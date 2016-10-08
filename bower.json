@@ -1,0 +1,23 @@
+{
+  "name": "skribki",
+  "description": "An open-source NodeJS wiki software based on git",
+  "main": "src/index.js",
+  "authors": [
+    "Vevox Digital <contact@vevox.io> (http://vevox.io)"
+    "Matthew Struble <matt@vevox.io>"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "wiki",
+    "git"
+  ],
+  "homepage": "https://github.com/VevoxDigital/Skribki",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
