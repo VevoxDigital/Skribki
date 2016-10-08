@@ -7,4 +7,6 @@ exports = module.exports = grunt => {
 
 
   });
+
+  grunt.registerTask('test', []);
 };

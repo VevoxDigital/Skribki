@@ -23,5 +23,8 @@
   "bugs": {
     "url": "https://github.com/VevoxDigital/Skribki/issues"
   },
-  "homepage": "https://github.com/VevoxDigital/Skribki#readme"
+  "homepage": "https://github.com/VevoxDigital/Skribki#readme",
+  "devDependencies": {
+    "grunt": "^1.0.1"
+  }
 }
