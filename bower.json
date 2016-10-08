@@ -3,7 +3,7 @@
   "description": "An open-source NodeJS wiki software based on git",
   "main": "src/index.js",
   "authors": [
-    "Vevox Digital <contact@vevox.io> (http://vevox.io)"
+    "Vevox Digital <contact@vevox.io> (http://vevox.io)",
     "Matthew Struble <matt@vevox.io>"
   ],
   "license": "MIT",
