@@ -1,25 +1,32 @@
 'use strict';
 
-const path  = require('path'),
-      Q     = require('q');
+const path    = require('path'),
+      Q       = require('q'),
+      config  = require('nconf');
 
 global.ROOTDIR = path.join(__dirname, '..');
 
+config.argv().env().file(path.join(ROOTDIR, 'config.json'));
+
 // Init everything.
-const output = Q.when(require('./lib/logger'))
-  .then(() => {
-    LOG.info('init phase ok');
+const output = Q.fcall(() => {
+  global.SVR = { };
+  return SVR;
+}).then(require('./lib/logger'))
+  .then(require('./lib/repo'))
+  .then((svr) => {
+    svr.log.info('init ok');
   })
   .catch(e => {
-    console.log(e);
+    if (SVR.log) {
+      SVR.log.error('init failed due to an error');
+      SVR.log.error(e.stack);
+    } else console.log(e.stack);
   })
   .fail(e => {
-    // TODO Write a failure handler.
-    console.log(e);
+    console.log('fail', e);
   })
   .finally(() => {
-    let msg = 'server init done';
-    if (global.LOG) return LOG.info(msg);
-    else console.log(msg);
+    console.log('fin');
   })
   .done();
