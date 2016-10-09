@@ -7,11 +7,14 @@ const winston = require('winston'),
 
 const dir = path.join(ROOTDIR, 'logs');
 
-exports = module.exports = Q.Promise((resolve, reject) => {
-  fs.ensureDir(dir, err => {
-    if (err) return reject(err);
+//exports = module.exports = Q.Promise((resolve, reject) => {
+exports = module.exports = svr => {
+  let deferred = Q.defer();
 
-    global.LOG = new winston.Logger({
+  fs.ensureDir(dir, err => {
+    if (err) return deferred.reject(err);
+
+    svr.log = new winston.Logger({
       transports: [
         new winston.transports.Console({
           colorize: true,
@@ -36,7 +39,10 @@ exports = module.exports = Q.Promise((resolve, reject) => {
         })
       ]
     });
-    LOG.info('logger created');
-    resolve();
+    svr.log.info('logger created');
+
+    deferred.resolve(svr);
   });
-});
+
+  return deferred.promise;
+};
