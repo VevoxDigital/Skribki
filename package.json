@@ -26,5 +26,12 @@
   "homepage": "https://github.com/VevoxDigital/Skribki#readme",
   "devDependencies": {
     "grunt": "^1.0.1"
+  },
+  "dependencies": {
+    "fs-extra": "^0.30.0",
+    "inquirer": "^1.2.1",
+    "path": "^0.12.7",
+    "q": "^1.4.1",
+    "simple-git": "^1.54.0"
   }
 }
