@@ -10,7 +10,7 @@ config.argv().env().file(path.join(ROOTDIR, 'config.json'));
 
 // Init everything.
 const output = Q.fcall(() => {
-  global.SVR = { };
+  global.SVR = { svrAuthor: 'Skbriki <skbriki@localhost>' };
   return SVR;
 }).then(require('./lib/logger'))
   .then(require('./lib/repo'))

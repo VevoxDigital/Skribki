@@ -15,12 +15,17 @@ exports = module.exports = (svr) => {
   fs.exists(svr.cwd, (err, exists) => {
     if (err) return deferred.reject(err);
     if (exists && !fs.statSync(svr.cwd).isDirectory())
-      deferred.reject(new Error('File "wiki" exists but is not a directory'));
+      return deferred.reject(new Error('File "wiki" exists but is not a directory'));
     else if (!exists) {
       fs.mkdirsSync(svr.cwd);
       svr.repo.init();
-    }
-    deferred.resolve(svr);
+
+      fs.copy(path.join(ROOTDIR, 'tpl', 'wiki'), svr.cwd, err => {
+        if (err) return deferred.reject(err);
+        svr.repo.add('./').commit('Initial Commit', { '--author': `"${svr.svrAuthor}"` });
+        deferred.resolve(svr);
+      });
+    } else deferred.resolve(svr);
   });
 
   return deferred.promise;
