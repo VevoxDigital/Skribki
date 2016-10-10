@@ -25,7 +25,8 @@
   },
   "homepage": "https://github.com/VevoxDigital/Skribki#readme",
   "devDependencies": {
-    "grunt": "^1.0.1"
+    "grunt": "^1.0.1",
+    "grunt-contrib-clean": "^1.0.0"
   },
   "dependencies": {
     "colors": "^1.1.2",
