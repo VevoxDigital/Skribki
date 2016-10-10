@@ -2,5 +2,22 @@
   "repo": {
     "cwd": "/var/skribki/repo",
     "bare": false
+  },
+  "wiki": {
+    "nav": {
+      "Home": "/home",
+      "Random": "/special/random",
+      "Search": "/special/search",
+      "More": {
+        "Create a Page": "/special/new",
+        "Dashboard": "/special/dashboard",
+        "Skribki Github": "https://github.com/VevoxDigital/Skribki",
+        "Vevox Homepage": "http://vevox.io"
+      }
+    },
+    "preventDeletion": [ "special", "partials" ],
+    "preventCreation": [ "special", "partials" ],
+    "allowJavascript": [ "special" ],
+    "allowHTMLFormatting": false
   }
 }
