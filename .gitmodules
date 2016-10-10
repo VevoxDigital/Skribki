@@ -1,4 +1,0 @@
-# Wiki Module
-[submodule "SkribkiWiki"]
-  path = repo
-  url = ./repo
