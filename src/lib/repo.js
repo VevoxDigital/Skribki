@@ -9,16 +9,18 @@ const Q       = require('q'),
 exports = module.exports = (svr) => {
   let deferred = Q.defer();
 
-  svr.cwd = config.get('repo:cwd');
-  fs.ensureDir(svr.cwd, err => {
-    if (err) return deferred.reject(err);
+  svr.cwd = path.join(ROOTDIR, 'wiki');
+  svr.repo = git()/*.silent(true)*/.cwd(svr.cwd);
 
-    svr.repo = git().silent(true).cwd(svr.cwd);
-    svr.repo.status((err, status) => {
-      if (!status) svr.repo.init(config.get('repo:bare'));
-      console.log(status);
-      deferred.resolve(svr);
-    });
+  fs.exists(svr.cwd, (err, exists) => {
+    if (err) return deferred.reject(err);
+    if (exists && !fs.statSync(svr.cwd).isDirectory())
+      deferred.reject(new Error('File "wiki" exists but is not a directory'));
+    else if (!exists) {
+      fs.mkdirsSync(svr.cwd);
+      svr.repo.init();
+    }
+    deferred.resolve(svr);
   });
 
   return deferred.promise;
