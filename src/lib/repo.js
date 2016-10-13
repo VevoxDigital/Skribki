@@ -20,7 +20,7 @@ exports = module.exports = (svr) => {
       fs.mkdirsSync(svr.cwd);
       svr.repo.init();
 
-      fs.copy(path.join(ROOTDIR, 'tpl', 'wiki'), svr.cwd, err => {
+      fs.copy(path.join(ROOTDIR, 'public', 'tpl'), svr.cwd, err => {
         if (err) return deferred.reject(err);
         svr.repo.add('./').commit('Initial Commit', { '--author': `"${svr.svrAuthor}"` });
         deferred.resolve(svr);
