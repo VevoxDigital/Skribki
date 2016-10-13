@@ -9,7 +9,7 @@ const Q       = require('q'),
 exports = module.exports = (svr) => {
   let deferred = Q.defer();
 
-  svr.cwd = path.join(ROOTDIR, 'wiki');
+  svr.cwd = path.join(ROOTDIR, config.get('repo:cwd') || 'wiki');
   svr.repo = git()/*.silent(true)*/.cwd(svr.cwd);
 
   fs.exists(svr.cwd, (err, exists) => {

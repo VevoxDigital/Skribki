@@ -1,6 +1,6 @@
 {
   "repo": {
-    "cwd": "/var/skribki/repo",
+    "cwd": "wiki",
     "bare": false
   },
   "wiki": {
