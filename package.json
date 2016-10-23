@@ -1,0 +1,27 @@
+{
+  "name": "skribki",
+  "version": "0.1.0",
+  "description": "An open-source wiki software based on git",
+  "main": "release.js",
+  "dependencies": {
+    "total.js": "^2.0.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VevoxDigital/Skribki.git"
+  },
+  "author": "Vevox Digital",
+  "contributors": [
+    "Matthew Struble <matt@vevox.io>"
+  ],
+  "private": true,
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/VevoxDigital/Skribki/issues"
+  },
+  "homepage": "https://github.com/VevoxDigital/Skribki#readme"
+}
