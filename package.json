@@ -4,6 +4,8 @@
   "description": "An open-source wiki software based on git",
   "main": "release.js",
   "dependencies": {
+    "bootstrap": "^3.3.7",
+    "node-sass": "^3.10.1",
     "total.js": "^2.0.1"
   },
   "devDependencies": {},
