@@ -1,0 +1,11 @@
+name                            : Skribki
+author                          : Vevox Digital
+version                         : 0.1.0
+secret                          : secret-key-for-web
+
+// Mail settings
+mail.smtp                       : smtp.yourwebsite.com
+mail.smtp.options               : {"secure":false,"port":25,"user":"","password":"","timeout":10000}
+mail.address.from               : noreply@vevox.io
+mail.address.reply              : contact@vevox.io
+mail.address.bcc                :
