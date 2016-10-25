@@ -5,6 +5,7 @@
   "main": "release.js",
   "dependencies": {
     "bootstrap": "^3.3.7",
+    "less": "^2.7.1",
     "node-sass": "^3.10.1",
     "total.js": "^2.0.1"
   },

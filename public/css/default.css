@@ -1,16 +1,104 @@
-/*auto
+$color-base-1: #23395C;
+$color-base-2: $color-base-1 - #0b0b0b;
 
-$color    : #67B13D;
+$color-anchor-1: #3498db;
+$color-anchor-2: $color-anchor-1 - #111;
 
-body { padding:0; margin:0; font:normal 14px Arial; color:#656D78; background-color: #67B13D; line-height: 20px; }
+$color-text-1: #333;
+$color-text-2: #f5f5f5;
 
-.container-background { background-color: white; }
-.container { margin:0 auto; width: 960px; padding: 50px 0; }
+body {
+  color: $color-text-1;
+  font-family: 'Open Sans', sans-serif;
+  background-color: #fff - #222;
+}
 
-.center { text-align: center; }
-hr { border: 0; border-top: 1px solid #E0E0E0; }
+a {
+  color: $color-anchor-1;
+  transition: color 250ms;
+  &:hover {
+    color: $color-anchor-2;
+    text-decoration: none;
+  }
+}
 
-.linkbutton { display: inline-block; position: relative; padding: 15px 80px; color: $color; border: 1px solid $color; text-decoration: none; border-radius: 4px; }
-.linkbutton:hover { color: white; background-color: $color; }
+.navbar-inverse {
+  background-color: $color-base-1;
+  border-color: $color-base-2;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.07);
+}
 
-footer { color: white; text-align: center; margin-top: 20px; }*/
+.page-header {
+  width: 100%;
+  background-color: $color-base-1;
+  padding: 30px;
+  color: $color-text-2;
+  margin-bottom: 0;
+  .container {
+    h1 { font-size: 25pt; margin: 0; }
+    h2 { font-size: 15pt; opacity: 0.5; margin: 0; font-weight: 300; }
+  }
+}
+
+.banner {
+  padding: 15px 0;
+  background-color: $color-text-2;
+  border-bottom: 1px ($color-text-2 - #111) solid;
+  color: $color-text-1 + #555;
+  a {
+    font-weight: bold;
+  }
+}
+
+.content {
+  background-color: #fff - #111;
+  padding-bottom: 50px;
+  min-height: 50vh;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+  .container {
+    .navigation {
+      text-align: right;
+      padding: 20px 30px 0;
+      hr {
+        border-top: 1px ($color-anchor-2) solid;
+        opacity: 0.2;
+        width: 20%;
+        margin: 20px 0 10px;
+        display: inline-block;
+      }
+    }
+    .page {
+      background-color: #fff;
+      min-height: 40px;
+      padding: 10px;
+      margin-top: 0;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+  }
+}
+
+@media screen and (min-width: 512px) {
+  .page-header {
+    padding: 50px 0;
+    .container {
+      h1 { font-size: 40pt; }
+      h2 { font-size: 20pt; }
+    }
+  }
+  .content {
+    .container {
+      .navbar {
+
+      }
+      .page {
+        border-radius: 0 0 5px 5px;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 1400px) {
+  .container {
+    width: 1400px;
+  }
+}

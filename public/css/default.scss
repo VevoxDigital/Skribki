@@ -1,3 +1,27 @@
+$color-base-1: #23395C;
+$color-base-2: @color-base-1 - #111;
+
+$color-text-1: #333;
+$color-text-2: #F5F5F5;
+
 body {
-  background-color: #999;
+  color: $color-text-1;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.navbar-inverse {
+  background-color: $color-base-1;
+  border-color: $color-base-2;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+
+.page-header {
+  width: 100%;
+  background-color: $color-base-1;
+  padding: 50px 0;
+  color: $color-text-2;
+  .container {
+    h1 { font-size: 40pt; margin: 0; }
+    h2 { font-size: 20pt; opacity: 0.5; margin: 0; font-weight: 300; }
+  }
 }
