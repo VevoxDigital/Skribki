@@ -86,7 +86,7 @@ a {
 .page {
   /* TODO Write page styles, possibly themed */
 
-  p { color: #777; }
+  p { color: #777; padding-left: 10px; }
 
   h1 {
     font-size: 22pt;
@@ -99,12 +99,19 @@ a {
   h5 { font-size: 10pt; opacity: 0.8; }
   h6 { font-size: 10pt; opacity: 0.6; }
 
+  code {
+    color: #888;
+    background-color: #fff - #111;
+    border-radius: 0;
+    padding: 1px 4px;
+  }
+
   .categories {
     a { padding-left: 6px; }
   }
 }
 
-@media screen and (min-width: 512px) {
+@media screen and (min-width: 992px) {
   .page-header {
     padding: 50px 0;
     .container {
@@ -125,6 +132,7 @@ a {
       }
       .page {
         border-radius: 0 0 5px 5px;
+        padding: 20px 80px;
       }
     }
   }
