@@ -99,6 +99,14 @@ a {
   }
 }
 
+.page {
+  /* TODO Write page styles, possibly themed */
+
+  .categories {
+    a { padding-left: 6px; }
+  }
+}
+
 @media screen and (min-width: 1400px) {
   .container {
     width: 1400px;
