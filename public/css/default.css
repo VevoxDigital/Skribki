@@ -59,6 +59,8 @@ a {
     .navigation {
       text-align: right;
       padding: 20px 30px 0;
+      background-color: #fff;
+      .navgroup:last-child { padding-bottom: 30px; }
       hr {
         border-top: 1px ($color-anchor-2) solid;
         opacity: 0.2;
@@ -87,8 +89,8 @@ a {
   }
   .content {
     .container {
-      .navbar {
-
+      .navigation {
+        background-color: transparent;
       }
       .page {
         border-radius: 0 0 5px 5px;
