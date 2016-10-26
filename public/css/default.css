@@ -57,12 +57,13 @@ a {
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
   .container {
     .navigation {
-      text-align: right;
       padding: 20px 30px 0;
       background-color: #fff;
-      h1, h2, h3 { font-size: inherit; margin: 0; }
-      h2, h3 { font-weight: normal; padding-right: 3px; }
-      h3 { padding-right: 6px; font-size: 80%; }
+      font-size: 15pt;
+      h1, h2, h3 { font-size: inherit; margin: 0; padding: 4px; }
+      h2, h3 { font-weight: normal; padding-left: 5px; font-weight: light; }
+      h3 { padding-left: 10px; font-size: 80%; font-style: italic; }
+      h1 { font-size: 130%; }
       .navgroup:last-child { padding-bottom: 30px; }
       hr {
         border-top: 1px ($color-anchor-2) solid;
@@ -94,6 +95,12 @@ a {
     .container {
       .navigation {
         background-color: transparent;
+        text-align: right;
+        font-size: 10pt;
+        h1, h2, h3 { font-size: inherit; margin: 0; padding: 2px; }
+        h2, h3 { font-weight: normal; padding-right: 5px; }
+        h3 { padding-right: 20px; font-size: 80%; }
+        h1 { font-size: 130%; }
       }
       .page {
         border-radius: 0 0 5px 5px;
