@@ -5,8 +5,11 @@
   "main": "release.js",
   "dependencies": {
     "bootstrap": "^3.3.7",
+    "fs-extra": "^0.30.0",
     "less": "^2.7.1",
     "node-sass": "^3.10.1",
+    "path": "^0.12.7",
+    "simple-git": "^1.56.0",
     "total.js": "^2.0.1"
   },
   "devDependencies": {},
