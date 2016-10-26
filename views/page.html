@@ -1,2 +1,8 @@
-page ok<br>
-@{model.content}
+@{!model.body}
+<hr>
+<p class="categories">
+  Categories:
+  @{foreach cat in repository.categories}
+    <a href="/categories/@{cat}">@{cat}</a>
+  @{end}
+</p>

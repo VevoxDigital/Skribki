@@ -1,6 +1,6 @@
 'use strict';
 
-const special_route = /^\/special\/?/i,
+const special_route = /^\/(?:special|category)\/?/i,
       page_model = 'page';
 
 exports.install = function () {
@@ -23,8 +23,26 @@ function process_page() {
 
   if (method === 'GET') {
 
-    self.repository.title = 'Page title';
-    self.view('page', { content: 'Page: ' + self.url });
+    F.model('page').read(self.url, (err, c) => {
+      if (err) return res.status(500).send(err.stack); // TODO Better error handling.
+
+      let content = c || {
+        title: 'Page Not Found',
+        desc: 'The page you requested has not been created.',
+        categories: [],
+        body: `#Page Does not Exist\nWould you like to [create this page](${self.url}?create)?`
+      };
+
+      self.repository.title = content.title.toString();
+      self.repository.desc = content.desc.toString();
+      self.repository.categories = content.categories;
+
+      if (content.body) self.view('page', { body: content.body }); // Is page
+      else {
+        // Is dir
+        self.res.send('is dir ' + content.title + ' ' + content.desc + '<br>' + self.url);
+      }
+    });
 
   } else self.res.send(`method ${method} not supported for ${self.url}`);
 
@@ -32,5 +50,5 @@ function process_page() {
 };
 
 function process_special() {
-
+  self.view('page', { body: 'special page' }); // TODO
 };
