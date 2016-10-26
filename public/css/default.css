@@ -76,10 +76,31 @@ a {
     .page {
       background-color: #fff;
       min-height: 40px;
-      padding: 10px;
+      padding: 20px 40px;
       margin-top: 0;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
+  }
+}
+
+.page {
+  /* TODO Write page styles, possibly themed */
+
+  p { color: #777; }
+
+  h1 {
+    font-size: 22pt;
+    padding-bottom: 5px;
+    border-bottom: 1px (#fff - #111) solid;
+  }
+  h2 { font-size: 18pt; }
+  h3 { font-size: 14pt; opacity: 0.8; }
+  h4 { font-size: 14pt; opacity: 0.6; }
+  h5 { font-size: 10pt; opacity: 0.8; }
+  h6 { font-size: 10pt; opacity: 0.6; }
+
+  .categories {
+    a { padding-left: 6px; }
   }
 }
 
@@ -107,13 +128,12 @@ a {
       }
     }
   }
-}
+  .page {
 
-.page {
-  /* TODO Write page styles, possibly themed */
+    h1 {
 
-  .categories {
-    a { padding-left: 6px; }
+    }
+
   }
 }
 
