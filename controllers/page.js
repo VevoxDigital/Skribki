@@ -30,7 +30,7 @@ function process_page() {
         title: 'Page Not Found',
         desc: 'The page you requested has not been created.',
         categories: [],
-        body: `#Page Does not Exist\nWould you like to [create this page](${self.url}?create)?`
+        body: `# Page Does not Exist\nWould you like to [create this page](${self.url}?create)?`
       };
 
       self.repository.title = content.title.toString();
