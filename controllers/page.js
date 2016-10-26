@@ -37,7 +37,26 @@ function process_page() {
       self.repository.desc = content.desc.toString();
       self.repository.categories = content.categories;
 
-      if (content.body) self.view('page', { body: content.body }); // Is page
+      if (content.body) {
+        // Is page
+
+        content.body = content.body.replace('<', '&lt;');
+        content.body = content.body.replace('>', '&rt;');
+        content.body = require('marked')(content.body);
+
+        self.repository.toc = [];
+        let headerPattern = /<h([123])[^>]*>(.+)<\/h[123]>/igm, m;
+        while (m = headerPattern.exec(content.body)) {
+          self.repository.toc.push({
+            tagS: '<h' + m[1] + '>',
+            tagE: '</h' + m[1] + '>',
+            title: m[2],
+            hash: m[2].toLowerCase().replace(' ', '-')
+          });
+        }
+
+        self.view('page', { body: content.body });
+      }
       else {
         // Is dir
         self.res.send('is dir ' + content.title + ' ' + content.desc + '<br>' + self.url);

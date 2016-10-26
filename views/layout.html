@@ -40,18 +40,23 @@
 		<div class="content">
 			<div class="container">
 				<div class="row">
+
 					<div class="navigation col-xs-12 col-md-3 col-lg-2">
 						<div class="navgroup">
 							<a href="/">Wiki Home</a>
 						</div>
 						<hr>
 						<div class="navgroup">
-							<a href="/">Wiki Home</a>
+							@{foreach c in repository.toc}
+								@{!c.tagS}<a href="#@{c.hash}">@{c.title}</a>@{!c.tagE}
+							@{end}
 						</div>
 					</div>
+
 					<div class="page col-xs-12 col-md-9 col-lg-10">
 						@{body}
 					</div>
+
 				</div>
 			</div>
 		</div>

@@ -60,6 +60,9 @@ a {
       text-align: right;
       padding: 20px 30px 0;
       background-color: #fff;
+      h1, h2, h3 { font-size: inherit; margin: 0; }
+      h2, h3 { font-weight: normal; padding-right: 3px; }
+      h3 { padding-right: 6px; font-size: 80%; }
       .navgroup:last-child { padding-bottom: 30px; }
       hr {
         border-top: 1px ($color-anchor-2) solid;
