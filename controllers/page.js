@@ -51,7 +51,7 @@ function process_page() {
             tagS: '<h' + m[1] + '>',
             tagE: '</h' + m[1] + '>',
             title: m[2],
-            hash: m[2].toLowerCase().split(' ').join('-').split(/[^a-z0-9\-]/i).join('')
+            hash: m[2].toLowerCase().replace(/ /g, '-').replace(/[^a-z0-9\-]/ig, '')
           });
         }
 
