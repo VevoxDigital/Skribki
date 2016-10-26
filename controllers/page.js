@@ -41,7 +41,7 @@ function process_page() {
         // Is page
 
         content.body = content.body.replace('<', '&lt;');
-        content.body = content.body.replace('>', '&rt;');
+        content.body = content.body.replace(/(?!^)>/gm, '&rt;');
         content.body = require('marked')(content.body);
 
         self.repository.toc = [];
