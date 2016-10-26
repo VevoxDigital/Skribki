@@ -18,7 +18,8 @@ function verifyWikiDirectory() {
 
       wiki.init();
       fs.copySync(path.join(__dirname, '..', 'home.md'), path.join(wikiDir, 'home'));
-      wiki.add('home').commit('Initial commit', { '--author': '"Skribki <skribki@localhost>"' });
+      fs.copySync(path.join(__dirname, '..', 'tester.md'), path.join(wikiDir, 'tester'));
+      wiki.add('home').add('tester').commit('Initial commit', { '--author': '"Skribki <skribki@localhost>"' });
 
     } catch (e) {
       console.error('Could not initialize the repository. Exiting now');

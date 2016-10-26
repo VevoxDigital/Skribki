@@ -106,6 +106,8 @@ a {
     padding: 1px 4px;
   }
 
+  pre code { background-color: transparent; color: #555; }
+
   .categories {
     a { padding-left: 6px; }
   }
