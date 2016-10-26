@@ -5,6 +5,7 @@
   "main": "release.js",
   "dependencies": {
     "bootstrap": "^3.3.7",
+    "cheerio": "^0.22.0",
     "fs-extra": "^0.30.0",
     "less": "^2.7.1",
     "marked": "^0.3.6",

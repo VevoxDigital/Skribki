@@ -40,8 +40,11 @@ function process_page() {
       if (content.body) {
         // Is page
 
-        content.body = content.body.replace(/<\/?script[^>]*>/gi, '```');
         content.body = require('marked')(content.body);
+
+        let $ = require('cheerio').load(content.body);
+        $('script').remove();
+        content.body = $.html();
 
         self.repository.toc = [];
         let headerPattern = /<h([123])[^>]*>(.+)<\/h[123]>/igm, m;
