@@ -17,6 +17,8 @@ This is a heading
 
 # Span Elements
 
+<p>Allows HTML, but converts `<script>` tags to codeblocks.</p>
+
 ## Links
 External Anchor: [click me!](https://vevox.io)
 
@@ -90,6 +92,16 @@ Headers were skipped here because of their inclusion at the top of the page.
 This is a normal paragraph
 
     This is a code block.
+
+```
+Here's some <p>html</p>
+<script type="text/javascript">alert('hello!')</script>
+```
+
+<script>
+  // This is a script tag that has been escaped.
+  alert('Hello world!');
+</script>
 
 ## Horizontal Rules
 
