@@ -3,6 +3,10 @@
 const special_route = /^\/(?:special|category)\/?/i,
       page_model = 'page';
 
+const path  = require('path'),
+      fs    = require('fs-extra'),
+      q     = require('q');
+
 exports.install = function () {
   let self = this;
 
@@ -39,25 +43,44 @@ function process_page() {
 
       if (content.body) {
         // Is page
+        const parsersDir = path.join(__dirname, '..', 'extensions', 'parsers');
 
-        content.body = require('marked')(content.body);
+        // TODO Cache parsed files.
+        let parsers = [];
+        fs.walk(parsersDir)
+          .on('data', item => {
+            if (item.stats.isFile() && path.extname(item.path) === '.js')
+              parsers.push(require(item.path));
+          }).on('end', () => {
 
-        let $ = require('cheerio').load(content.body);
-        $('script').remove();
-        content.body = $.html();
+            let i = 0, pi, doc = q.fcall(() => {
 
-        self.repository.toc = [];
-        let headerPattern = /<h([123])[^>]*>(.+)<\/h[123]>/igm, m;
-        while (m = headerPattern.exec(content.body)) {
-          self.repository.toc.push({
-            tagS: '<h' + m[1] + '>',
-            tagE: '</h' + m[1] + '>',
-            title: m[2],
-            hash: m[2].toLowerCase().replace(/[^a-z0-9]/ig, '-')
+              self.repository.toc = [];
+
+              let headerPattern = /<h([123])[^>]*>(.+)<\/h[123]>/igm, m;
+              while (m = headerPattern.exec(content.body)) {
+                self.repository.toc.push({
+                  tagS: '<h' + m[1] + '>',
+                  tagE: '</h' + m[1] + '>',
+                  title: m[2],
+                  hash: m[2].toLowerCase().replace(/[^a-z0-9]/ig, '-')
+                });
+                pi = headerPattern.lastIndex;
+              }
+
+              return content.body.substring(pi + 1);
+            });
+
+            //parsers.forEach(p => {
+              //doc = doc.then(require(parsersDir + '/90-markdown.js'))
+            //});
+            parsers.reduce((cur, next) => { return cur.then(next); }, q(doc)).then((body) => {
+              self.view('page', { body: body });
+            }).catch(err => {
+              self.throw500(err);
+            }).done();
+
           });
-        }
-
-        self.view('page', { body: content.body });
       }
       else {
         // Is dir
