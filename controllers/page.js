@@ -53,28 +53,23 @@ function process_page() {
               parsers.push(require(item.path));
           }).on('end', () => {
 
-            let i = 0, pi, doc = q.fcall(() => {
+            parsers.reduce((cur, next) => { return cur.then(next); }, q(content.body)).then((body) => {
 
               self.repository.toc = [];
 
               let headerPattern = /<h([123])[^>]*>(.+)<\/h[123]>/igm, m;
-              while (m = headerPattern.exec(content.body)) {
+              while (m = headerPattern.exec(body)) {
                 self.repository.toc.push({
                   tagS: '<h' + m[1] + '>',
                   tagE: '</h' + m[1] + '>',
                   title: m[2],
                   hash: m[2].toLowerCase().replace(/[^a-z0-9]/ig, '-')
                 });
-                pi = headerPattern.lastIndex;
               }
 
-              return content.body.substring(pi + 1);
-            });
+              return body;
 
-            //parsers.forEach(p => {
-              //doc = doc.then(require(parsersDir + '/90-markdown.js'))
-            //});
-            parsers.reduce((cur, next) => { return cur.then(next); }, q(doc)).then((body) => {
+            }).then((body) => {
               self.view('page', { body: body });
             }).catch(err => {
               self.throw500(err);
