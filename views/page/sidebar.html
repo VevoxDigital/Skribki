@@ -1,9 +1,16 @@
-<div class="navgroup">
-  <a href="/">Wiki Home</a>
-</div>
-<hr>
-<div class="navgroup">
-  @{foreach c in repository.toc}
-    @{!c.tagS}<a href="#@{c.hash}">@{c.title}</a>@{!c.tagE}
-  @{end}
-</div>
+@{if repository.$sidebar}
+  <!-- TODO Wiki image & styles -->
+  <div class="navgroup">
+    @{foreach link in repository.$sidebar.links}
+      <a href="@{link.key}"><h1>@{link.value}</h1></a>
+    @{end}
+  </div>
+@{fi}
+@{if repository.toc}
+  <hr>
+  <div class="navgroup">
+    @{foreach c in repository.toc}
+      @{!c.tagS}<a href="#@{c.hash}">@{c.title}</a>@{!c.tagE}
+    @{end}
+  </div>
+@{fi}
