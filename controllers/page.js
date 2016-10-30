@@ -12,11 +12,11 @@ exports.install = function () {
 
   F.route((url, req, flags) => {
     return !url.match(special_route);
-  }, process_page);
+  }, process_page, ['#navbar', '#sidebar']);
 
   F.route((url, req, flags) => {
     return url.match(special_route);
-  }, process_special);
+  }, process_special, ['#navbar', '#sidebar']);
 
 };
 

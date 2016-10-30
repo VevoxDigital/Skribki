@@ -1,0 +1,21 @@
+{
+  "navbar": {
+    "oem": {
+      "icon": "/img/vevox.png",
+      "name": "Vevox Digital",
+      "url": "http://vevox.io"
+    },
+    "links": {
+      "http://workshop.vevox.io": "The Workshop",
+      "https://github.com/VevoxDigital": "GitHub"
+    }
+  },
+  "sidebar": {
+    "logo": "/img/logo.png",
+    "links": {
+      "/": "Wiki Home",
+      "/special/random": "Random Page",
+      "http://vevox.io": "Vevox Digital"
+    }
+  }
+}
