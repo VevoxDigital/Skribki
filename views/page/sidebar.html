@@ -1,0 +1,9 @@
+<div class="navgroup">
+  <a href="/">Wiki Home</a>
+</div>
+<hr>
+<div class="navgroup">
+  @{foreach c in repository.toc}
+    @{!c.tagS}<a href="#@{c.hash}">@{c.title}</a>@{!c.tagE}
+  @{end}
+</div>

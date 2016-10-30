@@ -19,51 +19,6 @@
 		<title>@{repository.title || 'Wiki Home'}</title>
 	</head>
 	<body>
-
-		<nav class="navbar navbar-fixed-top navbar-inverse">
-
-		</nav>
-
-		<header class="page-header">
-			<div class="container">
-				<h1>@{repository.title || 'Wiki Home'}</h1>
-				<h2>@{repository.desc || ''}</h2>
-			</div>
-		</header>
-
-		<div class="banner">
-			<div class="container">
-				skribki is undergoing development - <a href="https://github.com/VevoxDigital/Skribki/">see what's coming</a>
-			</div>
-		</div>
-
-		<div class="content">
-			<div class="container">
-				<div class="row">
-
-					<div class="navigation col-xs-12 col-md-3 col-lg-2">
-						<div class="navgroup">
-							<a href="/">Wiki Home</a>
-						</div>
-						<hr>
-						<div class="navgroup">
-							@{foreach c in repository.toc}
-								@{!c.tagS}<a href="#@{c.hash}">@{c.title}</a>@{!c.tagE}
-							@{end}
-						</div>
-					</div>
-
-					<div class="page col-xs-12 col-md-9 col-lg-10">
-						@{body}
-					</div>
-
-				</div>
-			</div>
-		</div>
-
-		<footer>
-
-		</footer>
-
+		@{body}
 	</body>
 </html>
