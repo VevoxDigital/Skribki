@@ -6,6 +6,7 @@
       "url": "http://vevox.io"
     },
     "links": {
+      "/": "Home",
       "http://workshop.vevox.io": "The Workshop",
       "https://github.com/VevoxDigital": "GitHub"
     }
@@ -16,6 +17,31 @@
       "/": "Wiki Home",
       "/special/random": "Random Page",
       "http://vevox.io": "Vevox Digital"
+    }
+  },
+  "auth": {
+    "whitelist": false,
+    "emails": [
+      "postmaster@localhost"
+    ],
+    "strageties": {
+      "github": {
+        "displayName": "GitHub",
+        "icon": "fa-github",
+        "color": "#f5f5f5",
+        "options": {
+          "init": { },
+          "auth": { "scope": "user:email" },
+          "callback": { }
+        },
+        "profileMap": {
+          "id": "id",
+          "provider": "provider",
+          "name": "displayName",
+          "username": "username",
+          "email": "emails[0].value"
+        }
+      }
     }
   }
 }
