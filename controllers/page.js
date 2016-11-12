@@ -14,10 +14,6 @@ exports.install = function () {
     return !url.match(special_route);
   }, process_page, ['#navbar', '#sidebar']);
 
-  F.route((url, req, flags) => {
-    return url.match(special_route);
-  }, process_special, ['#navbar', '#sidebar']);
-
 };
 
 function process_page() {
@@ -84,10 +80,4 @@ function process_page() {
     });
 
   } else self.res.send(`method ${method} not supported for ${self.url}`);
-
-  //this.view('index');
-};
-
-function process_special() {
-  self.view('page', { body: 'special page' }); // TODO
 };
