@@ -8,11 +8,11 @@ const passport  = require('passport'),
 const secrets = require('../lib/secrets');
 
 passport.serializeUser((user, done) => {
-  done(null, user.id);
+  done(null, user);
 });
 
 passport.deserializeUser((user, done) => {
-
+  done(null, user);
 });
 
 var files = [];
