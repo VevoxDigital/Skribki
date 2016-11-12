@@ -35,9 +35,25 @@ function process_login_callback(provider) {
   strategy.options.callback.failureRedirect = strategy.options.callback.failureRedirect || '/special/login';
 
   passport.authenticate(provider, strategy.options.callback)(self.req, self.res, (err) => {
-    if (err) return self.redirect(strategy.options.callback.failureRedirect);
+    if (err) return self.redirect(strategy.options.callback.failureRedirect + '?msg=' + err.toString().replace(' ', '+'));
 
-    // TODO Let the user know they logged in somehow.
-    self.json(self.user);
+    const emails = config.get('auth:emails');
+    let accept = !config.get('auth:whitelist');
+
+    for (let i = 0; i < emails.length; i++) {
+      let email = emails[i];
+      if (email.startsWith('/')) {
+        let flagIndex = email.lastIndexOf('/');
+        if (!!self.user.email.match(new RegExp(email.substr(1, flagIndex), emails.substr(flagIndex + 1)))) {
+          accept = !accept;
+          break;
+        }
+      } else if (email === self.user.email) {
+        accept = !accept;
+        break;
+      }
+    }
+
+    self.redirect(accept ? '/' : strategy.options.callback.failureRedirect + '?msg=Email+blacklisted+or+not+whitelisted');
   });
 };
