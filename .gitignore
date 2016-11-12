@@ -43,3 +43,6 @@ dist/
 repo/
 /wiki/
 tmp/
+
+# Secrets, hashes, and other private files
+.secret
