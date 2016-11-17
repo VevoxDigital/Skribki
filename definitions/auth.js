@@ -7,6 +7,8 @@ const passport  = require('passport'),
 
 const secrets = require('../lib/secrets');
 
+INSTALL('module', 'http://modules.totaljs.com/session/v1.00/session.js', { cookie: '$skr-ss', secret: CONFIG('secret') });
+
 passport.serializeUser((user, done) => {
   done(null, user);
 });
@@ -32,4 +34,13 @@ const auths = fs.walk('./definitions/auth')
     });
 
     F.middleware('passport.js', passport.initialize());
+    F.middleware('passport.js-session', passport.session());
+    F.middleware('user', (req, res, next, options, controller) => {
+      controller.repository.$user = controller.session.passport.user;
+      next();
+    });
+
+    F.use('session');
+    F.use('passport.js');
+    F.use('passport.js-session');
   });
