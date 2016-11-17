@@ -1,16 +1,31 @@
 <nav class="navbar navbar-fixed-top navbar-inverse">
   <div class="container">
 
-    <a href="@{repository.$navbar.oem.url}" class="oem nav-item">
-      <img src="@{repository.$navbar.oem.icon}" class="oem-icon">
-      <span class="oem-name">@{repository.$navbar.oem.name}
-    </a>
+    <span class="nav-item">
+      <a href="@{repository.$navbar.oem.url}" class="oem">
+        <img src="@{repository.$navbar.oem.icon}" class="oem-icon">
+        <span class="oem-name">@{repository.$navbar.oem.name}
+      </a>
+    </span>
 
     <ul class="nav-items">
       @{foreach link in repository.$navbar.links}
-        <li><a href="@{link.key}" class="nav-item">@{link.value}</a></li>
+        <li class="nav-item"><a href="@{link.key}">@{link.value}</a></li>
       @{end}
     </ul>
+
+    <div class="navbar-right">
+      @{if user}
+        <ul class="nav-items">
+          <li class="nav-item">Hi there, @{user.username}</li>
+          <li class="nav-item"><a href="/special/logout">Logout</a></li>
+        </ul>
+      @{else}
+        <ul class="nav-items">
+          <li class="nav-item"><a href="/special/login">Login</a></li>
+        </ul>
+      @{fi}
+    </div>
 
   </div>
 
