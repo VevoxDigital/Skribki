@@ -12,6 +12,12 @@ F.helpers.config = key => {
   return nconf.get(key);
 }
 
+F.middleware('config', (req, res, next, options, controller) => {
+  if (controller) initConfig();
+  next();
+});
+F.use('config');
+
 F.middleware('navbar', (req, res, next, options, controller) => {
 
   if (controller) {
