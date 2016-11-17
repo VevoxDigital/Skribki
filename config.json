@@ -30,7 +30,7 @@
     "emails": [
       "postmaster@localhost"
     ],
-    "strageties": {
+    "strategies": {
       "github": {
         "displayName": "GitHub",
         "icon": "fa-github",

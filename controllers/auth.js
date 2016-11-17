@@ -17,7 +17,7 @@ function process_login(provider) {
 
   self.custom();
 
-  let strategy = config.get(`auth:strageties:${provider}`);
+  let strategy = config.get(`auth:strategies:${provider}`);
   if (!strategy) return self.res.send(404, 'Unknown provider: ' + provider);
 
   passport.authenticate(provider, strategy.options.auth)(self.req, self.res, () => { });
@@ -26,7 +26,7 @@ function process_login(provider) {
 function process_login_callback(provider) {
   let self = this;
 
-  let strategy = config.get(`auth:strageties:${provider}`);
+  let strategy = config.get(`auth:strategies:${provider}`);
   if (!strategy) return self.res.send(404, 'Unknown provider: ' + provider);
 
   strategy.options.callback = strategy.options.callback || { };
