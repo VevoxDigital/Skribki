@@ -34,10 +34,7 @@ function process_login_callback(provider) {
   strategy.options.callback.failureRedirect = strategy.options.callback.failureRedirect || '/special/login';
 
   passport.authenticate(provider, (err, user, info) => {
-    if (err) {
-      console.error(err);
-      return self.redirect(strategy.options.callback.failureRedirect + '?err=err.auth.failure');
-    }
+    if (err) return self.redirect(strategy.options.callback.failureRedirect + '?err=err.auth.failure');
 
     const emails = config.get('auth:emails');
     let accept = !config.get('auth:whitelist');
@@ -58,8 +55,8 @@ function process_login_callback(provider) {
 
     if (accept) {
       self.req.login(user, err => {
-        // TODO Better error handling
-        if (err) console.error(err);
+        if (err) return self.redirect(strategy.options.callback.failureRedirect
+          + '?err=err.generic&msg=' + err.toString().replace(/\s/g, '+'));
         self.redirect(strategy.options.callback.successRedirect);
       });
 
