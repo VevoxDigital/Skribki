@@ -6,7 +6,7 @@ const passport  = require('passport'),
 // TODO Actually process all the providers with given options.
 
 exports.install = () => {
-  F.route('/special/login', function () { this.view('login'); }, ['#navbar', '#user']);
+  F.route('/special/login', function () { this.view('login'); }, ['#navbar']);
   F.route('/special/login/{provider}', process_login);
   F.route('/special/login/{provider}/callback', process_login_callback);
   F.route('/special/logout', process_logout);
