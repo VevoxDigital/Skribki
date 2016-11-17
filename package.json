@@ -22,7 +22,8 @@
   "scripts": {
     "test": "node test.js",
     "start": "node release.js",
-    "debug": "node debug.js"
+    "debug": "node debug.js",
+    "kill-crash": "sudo kill -9 `lsof -t -i:8000`"
   },
   "repository": {
     "type": "git",
