@@ -46,3 +46,7 @@ tmp/
 
 # Secrets, hashes, and other private files
 .secret
+
+# Ignore FA and other font files. Have OEM add when needed.
+public/css/font-awesome*
+public/fonts/
