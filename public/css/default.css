@@ -140,6 +140,27 @@ nav {
 
 .page {
   /* TODO Write page styles, possibly themed */
+  &.page-login {
+
+    .login-box {
+      .btn {
+        font-size: 10pt;
+        opacity: 1;
+        transition: opacity 250ms;
+        vertical-align: middle;
+        &:hover {
+          opacity: 0.9;
+        }
+        span.fa, img {
+          display: inline-block;
+          vertical-align: middle;
+          height: 12pt;
+          font-size: 12pt;
+          padding-right: 5px;
+        }
+      }
+    }
+  }
 
   p { color: #777; padding-left: 10px; }
 

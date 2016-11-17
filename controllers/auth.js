@@ -6,10 +6,23 @@ const passport  = require('passport'),
 // TODO Actually process all the providers with given options.
 
 exports.install = () => {
-  F.route('/special/login', function () { this.view('login'); }, ['#navbar']);
+  F.route('/special/login', view_login, ['#navbar']);
   F.route('/special/login/{provider}', process_login);
   F.route('/special/login/{provider}/callback', process_login_callback);
   F.route('/special/logout', process_logout);
+};
+
+function view_login() {
+  let self = this;
+
+  let model = { strategies: [] };
+  for (const provider in config.get('auth:strategies')) {
+    let strategy = config.get('auth:strategies:' + provider);
+    strategy.provider = provider;
+    model.strategies.push(strategy);
+  }
+
+  self.view('login', model);
 };
 
 function process_login(provider) {

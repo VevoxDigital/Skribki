@@ -5,11 +5,38 @@
 <div class="content">
   <div class="container">
     <div class="row">
+      <div class="page page-login">
 
-      <div class="login-box page">
+        <h1>Wiki Login</h1>
+
+        <p>
+          Log In to one of the providers below to gain access to edit pages, provided the wiki owners allows it.
+        </p>
+
+        <div class="text-center">
+          <h2>Login Providers</h2>
+
+          <div class="login-box">
+            @{foreach strategy in model.strategies}
+              <a href="/special/login/@{strategy.provider}" class="btn btn-lg btn-login"
+                style="color: @{strategy.color.foreground}; background-color: @{strategy.color.background}">
+                @{if strategy.icon.startsWith('fa-')}
+                  <span class="fa @{strategy.icon}"></span>
+                @{else}
+                  <img src="@{strategy.icon}">
+                @{fi}
+                Login with <strong>@{strategy.displayName}</strong>
+              </a>
+            @{end}
+          </div>
+          <br>
+          <p>
+            Want more login options? Ask the wiki host to
+            <a href="http://wiki.vevox.io/docs/skribki/adding-providers"> add more providers</a>.
+          </p>
+        </div>
 
       </div>
-
     </div>
   </div>
 </div>
