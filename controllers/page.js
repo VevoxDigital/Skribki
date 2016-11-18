@@ -28,9 +28,9 @@ function process_page() {
 
       let content = c || {
         title: 'Page Not Found',
-        desc: 'The page you requested has not been created.',
+        desc: 'The page you requested was not found.',
         categories: [],
-        body: `# Page Does not Exist\nWould you like to [create this page](${self.url}?create)?`
+        body: `# Page Does not Exist\nWould you like to [create this page](${self.url}?edit)?`
       };
 
       self.repository.title = content.title.toString();
@@ -66,7 +66,7 @@ function process_page() {
               return body;
 
             }).then((body) => {
-              self.view('page', { body: body });
+              self.view('page', { body: body, url: self.url });
             }).catch(err => {
               self.throw500(err);
             }).done();

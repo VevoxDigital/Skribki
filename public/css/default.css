@@ -22,6 +22,10 @@ a {
   }
 }
 
+.float-right { float: right; }
+.float-left  { float: left;  }
+.float-clear { float: clear; }
+
 .navbar-inverse {
   background-color: $color-base-1;
   border-color: $color-base-2;
@@ -159,6 +163,12 @@ nav {
           padding-right: 5px;
         }
       }
+    }
+  }
+  .page-opts {
+    a {
+      padding: 5px;
+      font-size: 10pt;
     }
   }
 

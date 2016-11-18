@@ -11,6 +11,14 @@
       </div>
 
       <div class="page col-xs-12 col-md-9 col-lg-10">
+        <div class="float-right page-opts">
+          <a href="@{self.url}?a=history">History </a>
+          @{if user}
+            <a href="@{self.url}?a=edit">Edit </a>
+            <a href="@{self.url}?a=delete" style="color: #e74c3c;">Delete</a>
+          @{fi}
+        </div>
+        <div class="float-clear"></div>
         @{!model.body}
         <hr>
         <p class="categories">
