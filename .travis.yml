@@ -1,0 +1,28 @@
+language: node_js
+node_js:
+- '6.1'
+- '6.0'
+- '5'
+- '5.1'
+- '4'
+- '4.2'
+- '4.1'
+- '4.0'
+before_install:
+- npm install -g grunt-cli bower
+install:
+- npm install
+- bower install
+branches:
+  only:
+  - master
+  - dev
+env:
+  matrix:
+  - CXX=g++-4.8
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - g++-4.8
