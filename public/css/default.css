@@ -182,6 +182,24 @@ nav {
       font-size: 10pt;
     }
   }
+  .page-filelist {
+    width: 100%;
+    list-style-image: none;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    a {
+      color: $color-anchor-1;
+      font-size: 13pt;
+      flex: none 1 auto;
+      vertical-align: middle;
+      i {
+        font-size: 10pt;
+        display: inline-block;
+        width: 15px;
+      }
+    }
+  }
 
   p { color: #777; padding-left: 10px; }
 

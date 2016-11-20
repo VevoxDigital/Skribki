@@ -11,7 +11,7 @@
       </div>
 
       <div class="page col-xs-12 col-md-9 col-lg-10">
-        <div class="float-right page-opts">
+        <div class="text-right page-opts">
           <a href="@{self.url}?a=history">History </a>
           @{if user}
             <a href="@{self.url}?a=edit">Edit </a>
@@ -19,11 +19,7 @@
           @{fi}
         </div>
         <div class="float-clear"></div>
-        @{if model.body}
-          @{!model.body}
-        @{else if model.files}
-          <h1>files</h1>
-        @{fi}
+        @{!model.body}
 
         @{if repository.categories && repository.categories.length}
           <hr>

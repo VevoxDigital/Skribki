@@ -80,7 +80,25 @@ exports.parse = raw => {
           deferred.resolve(content);
         }).catch(err => { deferred.reject(err); });
       });
-  } else throw new Error('Cannot parse: invalid input');
+  } else if (typeof raw === 'object') {
+    let page = '<h1>Directory Contents</h1>' +
+      '<p>This directory has no homepage. The contents of the directory are listed below:</p>' +
+      '<div class="page-filelist">';
+
+    raw.arr.forEach(item => {
+      page += `
+        <a href="${raw.route}${item.name}">
+          <i class="fa fa-${item.isDir ? 'folder' : 'file-text-o'}"></i>
+          ${item.isDir ? '<strong>' : ''}${item.name}${item.isDir ? '</strong>' : ''}
+        </a>`;
+    });
+
+    deferred.resolve({
+      title: 'Directory',
+      desc: 'Currently viewing files for: ' + raw.route.slice(0, -1),
+      body: page + '</div>'
+    });
+  } else throw new Error('Cannot parse: invalid input as ' + typeof raw);
 
   return deferred.promise;
 };
@@ -89,7 +107,8 @@ exports.readRaw = r => {
   let deferred = q.defer();
   verifyWikiDirectory();
 
-  let route = r || '/', p = path.join(wikiDir, route.substring(1)).slice(0, -1);
+  let route = r || '/', p = path.join(wikiDir, route.substring(1));
+  if (p.endsWith('/')) p = p.slice(0, -1);
 
   fs.stat(p, (err, stats) => {
     if (err) return deferred.reject(err);
@@ -98,13 +117,13 @@ exports.readRaw = r => {
       let homeFile = path.join(p, 'home');
       if (fs.existsSync(homeFile)) p = homeFile;
       else {
-        let files = fs.walkSync(p), dirArray = [];
+        let files = fs.readdirSync(p), dir = { route: route, arr: [] };
+        files.sort();
         for (const file of files) {
           let stat = fs.statSync(path.join(p, file));
-          console.log(file);
-          dirArray.push({ name: file, isDir: stat.isDirectory() });
+          dir.arr.push({ name: file, isDir: stat.isDirectory() });
         }
-        return deferred.resolve(dirArray);
+        return deferred.resolve(dir);
       }
     }
 

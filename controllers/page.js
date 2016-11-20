@@ -42,22 +42,19 @@ function process_page() {
 
         self.view('edit', model);
       } else {
-        if (typeof c === 'array') self.view('page', { files: c, url: self.url });
-        else {
-          let content = c || {
-            title: 'Page Not Found',
-            desc: 'The page you requested was not found.',
-            categories: [],
-            body: `<h1>Page Does not Exist</h1>Would you like to <a href="${self.url}?a=edit">create this page</a>?`
-          };
+        let content = c || {
+          title: 'Page Not Found',
+          desc: 'The page you requested was not found.',
+          categories: [],
+          body: `<h1>Page Does not Exist</h1>Would you like to <a href="${self.url}?a=edit">create this page</a>?`
+        };
 
-          self.repository.title = content.title.toString();
-          self.repository.desc = content.desc.toString();
-          self.repository.categories = content.categories;
-          self.repository.toc = content.toc;
+        self.repository.title = content.title.toString();
+        self.repository.desc = content.desc.toString();
+        self.repository.categories = content.categories;
+        self.repository.toc = content.toc;
 
-          self.view('page', { body: content.body, url: self.url });
-        }
+        self.view('page', { body: content.body, url: self.url });
       }
     }).catch(err => F.response500(self.req, self.res, err)).done();
   } else self.res.send(`method ${method} not supported for ${self.url}`);
