@@ -1,8 +1,9 @@
 'use strict';
 
 const fs    = require('fs-extra'),
-      git  = require('simple-git'),
-      path  = require('path');
+      git   = require('simple-git'),
+      path  = require('path'),
+      q     = require('q');
 
 const wikiDir = path.join(__dirname, '..', 'wiki');
 
@@ -36,42 +37,96 @@ exports.create = (route, author, done) => {
   done();
 };
 
-exports.read = (r, done) => {
+exports.parse = raw => {
+  let deferred = q.defer();
+
+  if (typeof raw === 'string') {
+    let content = { title: 'A Wiki Page', desc: '', categories: [], body: raw }, lines = raw.split('\n');
+
+    const linePattern = /^\$([\S]+) (.+)$/;
+    for (let line of lines) {
+      line = line.trim();
+      let matches = line.match(linePattern);
+
+      if (!matches) break;
+
+      content[matches[1]] = JSON.parse(matches[2]);
+      content.body = content.body.substring(content.body.indexOf('\n') + 1, content.body.length);
+    }
+
+    const parsersDir = path.join(__dirname, '..', 'extensions', 'parsers');
+    let parsers = [];
+    fs.walk(parsersDir)
+      .on('data', item => {
+        if (item.stats.isFile() && path.extname(item.path) === '.js')
+          parsers.push(require(item.path));
+      }).on('end', () => {
+        parsers.reduce((cur, next) => { return cur.then(next); }, q(content.body)).then((body) => {
+          content.toc = [];
+
+          let headerPattern = /<h([123])[^>]*>(.+)<\/h[123]>/igm, m;
+          while (m = headerPattern.exec(body)) {
+            content.toc.push({
+              tagS: '<h' + m[1] + '>',
+              tagE: '</h' + m[1] + '>',
+              title: m[2],
+              hash: m[2].toLowerCase().replace(/[^a-z0-9]/ig, '-')
+            });
+          }
+
+          return body;
+        }).then(parsed => {
+          content.body = parsed;
+          deferred.resolve(content);
+        }).catch(err => { deferred.reject(err); });
+      });
+  } else throw new Error('Cannot parse: invalid input');
+
+  return deferred.promise;
+};
+
+exports.readRaw = r => {
+  let deferred = q.defer();
   verifyWikiDirectory();
 
-  let route = r === '/' ? '/home/' : r,
-      p = path.join(wikiDir, route.substring(1)).slice(0, -1);
+  let route = r || '/', p = path.join(wikiDir, route.substring(1)).slice(0, -1);
 
-  if (fs.existsSync(p)) {
-    fs.stat(p, (err, stats) => {
-      if (err) return done(err);
+  fs.stat(p, (err, stats) => {
+    if (err) return deferred.reject(err);
 
-      if (stats.isFile()) {
+    if (stats.isDirectory()) {
+      let homeFile = path.join(p, 'home');
+      if (fs.existsSync(homeFile)) p = homeFile;
+      else {
+        let files = fs.walkSync(p), dirArray = [];
+        for (const file of files) {
+          let stat = fs.statSync(path.join(p, file));
+          console.log(file);
+          dirArray.push({ name: file, isDir: stat.isDirectory() });
+        }
+        return deferred.resolve(dirArray);
+      }
+    }
 
-        let reader = require('readline').createInterface({
-          input: fs.createReadStream(p)
-        });
-
-        let content = { title: 'A Wiki Page', desc: '', categories: [], body: '' };
-        reader.on('line', line => {
-          let isHeading = true, headingPattern = /^\$([^ ]+) (.+)$/;
-          if (line.match(headingPattern) && isHeading) {
-            let m = headingPattern.exec(line);
-            if (content[m[1]] !== undefined) content[m[1]] = JSON.parse(m[2]);
-          } else {
-            isHeading = false;
-            content.body += line + '\n';
-          }
-        }).on('close', () => {
-          done(null, content);
-        });
-
-      } else if (stats.isDirectory()) {
-
-      } else done(null, false);
-
+    // Not else because home file expects continue
+    fs.readFile(p, (err, data) => {
+      if (err) return deferred.reject(err);
+      deferred.resolve(data.toString());
     });
-  } else done(null, false);
+  });
+
+  return deferred.promise;
+};
+
+exports.read = (r) => {
+  let deferred = q.defer();
+
+  self.readRaw(r).then(raw => {
+    if (typeof raw === 'array') deferred.resolve(raw);
+    else deferred.resolve(self.parse(raw));
+  }).catch(err => { console.log(err.stack); deferred.resolve(null); }).done();
+
+  return deferred.promise;
 };
 
 exports.update = (route, content, author, done) => {
@@ -85,3 +140,5 @@ exports.delete = (route, done) => {
   console.log('delete ' + route);
   done();
 };
+
+const self = exports;
