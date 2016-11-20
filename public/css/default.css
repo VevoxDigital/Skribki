@@ -145,7 +145,6 @@ nav {
 .page {
   /* TODO Write page styles, possibly themed */
   &.page-login {
-
     .login-box {
       .btn {
         font-size: 10pt;
@@ -165,6 +164,18 @@ nav {
       }
     }
   }
+  &.page-edit {
+    textarea {
+      width: 100%;
+      resize: none;
+      border: 1px #eee solid;
+      border-radius: 10px;
+      box-shadow: 0 0 2px 1px rgba(0,0,0,0.05) inset;
+      background-color: #fcfcfc;
+      padding: 10px;
+    }
+  }
+
   .page-opts {
     a {
       padding: 5px;
