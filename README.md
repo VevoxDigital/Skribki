@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://cdn.rawgit.com/VevoxDigital/Skribki/master/public/img/logo.png" height="100px"><br>
+  <img src="https://cdn.rawgit.com/VevoxDigital/Skribki/master/public/img/logo.png" height="150px"><br>
   <strong>A Free &amp; Open Source Wiki Software Based on Git</strong>
 
   <br><br>
