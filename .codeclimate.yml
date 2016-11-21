@@ -19,8 +19,6 @@ engines:
         enabled: false
       global-require:
         enabled: false
-  csslint:
-    enabled: true
   fixme:
     enabled: true
 ratings:
