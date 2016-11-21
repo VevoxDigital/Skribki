@@ -1,22 +1,29 @@
+# Skribki Wiki CI configuration.
+# https://travis-ci.org/VevoxDigital/Skribki
+
 language: node_js
+
+# Building against NodeJS 6+
+# Should work on 6.0/6.1.
+# LTS (6.9.1 as of) recommended, stable (7.0.0 as of) appears to also work.
 node_js:
+- 'stable'
+- 'lts'
 - '6.1'
 - '6.0'
-- '5'
-- '5.1'
-- '4'
-- '4.2'
-- '4.1'
-- '4.0'
-before_install:
-- npm install -g grunt-cli bower
+
+
+# Install necessary packages before runtime
 install:
 - npm install
-#- bower install
+
+# Build only master/dev. Other branches are docs, examples, or legacy.
 branches:
   only:
   - master
   - dev
+
+# Setup compiler environment. Utilize G++ 4.8 over default compiler.
 env:
   matrix:
   - CXX=g++-4.8
