@@ -38,41 +38,60 @@ exports.install = () => {
   } else LOG.info('repository appears to be initialized and okay');
 };
 
-exports.create = (route, author, done) => {
-  verifyWikiDirectory();
-  console.log('create ' + route + ' from ' + author);
-  done();
+// verify content is as it should be.
+exports.verifyContentIntegrety = (content) => {
+  if (typeof content.title !== 'string')
+    throw new Error('content title must be a string');
+  if (typeof content.desc !== 'string')
+    throw new Error('content description must be a string');
+  if (content.categories
+    && (typeof content.categories !== 'object'
+    && typeof content.categories.length !== 'number'))
+    throw new Error('content categories must be falsy or a valid array');
+  if (typeof content.body !== 'string')
+    throw new Error('content body must be a string');
 };
 
+// parse the given raw data
 exports.parse = raw => {
   let deferred = q.defer();
 
+  // if the raw is the contents of a file
   if (typeof raw === 'string') {
-    let content = { title: 'A Wiki Page', desc: '', categories: [], body: raw }, lines = raw.split('\n');
+    let content = { title: 'A Wiki Page', desc: '', categories: [], body: raw },
+        lines = raw.split('\n');
 
-    const linePattern = /^\$([\S]+) (.+)$/;
+    // extract meta from the file
+    const linePattern = /^\$([\S]+)\s+(.+)$/;
     for (let line of lines) {
       line = line.trim();
       let matches = line.match(linePattern);
-
       if (!matches) break;
 
       content[matches[1]] = JSON.parse(matches[2]);
       content.body = content.body.substring(content.body.indexOf('\n') + 1, content.body.length);
     }
 
+    // get all the parsers from the parsersDir
     const parsersDir = path.join(__dirname, '..', 'extensions', 'parsers');
     let parsers = [];
     fs.walk(parsersDir)
       .on('data', item => {
-        if (item.stats.isFile() && path.extname(item.path) === '.js')
-          parsers.push(require(item.path));
+        try {
+          if (item.stats.isFile() && path.extname(item.path) === '.js')
+            parsers.push(require(item.path)); // eslint-disable-line global-require
+        } catch (e) {
+          LOG.warn('failed to load parser');
+          LOG.warn(e.stack);
+        }
       }).on('end', () => {
+        // parse everything based on the parsers
         parsers.reduce((cur, next) => { return cur.then(next); }, q(content.body)).then((body) => {
           content.toc = [];
 
+          // look for headers and add them to the ToC
           let headerPattern = /<h([123])[^>]*>(.+)<\/h[123]>/igm, m;
-          while (m = headerPattern.exec(body)) {
+          while ((m = headerPattern.exec(body))) {
             content.toc.push({
               tagS: '<h' + m[1] + '>',
               tagE: '</h' + m[1] + '>',
@@ -84,14 +103,23 @@ exports.parse = raw => {
           return body;
         }).then(parsed => {
           content.body = parsed;
-          deferred.resolve(content);
+          try {
+            // verify content is good, then resolve with it
+            verifyContentIntegrety(content);
+            deferred.resolve(content);
+          } catch (e) {
+            // if content is bad, reject with the error
+            deferred.reject(e);
+          }
         }).catch(err => { deferred.reject(err); });
       });
   } else if (typeof raw === 'object') {
+    // if raw is a list of files in a directory
     let page = '<h1>Directory Contents</h1>' +
       '<p>This directory has no homepage. The contents of the directory are listed below:</p>' +
       '<div class="page-filelist">';
 
+    // add link to each item, not recursive
     raw.arr.forEach(item => {
       page += `
         <a href="${raw.route}${item.name}">
@@ -100,6 +128,7 @@ exports.parse = raw => {
         </a>`;
     });
 
+    // resolve with the HTML result
     deferred.resolve({
       title: 'Directory',
       desc: 'Currently viewing files for: ' + raw.route.slice(0, -1),
@@ -110,19 +139,23 @@ exports.parse = raw => {
   return deferred.promise;
 };
 
+// read the raw data out of a wiki file
 exports.readRaw = r => {
   let deferred = q.defer();
 
   let route = r || '/', p = path.join(wikiDir, route.substring(1));
   if (p.endsWith('/')) p = p.slice(0, -1);
 
+  // start by checking the file
   fs.stat(p, (err, stats) => {
     if (err) return deferred.reject(err);
 
+    // is directory?
     if (stats.isDirectory()) {
       let homeFile = path.join(p, 'home');
-      if (fs.existsSync(homeFile)) p = homeFile;
+      if (fs.existsSync(homeFile)) p = homeFile; // the home file exists, so read that
       else {
+        // home file does not exist. build an array and resolve that
         let files = fs.readdirSync(p), dir = { route: route, arr: [] };
         files.sort();
         for (const file of files) {
@@ -133,7 +166,7 @@ exports.readRaw = r => {
       }
     }
 
-    // Not else because home file expects continue
+    // if we haven't resolved already (i.e. has home or is file), read the file and resolve it
     fs.readFile(p, (err, data) => {
       if (err) return deferred.reject(err);
       deferred.resolve(data.toString());
@@ -143,27 +176,12 @@ exports.readRaw = r => {
   return deferred.promise;
 };
 
+// helper method that calls read and parse together
 exports.read = (r) => {
-  let deferred = q.defer();
-
-  self.readRaw(r).then(raw => {
-    if (typeof raw === 'array') deferred.resolve(raw);
-    else deferred.resolve(self.parse(raw));
-  }).catch(err => { console.log(err.stack); deferred.resolve(null); }).done();
-
-  return deferred.promise;
+  return q(exports.readRaw(r)
+    .then(exports.parse));
 };
 
-exports.update = (route, content, author, done) => {
-  verifyWikiDirectory();
-  console.log('update ' + route);
-  done();
-};
-
-exports.delete = (route, done) => {
-  verifyWikiDirectory();
-  console.log('delete ' + route);
-  done();
-};
-
-const self = exports;
+// TODO create
+// TODO update
+// TODO delete
