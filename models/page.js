@@ -10,26 +10,33 @@ const wikiDir = path.join(__dirname, '..', 'wiki');
 exports.id = 'page';
 exports.version = '1';
 
-function verifyWikiDirectory() {
+exports.install = () => {
   fs.ensureDirSync(wikiDir);
   let wiki = git(wikiDir);
   if (!fs.existsSync(path.join(wikiDir, '.git'))) {
-    console.log('Repository is not initialized, doing so now.');
+    LOG.info('wiki repository missing or not initialized. doing so now');
     try {
 
-      wiki.init();
+      // init, copy files over, and commit them
+      wiki.init()
+        .addConfig('user.email', 'skribki@localhost')
+        .addConfig('user.name', 'Skribki');
       fs.copySync(path.join(__dirname, '..', 'home.md'), path.join(wikiDir, 'home'));
       fs.copySync(path.join(__dirname, '..', 'tester.md'), path.join(wikiDir, 'tester'));
       wiki.add('home').add('tester').commit('Initial commit', { '--author': '"Skribki <skribki@localhost>"' });
+      LOG.info('wiki repository initialized');
 
     } catch (e) {
-      console.error('Could not initialize the repository. Exiting now');
-      console.error(e.stack);
-      process.exit(-1);
-    }
 
-  }
-}
+      // if repo init fails
+      LOG.error('wiki did not ')
+      LOG.error('Could not initialize the repository');
+      LOG.error(e.stack);
+      F.stop(-1);
+
+    }
+  } else LOG.info('repository appears to be initialized and okay');
+};
 
 exports.create = (route, author, done) => {
   verifyWikiDirectory();
@@ -105,7 +112,6 @@ exports.parse = raw => {
 
 exports.readRaw = r => {
   let deferred = q.defer();
-  verifyWikiDirectory();
 
   let route = r || '/', p = path.join(wikiDir, route.substring(1));
   if (p.endsWith('/')) p = p.slice(0, -1);

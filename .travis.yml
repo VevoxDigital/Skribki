@@ -12,6 +12,9 @@ node_js:
 - '6.1'
 - '6.0'
 
+# setup the workspace for the build
+before_install:
+- 'touch .secret && echo "test secret" > .secret'
 
 # Install necessary packages before runtime
 install:
