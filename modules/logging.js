@@ -8,7 +8,7 @@ exports.id = 'logging';
 
 exports.install = () => {
 
-  F.console = new winston.Logger({
+  F.log = new winston.Logger({
     level: 'debug',
     transports: [
       new winston.transports.Console({
@@ -33,7 +33,6 @@ exports.install = () => {
     ]
   });
 
-  global.LOG = F.console;
-  F.log = F.console;
+  global.LOG = F.log;
 
 };
