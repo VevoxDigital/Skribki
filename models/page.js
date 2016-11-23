@@ -105,7 +105,7 @@ exports.parse = raw => {
           content.body = parsed;
           try {
             // verify content is good, then resolve with it
-            verifyContentIntegrety(content);
+            exports.verifyContentIntegrety(content);
             deferred.resolve(content);
           } catch (e) {
             // if content is bad, reject with the error
