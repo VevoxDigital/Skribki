@@ -14,7 +14,7 @@ node_js:
 
 # setup the workspace for the build
 before_install:
-- 'touch .secret && echo "test secret" > .secret'
+- 'touch .secret'
 
 # Install necessary packages before runtime
 install:
