@@ -1,41 +1,21 @@
 'use strict';
 
-const nconf = require('nconf');
+const nconf = require('nconf'),
+      configFile = require('path').join(__dirname, '..', 'config.json');
 
-const configFile = require('path').join(__dirname, '..', 'config.json');
+nconf.argv().env().file({ file: configFile });
 
-function initConfig() {
-  if (!nconf.$navbar) nconf.argv().env().file({ file: configFile });
-}
+// make a config helper for custom config
+F.helpers.config = key => { return nconf.get(key); };
 
-F.helpers.config = key => {
-  return nconf.get(key);
-}
-
-F.middleware('config', (req, res, next, options, controller) => {
-  if (controller) initConfig();
-  next();
-});
-F.use('config');
-
+// add the navbar to the repository
 F.middleware('navbar', (req, res, next, options, controller) => {
-
-  if (controller) {
-    initConfig();
-    controller.repository.$navbar = nconf.get('navbar') || { };
-  }
-
+  controller.repository.$navbar = nconf.get('navbar') || { };
   next();
-
 });
 
+// add the sidebar to the repository
 F.middleware('sidebar', (req, res, next, options, controller) => {
-
-  if (controller) {
-    initConfig();
-    controller.repository.$sidebar = nconf.get('sidebar') || { };
-  }
-
+  controller.repository.$sidebar = nconf.get('sidebar') || { };
   next();
-
 });
