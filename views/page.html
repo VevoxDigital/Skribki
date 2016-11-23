@@ -10,7 +10,7 @@
         @{view('sidebar')}
       </div>
 
-      <div class="page col-xs-12 col-md-9 col-lg-10">
+      <div id="page" class="page col-xs-12 col-md-9 col-lg-10">
         <div class="text-right page-opts">
           <a href="@{self.url}?a=history">History </a>
           @{if user}
@@ -19,7 +19,9 @@
           @{fi}
         </div>
         <div class="float-clear"></div>
-        @{!model.body}
+        <div id="pageBody">
+          @{!model.body}
+        </div>
 
         @{if repository.categories && repository.categories.length}
           <hr>
