@@ -21,23 +21,23 @@ function processPage() {
         break;
       case 'edit':
         // editing the page
-        F.model(MODEL_PAGE).readRaw(self.url).then(c => { processPageContentEdit(self, c); })
+        F.model(MODEL_PAGE).readRaw(self.url).then(c => { exports.processPageContentEdit(self, c); })
           .catch(err => F.response500(self.req, self.res, err)).done();
         break;
       default:
         // Just show the page normally
-        F.model(MODEL_PAGE).read(self.url).then((c) => { processPageContent(self, c); })
+        F.model(MODEL_PAGE).read(self.url).then((c) => { exports.processPageContent(self, c); })
           .catch(err => F.response500(self.req, self.res, err)).done();
   } else self.res.send(`method ${method} not supported for ${self.url}`);
 }
 
-function processPageContentEdit(self, c) {
+exports.processPageContentEdit = (self, c) => {
   if (!self.user) return self.redirect(self.url);
   if (typeof c === 'object') return self.redirect(self.url + '/home?a=edit');
 
   let model = { };
   model.isEdit = true;
-  model.content = c || '$title Page Title\n$desc Page Desc\n$categories []';
+  model.content = c || '$title Page Title\n$desc Page Desc\n$categories []\n\nHello World';
 
   let editing = c ? 'Editing' : 'Creating';
   self.repository.title = editing + ' Page';
@@ -46,7 +46,7 @@ function processPageContentEdit(self, c) {
   self.view('edit', model);
 }
 
-function processPageContent(self, c) {
+exports.processPageContent = (self, c) => {
   let content = c || {
     title: 'Page Not Found',
     desc: 'The page you requested was not found.',
