@@ -7,7 +7,7 @@ const passport  = require('passport'),
 
 const secrets = require('../lib/secrets');
 
-INSTALL('module', 'http://modules.totaljs.com/session/v1.00/session.js',
+INSTALL('module', path.join(__dirname, '..', 'lib', 'session.js'),
   { cookie: '_skr-ss', secret: CONFIG('secret'), timeout: '1 hour' });
 
 passport.serializeUser((user, done) => {

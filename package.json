@@ -26,7 +26,8 @@
     "test": "node test.js",
     "start": "node release.js",
     "debug": "node debug.js",
-    "kill-crash": "sudo kill -9 `lsof -t -i:8000`"
+    "kill-crash": "sudo kill -9 `lsof -t -i:8000`",
+    "install": "wget https://cdn.rawgit.com/totaljs/modules/master/Miscellaneous/session/session.js -O lib/session.js"
   },
   "repository": {
     "type": "git",
