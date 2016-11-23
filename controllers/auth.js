@@ -68,10 +68,10 @@ function processLoginCallback(provider) {
         if (check.startsWith('/')) {
           let flagIndex = check.lastIndexOf('/');
           if (email.match(new RegExp(check.substr(1, flagIndex), check.substr(flagIndex + 1))))
-            return !whitelist;
-        } else if (check === email) return !whitelist;
+            return whitelist;
+        } else if (check === email) return whitelist;
       }
-      return false;
+      return !whitelist;
     };
 
     // check the email
