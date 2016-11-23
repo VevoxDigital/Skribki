@@ -10,7 +10,8 @@ F.middleware('request-debug', (req, res, next, options, controller) => {
     else if (res.statusCode >= 400) color = 'yellow';
     else if (res.statusCode >= 300) color = 'cyan';
     else if (res.statusCode >= 200) color = 'green';
-    LOG.log('verbose', `${req.connection.remoteAddress} ${req.method.bold} ${req.url} ${res.statusCode.toString()[color]}`);
+    LOG.log(F.locked(req.url) ? 'silly' : 'verbose',
+      `${req.connection.remoteAddress} ${req.method.bold} ${req.url} ${res.statusCode.toString()[color]}`);
   });
   next();
 });
