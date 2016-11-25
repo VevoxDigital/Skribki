@@ -182,6 +182,94 @@ exports.read = (r) => {
     .then(exports.parse));
 };
 
+exports.buildDiffMessage = diff => {
+  let diffInfo = diff.raw.match(/diff --git a(\/\S+) b(\/\S+)/);
+  diff.file = {
+    a: diffInfo[1],
+    b: diffInfo[2]
+  };
+
+  const diffLinePattern = /@@ -(\d+),(\d+) \+(\d+),(\d+) @@\n?((?:[\+\- ].*\n)+)/g;
+  let diffMessages = [], diffMessage;
+  while ((diffMessage = diffLinePattern.exec(diff.raw))) {
+    let diffMessageObject = {
+      before: {
+        index: diffMessage[1],
+        length: diffMessage[2]
+      },
+      after: {
+        index: diffMessage[3],
+        length: diffMessage[4]
+      },
+      lines: []
+    };
+    for (const line of diffMessage[5].split('\n')) {
+      let color;
+      switch(line.charAt(0)) {
+        case '+':
+          color = 'addition';
+          break;
+        case '-':
+          color = 'deletion';
+          break;
+        case ' ':
+        default:
+          color = 'unchanged';
+      }
+      diffMessageObject.lines.push({
+        state: color,
+        text: line.substring(1)
+      });
+    }
+    diffMessages.push(diffMessageObject);
+  }
+  diff.messages = diffMessages;
+  delete diff.raw;
+};
+
+// fetch page history
+exports.history = (path) => {
+  let deferred = q.defer();
+
+  let wiki = git(wikiDir);
+  wiki.silent(true);
+  // if a hash was given, show its commit info
+  if (!path.startsWith('/')) wiki.show([path], (err, c) => {
+    if (err) return deferred.reject(err);
+
+    const commitPattern = /^commit ([a-z0-9]+)\nAuthor: ([A-Za-z0-9!-)_+=\- ]+)<([^>]+)>\nDate: +(.+)\n\n +(.+)\n\n/;
+
+    let commit = { }, info = c.match(commitPattern);
+
+    commit.hash = info[1];
+    commit.author = { name: info[2].trim(), email: info[3] };
+    commit.date = info[4];
+    commit.message = info[5];
+
+    // get the indecies of all the diff starts
+    const diffPattern = /diff --git.+\n(?:(?!diff).+\n)+/g;
+    let diffs = [], match;
+    while ((match = diffPattern.exec(c))) {
+      diffs.push({ raw: match[0] });
+    }
+
+    for (let diff of diffs) exports.buildDiffMessage(diff);
+    commit.diffs = diffs;
+
+    deferred.resolve(commit);
+  });
+  // if not, log the given path
+  else {
+    if (path.endsWith('/')) path = path.slice(0, -1);
+    wiki.log({ file: path.substring(1) }, (err, log) => {
+      if (err) return deferred.reject(err);
+      deferred.resolve(log.all);
+    });
+  }
+
+  return deferred.promise;
+};
+
 // TODO create
 // TODO update
 // TODO delete

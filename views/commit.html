@@ -1,0 +1,39 @@
+@{view('/page/navbar')}
+@{view('/page/header')}
+@{view('/page/banner')}
+
+<div class="content">
+  <div class="container">
+    <div class="row">
+      <div id="page" class="page page-commit">
+        <h1>Viewing Commit</h1>
+        <h2>@{model.commit.message}</h2>
+        <p>
+          @{model.commit.author.name} <code>&lt;@{model.commit.author.email}&gt;</code>
+          <span class="commit-date">@{model.commit.date}</span>
+        </p>
+        @{foreach diff in model.commit.diffs}
+          <a href="@{diff.file.a}" class="commit-filelink"><h3>@{diff.file.a}</h3></a>
+          @{foreach msg in diff.messages}
+            <code class="commit-diff-header">
+              @@ -@{msg.before.index},@{msg.before.length}
+               +@{msg.after.index},@{msg.after.length} @@
+            </code>
+            <table class="commit-diff">
+              <tbody>
+                @{foreach line in msg.lines}
+                  <tr class="commit-state commit-state-@{line.state}">
+                    <td>@{line.state !== 'addition' ? msg.before.index++ : ''}</td>
+                    <td>@{line.state !== 'deletion' ? msg.after.index++ : ''}</td>
+                    <td>@{line.state === 'addition' ? '+' : (line.state === 'deletion' ? '-' : '')}</td>
+                    <td>@{line.text}</td>
+                  </tr>
+                @{end}
+              </tbody>
+            </table>
+          @{end}
+        @{end}
+      </div>
+    </div>
+  </div>
+</div>

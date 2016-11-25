@@ -12,15 +12,63 @@
 
       <div id="page" class="page col-xs-12 col-md-9 col-lg-10">
         <div class="text-right page-opts">
-          <a href="@{self.url}?a=history">History </a>
-          @{if user}
-            <a href="@{self.url}?a=edit">Edit </a>
-            <a href="@{self.url}?a=delete" style="color: #e74c3c;">Delete</a>
+          @{if model.hideOptions}
+            <a href="@{url}">Back to Page </a>
+          @{else}
+            <a href="@{url}?a=history">History </a>
+            @{if user}
+              <a href="@{url}?a=edit">Edit </a>
+              <a href="@{url}?a=delete" style="color: #e74c3c;">Delete</a>
+            @{fi}
           @{fi}
         </div>
         <div class="float-clear"></div>
+
         <div id="pageBody">
-          @{!model.body}
+          <!-- NOTE Shown when a content body is present -->
+          @{if model.body}
+            <div class="page-content">
+              @{!model.body}
+            </div>
+
+          <!-- NOTE Shown when viewing a single page's history -->
+          @{else if model.history}
+            <div class="page-history">
+              <h1>Viewing Page History</h1>
+              <p>There have been @{model.commits || 0} changes to <code>@{url}</code></p>
+              <ul id="commitHistory">
+                @{foreach commit in model.history}
+                  <li>
+                    <a href="/special/commits/@{commit.hash}">
+                      <strong>@{commit.hash.substring(0,7)}</strong>
+                    </a>
+                    <span class="commit-msg"> @{commit.message}</span>
+                    <span class="commit-author"> - @{commit.author_name} &lt;@{commit.author_email}&gt;</span>
+                    <span class="commit-date"> (@{commit.date})</span>
+                  </li>
+                @{end}
+              </ul>
+
+              <div class="page-navigation">
+                @{if model.page > 1}
+                  <a href="@{url}?a=history">
+                    <i class="fa fa-arrow-circle-left"></i> First
+                  </a>
+                  <a href="@{url}?a=history&amp;page=@{model.page-1}">
+                    <i class="fa fa-arrow-circle-o-left"></i> Previous
+                  </a>
+                @{fi}
+                @{if model.page < model.pages}
+                  <a href="@{url}?a=history&amp;page=@{model.page+1}">
+                    Next <i class="fa fa-arrow-circle-o-right"></i>
+                  </a>
+                  <a href="@{url}?a=history&amp;page=@{model.pages}">
+                    Last <i class="fa fa-arrow-circle-right"></i>
+                  </a>
+                @{fi}
+              </div>
+            </div>
+          @{fi}
         </div>
 
         @{if repository.categories && repository.categories.length}

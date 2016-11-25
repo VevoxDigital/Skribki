@@ -142,8 +142,85 @@ nav {
   }
 }
 
-.page {
-  /* TODO Write page styles, possibly themed */
+#page {
+  #pageBody {
+    .page-content {
+      // TODO Move content styles to here
+    }
+    .page-history {
+      ul {
+        list-style-type: none;
+        li {
+          margin: 0;
+          padding: 2px;
+          a {
+            font-size: 14pt;
+            font-family: monospace;
+          }
+          .commit-message {
+            font-size: 12pt;
+          }
+          .commit-author {
+            font-size: 10pt;
+            opacity: 0.8;
+          }
+          .commit-date {
+            font-size: 9pt;
+            opacity: 0.5;
+          }
+        }
+      }
+      .page-navigation a {
+        display: inline-block;
+        padding: 2px 5px;
+      }
+    }
+  }
+
+  &.page-commit {
+    .commit-date {
+      padding: 5px;
+      font-size: 8pt;
+      opacity: 0.8;
+    }
+    .commit-filelink {
+      color: inherit;
+      display: block;
+      margin-top: 20px;
+      h3 {
+        transition: opacity 250ms;
+        display: block;
+        width: 100%;
+        background-color: #d8d8d8;
+        border-radius: 10px 10px 0 0;
+        margin: 0;
+        padding: 5px 15px;
+        &:hover { opacity: 0.8; }
+      }
+    }
+    .commit-diff-header {
+      display: block;
+      padding: 4px 10px;
+      width: 100%;
+    }
+    .commit-diff {
+      width: 100%;
+      margin: 0;
+      tbody { border: 1px #eee solid; border-radius: 0 0 5px 5px; }
+      tr {
+        td {
+          padding: 3px;
+          font-family: monospace;
+          border: 0 #eee solid;
+          &:nth-child(1), &:nth-child(2) { width: 60px; text-align: center; border-right-width: 1px; }
+          &:nth-child(3) { width: 15px; }
+        }
+        &.commit-state-addition                 { background-color: #E2F8DF; }
+        &.commit-state-deletion                 { background-color: #F7DFDF; }
+      }
+    }
+  }
+
   &.page-login {
     .login-box {
       .btn {

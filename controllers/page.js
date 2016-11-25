@@ -1,5 +1,7 @@
 'use strict';
 
+const cheerio = require('cheerio');
+
 const MODEL_PAGE = 'page';
 
 // install into framework
@@ -13,22 +15,24 @@ exports.install = function () {
 function processPage() {
   let self = this, method = self.req.method;
 
+  let page = F.model(MODEL_PAGE);
+
   // if getting, switch query.a
   if (method === 'GET') switch(self.query.a) {
       case 'history':
-        // TODO Page history
-        self.view('page', { body: 'TODO history' });
+        // viewing history
+        page = page.history(self.url).then(history => { exports.processHistory(self, history); });
         break;
       case 'edit':
         // editing the page
-        F.model(MODEL_PAGE).readRaw(self.url).then(c => { exports.processPageContentEdit(self, c); })
-          .catch(err => F.response500(self.req, self.res, err)).done();
+        page = page.readRaw(self.url).then(c => { exports.processPageContentEdit(self, c); });
         break;
       default:
         // Just show the page normally
-        F.model(MODEL_PAGE).read(self.url).then((c) => { exports.processPageContent(self, c); })
-          .catch(err => F.response500(self.req, self.res, err)).done();
+        page = page.read(self.url).then((c) => { exports.processPageContent(self, c); });
   } else self.res.send(`method ${method} not supported for ${self.url}`);
+
+  page.catch(err => F.response500(self.req, self.res, err)).done();
 }
 
 exports.processPageContentEdit = (self, c) => {
@@ -61,3 +65,21 @@ exports.processPageContent = (self, c) => {
 
   self.view('page', { body: content.body });
 }
+
+exports.processHistory = (self, history) => {
+  self.repository.title = 'Page History';
+  self.repository.desc = 'Viewing history for \'' + self.url + '\'';
+
+  // view all diffs for this page
+  const pageNum = self.query.page ? parseInt(self.query.page, 10) - 1 : 0,
+        perPage = 30, pages = Math.ceil(history.length / perPage),
+        pagedHistory = history.slice(pageNum * perPage, (pageNum + 1) * perPage);
+
+  self.view('page', {
+    history: pagedHistory,
+    page: pageNum + 1,
+    pages: pages,
+    commits: history.length,
+    hideOptions: true
+  });
+};
