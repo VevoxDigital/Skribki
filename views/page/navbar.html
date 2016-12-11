@@ -17,12 +17,12 @@
     <div class="navbar-right">
       @{if user}
         <ul class="nav-items">
-          <li class="nav-item">Hi there, @{user.username}</li>
-          <li class="nav-item"><a href="/special/logout">Logout</a></li>
+          <li class="nav-item">@(#nav.user)</li>
+          <li class="nav-item"><a href="/special/logout">@(#nav.logout)</a></li>
         </ul>
       @{else}
         <ul class="nav-items">
-          <li class="nav-item"><a href="/special/login">Login</a></li>
+          <li class="nav-item"><a href="/special/login">@(#nav.login)</a></li>
         </ul>
       @{fi}
     </div>

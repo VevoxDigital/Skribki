@@ -13,12 +13,12 @@
       <div id="page" class="page col-xs-12 col-md-9 col-lg-10">
         <div class="text-right page-opts">
           @{if model.hideOptions}
-            <a href="@{url}">Back to Page </a>
+            <a href="@{url}">@(#page.opts.back) </a>
           @{else}
-            <a href="@{url}?a=history">History </a>
+            <a href="@{url}?a=history">@(#page-opts-history) </a>
             @{if user}
-              <a href="@{url}?a=edit">Edit </a>
-              <a href="@{url}?a=delete" style="color: #e74c3c;">Delete</a>
+              <a href="@{url}?a=edit">@(#page.opts.edit) </a>
+              <a href="@{url}?a=delete" style="color: #e74c3c;">@(#page.opts.delete)</a>
             @{fi}
           @{fi}
         </div>
