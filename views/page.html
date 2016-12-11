@@ -15,7 +15,7 @@
           @{if model.hideOptions}
             <a href="@{url}">@(#page.opts.back) </a>
           @{else}
-            <a href="@{url}?a=history">@(#page-opts-history) </a>
+            <a href="@{url}?a=history">@(#page.opts.history) </a>
             @{if user}
               <a href="@{url}?a=edit">@(#page.opts.edit) </a>
               <a href="@{url}?a=delete" style="color: #e74c3c;">@(#page.opts.delete)</a>
@@ -74,7 +74,7 @@
         @{if repository.categories && repository.categories.length}
           <hr>
           <p class="categories">
-            Categories:
+            @(#page.categories):
             @{foreach cat in repository.categories}
               <a href="/category/@{cat}">@{cat}</a>
             @{end}
