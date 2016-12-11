@@ -3,7 +3,7 @@
 
 page.opts.back    : Back to Page
 page.opts.edit    : Edit
-page-opts-history : History
+page.opts.history : History
 page.opts.delete  : Delete
 
 page.categories   : Categories
