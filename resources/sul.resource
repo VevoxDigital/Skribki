@@ -1,6 +1,8 @@
 // Skribki Locale File
 // Sullang
 
+lang.name   : Sullang
+
 page.opts.back    : Proto ka
 page.opts.edit    : sa Skrib
 page.opts.history : Teri en

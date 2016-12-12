@@ -1,6 +1,8 @@
 // Skribki Locale File
 // English (US)
 
+lang.name   : English
+
 page.opts.back    : Back to Page
 page.opts.edit    : Edit
 page.opts.history : History

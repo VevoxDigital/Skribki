@@ -28,10 +28,21 @@
 	<footer>
 		<div class="container">
 			<p>
+				View In:
+				@{foreach lang in global.languages}
+					@{if index > 0}
+						|
+					@{fi}
+					@{if controller.language === lang.id}
+						<span>@{lang.name}</span>
+					@{else}
+						<a href="/special/lang?l=@{lang.id}&amp;url=@{controller.url}">@{lang.name}</a>
+					@{fi}
+				@{end}
+			<p>
 				A free wiki powered by <a href="https://github.com/VevoxDigital/Skribki">Skribki</a>,
 				designed and developed by Vevox Digital.
 			</p>
-
 			<p>
 				Unless otherwise noted, content is available
 				under <a href="@{helpers.config('footer:license:url')}">@{helpers.config('footer:license:name')}</a>
