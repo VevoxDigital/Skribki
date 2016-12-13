@@ -5,21 +5,21 @@
 <div class="content">
   <div class="container">
     <div class="row">
-      <div class="page page-edit">
-        <h1>Page Content</h1>
+      <div id="page" class="page page-edit">
+        <h1>@(#page.edit.header_content)</h1>
         <textarea rows="30">@{model.content}</textarea>
 
         <div class="text-center">
-          <a href="btn btn-lg btn-success" href="javascript:" id="previewUpdate">
-            <i class="fa fa-caret-down"></i> Update Preview <i class="fa fa-caret-down"></i>
+          <a class="btn btn-lg btn-success" href="javascript:" id="previewUpdate">
+            <span><i class="fa fa-caret-down"></i> @(#page.edit.preview_update) <i class="fa fa-caret-down"></i></span>
           </a>
         </div>
 
-        <h1>Page Preview</h1>
+        <h1>@(#page.edit.header_preview)</h1>
         <hr>
 
         <div id="preview">
-          <div class="text-center">No Preview Available</div>
+          <div class="text-center">@(#page.edit.preview_fail)</div>
         </div>
 
         <hr><hr>

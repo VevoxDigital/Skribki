@@ -251,6 +251,20 @@ nav {
       background-color: #fcfcfc;
       padding: 10px;
     }
+    .btn {
+      border: none;
+      border-radius: 0;
+      margin: 5px;
+      transition: 250ms;
+      background-color: $color-base-1;
+      padding: 10px 15px;
+      font-size: 10pt;
+      span { transition: 250ms; opacity: 0.5; }
+      &:hover {
+        background-color: $color-base-2;
+        span { opacity: 0.4; }
+      }
+    }
   }
 
   .page-opts {
