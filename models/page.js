@@ -270,6 +270,35 @@ exports.history = (path) => {
   return deferred.promise;
 };
 
-// TODO create
-// TODO update
+// update page content to given content, under given user
+// create page if not extamists
+exports.update = (page, user, content) => {
+  let deferred = q.defer();
+
+  if (page.endsWith('/')) page = page.slice(0, -1);
+  page = path.normalize(page); // rid of any issue of accessing files outside the wiki dir
+
+  let wiki = git(wikiDir);
+  try {
+    // make sure that if it exists, it is not a directory
+    let stat = fs.statSync(path.join(wikiDir, page));
+    if (!stat.isFile()) page += '/home';
+  } catch (e) {
+    // create page
+  }
+  page = path.normalize(page); // make sure our previous check didn't mess things up.
+
+  content.body = content.body.replace(/\r(?:\n)?/g, '\n');
+  fs.writeFile(path.join(wikiDir, page), content.body.trim() + '\n', err => {
+    if (err) return deferred.reject(err);
+    wiki.add(page)
+      .commit(content.msg, { '--author': `${user.name || user.username} <${user.email}>` }, err => {
+        if (err) return deferred.reject(err);
+        deferred.resolve();
+      });
+  });
+
+  return deferred.promise;
+};
+
 // TODO delete

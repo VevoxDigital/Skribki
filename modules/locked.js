@@ -2,6 +2,7 @@
 
 const lockedPatterns = [
   /^\/special\//i, // Special pages/directores
+  /^\/api\//i, // api routes
   /^\/categor(?:y|ies)\//i, // Categories
   /^\/(?:css|img|js)\//i, // Public files
   /\.(?:ico|png|jpg|gif|svg)(?:$|\?)/i // Images and other static files

@@ -9,6 +9,7 @@ exports.install = function () {
   F.route((url) => {
     return !F.locked(url);
   }, processPage, ['#navbar', '#sidebar']);
+  F.route('/api/page/*', processPageUpdate, ['post']);
 };
 
 // process the displaying of the page.
@@ -30,9 +31,24 @@ function processPage() {
       default:
         // Just show the page normally
         page = page.read(self.url).then((c) => { exports.processPageContent(self, c); });
-  } else self.res.send(`method ${method} not supported for ${self.url}`);
+  } else self.throw400(`method ${method} not supported for ${self.url}`);
 
   page.catch(err => F.response500(self.req, self.res, err)).done();
+}
+
+function processPageUpdate() {
+  let self = this,
+      page = F.model(MODEL_PAGE);
+  // trying to update/create a page
+  let url = self.url.substring(9);
+  if (!self.user) return self.throw401('must be logged in');
+  if (!self.req.body.content) return self.throw400('page content missing from request');
+  page.update(url, self.user, {
+    body: self.req.body.content,
+    msg: self.req.body.message || ('Update ' + url)
+  }).then(() => {
+    self.redirect(url);
+  }).catch(err => { self.throw500(err); }).done();
 }
 
 exports.processPageContentEdit = (self, c) => {
