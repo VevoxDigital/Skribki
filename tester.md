@@ -17,8 +17,6 @@ This is a heading
 
 # Span Elements
 
-<p>Allows HTML, but converts `<script>` tags to codeblocks.</p>
-
 ## Links
 External Anchor: [click me!](https://vevox.io)
 
