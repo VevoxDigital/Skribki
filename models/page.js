@@ -287,6 +287,7 @@ exports.update = (page, user, content) => {
     // create page
   }
   page = path.normalize(page); // make sure our previous check didn't mess things up.
+  if (page.startsWith('/')) page = page.substring(1);
 
   content.body = content.body.replace(/\r(?:\n)?/g, '\n');
   fs.writeFile(path.join(wikiDir, page), content.body.trim() + '\n', err => {
