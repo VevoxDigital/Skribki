@@ -8,13 +8,13 @@
       <div id="page" class="page page-edit">
         <h1>@(#page.edit.header_content)</h1>
         <form action="/api/page@{controller.url}" method="POST">
-          <input type="text" name="message" placeholder="Commit Message" value="Update @{controller.url}">
-          <input type="submit" value="Submit Changes" class="btn btn-lg btn-success">
+          <input type="text" name="message" placeholder="Commit Message" value="Update @{controller.url}" style="width:30%;">
+          <input type="submit" value="Submit Changes" class="btn btn-success">
 
           <textarea name="content" rows="30">@{model.content}</textarea>
 
           <div class="text-center">
-            <a class="btn btn-lg btn-success" href="javascript:" id="previewUpdate">
+            <a class="btn btn-lg btn-default" href="javascript:" id="previewUpdate">
               <span><i class="fa fa-caret-down"></i> @(#page.edit.preview_update) <i class="fa fa-caret-down"></i></span>
             </a>
           </div>
