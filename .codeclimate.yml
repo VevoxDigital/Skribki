@@ -1,0 +1,32 @@
+# CodeClimate Code Check configuration
+# https://codeclimate.com/github/VevoxDigital/Skribki
+
+engines:
+  duplication:
+    enabled: true
+    checks:
+      # Disable 'Similar code' check, as it throws a lot of false positives
+      Similar code:
+        enabled: false
+    config:
+      languages:
+      - javascript
+  eslint:
+    enabled: true
+    checks:
+      # Disable these as well: same issue as 'Similar code' check.
+      complexity:
+        enabled: false
+      global-require:
+        enabled: false
+  fixme:
+    enabled: true
+ratings:
+  paths:
+  - 'public/**'
+  - 'controllers/**/*.js'
+  - 'definitions/**/*.js'
+  - 'extensions/**/*.js'
+  - 'modules/**/*.js'
+  - 'models/**/*.js'
+  - 'views/**/*.pug'
