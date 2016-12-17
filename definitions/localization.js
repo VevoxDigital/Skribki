@@ -8,7 +8,7 @@ const COOKIE = '__lang';
 
 // fetch the locale from the session, default to English
 F.defaultLocale = config.get('language') || 'en';
-F.onLocate = req => { // onLocate? Is this a typo...?
+F.onLocale = req => {
   req.lang = req.cookie(COOKIE) || F.defaultLocale;
   return req.lang;
 };
