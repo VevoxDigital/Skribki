@@ -1,0 +1,21 @@
+doctype html
+html
+  head
+    title #{repository.title || 'Wiki'} &#183; #{config.oem_name || config.name}
+
+    // vendor files
+    link(href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous")
+
+    // custom header content
+    link(rel='stylesheet' href='/styles/layout.scss')
+    link(rel='stylesheet' href='/styles/' + controller.name + '.scss')
+    block scripts
+  body
+    include layout/navbar.pug
+    block content
+    block footer
+      footer
+        p footer content

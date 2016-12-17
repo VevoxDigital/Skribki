@@ -1,0 +1,23 @@
+/**
+  * Skribki layout styles
+  */
+
+// clean the page up a bit
+* { box-sizing: border-box; }
+body {
+  padding-top: 50px;
+  &, html { margin: 0; }
+}
+
+// navbar
+.navbar-brand {
+  & > img {
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+    padding-right: 3px;
+  }
+  & > span {
+    vertical-align: middle;
+  }
+}

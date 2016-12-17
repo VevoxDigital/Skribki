@@ -1,0 +1,20 @@
+nav.navbar.navbar-default.navbar-fixed-top
+  .container-fluid
+    .navbar-header
+      a.navbar-brand(href='/')
+        img(src=config['oem.icon'])
+        span #{config['oem.name']}
+    .collapse.navbar-collapse#navbarLeft
+      ul.nav.navbar-nav
+        - let nav = { text: config['navbar.items.text'], link: config['navbar.items.link'] }
+        - for (let i = 0; i < Math.min(nav.text.length, nav.link.length); i++)
+          li
+            a(href=nav.link[i])= nav.text[i]
+      ul.nav.navbar-nav.navbar-right#navbarRight
+        unless user
+          li
+            a(href='/special/login') Login
+        else
+          li Hi, #{user.name}
+          li
+            a(href='/special/login') Logout
