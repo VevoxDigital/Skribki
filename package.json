@@ -28,5 +28,8 @@
   "homepage": "http://wiki.vevox.io/projects/skribki",
   "engines": {
     "node": ">=6.0"
+  },
+  "dependencies": {
+    "total.js": "^2.3.0"
   }
 }
