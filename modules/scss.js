@@ -29,7 +29,7 @@ function scssCompiler(req, res, isValidation) {
   else {
     try {
       let output = exports.compile(fs.readFileSync(F.path.public(req.url)).toString());
-      F.cache.set(key, output);
+      if (!self.config.debug) F.cache.set(key, output, F.datetime.add('m', 4));
       self.responseContent(req, res, 200, output, 'text/css', true);
     } catch (e) {
       if (e.message.startsWith('ENOENT')) self.response404(req, res);
