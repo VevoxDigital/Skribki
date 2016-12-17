@@ -62,6 +62,7 @@ exports.install = opts => {
 
     let locals = {
       model: model,
+      controller: self,
       config: F.config,
       repository: self.repository,
       user: self.user,
