@@ -30,8 +30,11 @@
     "node": ">=6.0"
   },
   "dependencies": {
+    "lockfile": "^1.0.3",
     "node-sass": "^4.0.0",
     "pug": "^2.0.0-beta6",
+    "q": "^1.4.1",
+    "simple-git": "^1.65.0",
     "total.js": "^2.3.0"
   }
 }
