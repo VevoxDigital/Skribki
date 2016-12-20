@@ -30,31 +30,38 @@ exports.uninstall = () => {
   lockfile.unlockSync(F.path.wiki('repo.lck'));
 };
 
-exports.read = route => {
-  let deferred = q.defer();
+exports.normalizePath = route => {
+  assert.strictEqual(typeof route, 'string', 'route should be a string');
 
-  // verify params are in order
-  try {
-    assert.strictEqual(typeof route, 'string', 'url should be a string');
-  } catch (e) { deferred.reject(e); }
-
-  // sanitize the route a bit to avoid reading files outside the wiki dir.
+  // normalize to root to avoid stepping out of cwd
+  if (!route.startsWith('/')) route = '/' + route;
+  if (route.endsWith('/')) route = route.slice(0, -1);
   route = path.normalize(route);
 
-  // stat the route
-  // we should only reject on error; missing files resolve with no data
-  if (route.endsWith('/')) route = route.slice(0, -1);
-  let file = path.join(exports.wikiPath, route);
-  fs.stat(file, (err, stats) => {
-    if (err) return deferred.resolve(); // if file doesn't exist, resolve with no data
-    if (stats.isDirectory()) // if directory, look for an index file and try to read that
-      return deferred.resolve(exports.read(route + '/index'));
-    // exists and is file, try reading
-    fs.readFile(file, (err, data) => {
-      if (err) return deferred.reject(err);
-      deferred.resolve(data.toString()); // resolve with the file's contents
-    });
+  return route;
+};
+
+exports.workingFile = route => {
+  let deferred = q.defer();
+  route = exports.normalizePath(route);
+
+  fs.stat(path.join(exports.wikiPath, route), (err, stats) => {
+    if (err) return deferred.resolve(); // missing file means we resolve with no data.
+    route = stats.isDirectory() ? route + '/index' : route;
+    deferred.resolve(route);
   });
 
   return deferred.promise;
+};
+
+exports.read = route => {
+  return exports.workingFile(route).then(route => {
+    if (!route) return;
+    let deferred = q.defer();
+    fs.readFile(F.path.wiki(route), (err, data) => {
+      if (err) return deferred.reject(err);
+      deferred.resolve(data.toString());
+    });
+    return deferred.promise;
+  });
 };
