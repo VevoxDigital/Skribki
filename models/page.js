@@ -18,6 +18,7 @@ exports.install = () => {
   try {
     lockfile.lockSync(F.path.wiki('repo.lck'));
     git(F.path.wiki()).init();
+    // TODO Inital commit so tests won't fail trying to reset to HEAD^1
   } catch (e) {
     console.error('failed to lock repository, it may be in use');
     console.error(e);
@@ -64,4 +65,34 @@ exports.read = route => {
     });
     return deferred.promise;
   });
+};
+
+exports.write = (route, data) => {
+  assert.equal(typeof data, typeof { }, 'data should be an object, got ' + typeof data);
+  assert.equal(typeof data.name, 'string', 'data should have string name');
+  assert.equal(typeof data.email, 'string', 'data should have string email');
+  assert.equal(typeof data.body, 'string', 'data should have string body');
+  data.body = data.body.replace(/\r(?:\n)?/g, '\n');
+
+  let deferred = q.defer();
+
+  route = exports.normalizePath(route);
+  // lock the file to avoid any weird commits with two simultanious edits
+  // wait 2 seconds for other locks to be released
+  lockfile.lock(F.path.wiki(route + '.lck'), { wait: 2000 }, err => {
+    if (err) return deferred.reject(err);
+    fs.writeFile(F.path.wiki(route), data.body, err => {
+
+      // file written with new data, commit to git
+      git(F.path.wiki()).add(route.substring(1))
+        .commit(data.message || 'Update ' + route, { '--author': `${data.name} <${data.email}>` }, () => {
+          lockfile.unlock(F.path.wiki(route + '.lck'), (err) => {
+            if (err) return deferred.reject(err);
+            deferred.resolve();
+          });
+        });
+    });
+  });
+
+  return deferred.promise;
 };

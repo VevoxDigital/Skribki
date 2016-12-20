@@ -26,32 +26,39 @@ exports.run = () => {
   });
 
   F.assert('models:page:workingFile', next => {
-    try {
-      fs.unlinkSync(F.path.wiki(TEST_PATH));
-    } catch (e) { /* no-op */ }
     fs.mkdirSync(F.path.wiki(TEST_PATH));
     page.workingFile(TEST_PATH).then(file => {
       assert.equal(file, TEST_PATH + '/index', 'should fetch index of directory');
       fs.rmdirSync(F.path.wiki(TEST_PATH));
-      page.workingFile(TEST_PATH).then(file => {
+      return page.workingFile(TEST_PATH).then(file => {
         assert.ok(!file, 'should return empty data on missing file');
         next(); // file present condition tested in next test
-      }).catch(assert.ifError).done();
+      });
     }).catch(assert.ifError).done();
   });
 
   F.assert('models:page:read', next => {
-    try {
-      fs.unlinkSync(F.path.wiki(TEST_PATH));
-    } catch (e) { /* no-op */ }
     page.read(TEST_PATH).then((data) => {
       assert.ok(!data, 'missing file should not have data');
       fs.writeFileSync(F.path.wiki(TEST_PATH), 'foobar');
-      page.read(TEST_PATH).then((data) => {
+      return page.read(TEST_PATH).then((data) => {
         assert.strictEqual(data, 'foobar', 'should read file contents');
         fs.unlinkSync(F.path.wiki(TEST_PATH));
         next();
-      }).catch(assert.ifError).done();
+      });
+    }).catch(assert.ifError).done();
+  });
+
+  F.assert('models:page:write', next => {
+    page.write(TEST_PATH, {
+      name: 'Test User',
+      email: 'test@example.com',
+      body: 'foobarbaz'
+    }).then(() => {
+      return page.read(TEST_PATH).then(data => {
+        assert.equal(data, 'foobarbaz', 'should have written file to disk');
+        require('simple-git')(F.path.wiki()).reset(['HEAD^1', '--hard'], next);
+      });
     }).catch(assert.ifError).done();
   });
 
