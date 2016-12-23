@@ -6,18 +6,22 @@
 * { box-sizing: border-box; }
 body {
   padding-top: 50px;
+  background-color: #d8d8d8;
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   &, html { margin: 0; }
 }
 
-// navbar
-.navbar-brand {
-  & > img {
-    display: inline-block;
-    height: 100%;
-    vertical-align: middle;
-    padding-right: 3px;
-  }
-  & > span {
-    vertical-align: middle;
-  }
+@import 'colors';
+
+// layout partials
+@import 'header';
+@import 'navbar';
+@import 'footer';
+
+// layouts
+@import 'layout-sidebar';
+
+// generic styles
+@media screen and (min-width: 1400px) {
+  .container { width: 1300px; }
 }

@@ -1,0 +1,39 @@
+@import 'layout-content';
+
+#sidebar {
+  padding: 10px;
+//  background-color: $color-light-bg - #111;
+  a {
+    display: block;
+    color: $color-base-1;
+    text-decoration: none;
+    transition: 250ms;
+    padding-left: 30px;
+    border-right: 0 $color-base-1 solid;
+    &.sidebar-lg {
+      font-weight: bold;
+      font-size: 12pt;
+      margin: 10px 0;
+    }
+    &.sidebar-md {
+      font-size: 10pt;
+      margin: 5px 0;
+    }
+    &.sidebar-sm {
+      font-size: 8pt;
+    }
+    &:hover, &:focus {
+      opacity: 0.6;
+      padding-left: 35px;
+    }
+    &:active, &.active {
+      border-width: 1px;
+    }
+  }
+  hr {
+    border-color: $color-base-1;
+    margin: 20px auto;
+    width: 80%;
+    opacity: 0.2;
+  }
+}

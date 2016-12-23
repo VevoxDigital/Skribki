@@ -1,0 +1,15 @@
+/**
+  * Skribki global colors
+  */
+
+// generic
+$color-light-fg: #333;
+$color-light-bg: #f5f5f5;
+$color-dark-fg: $color-light-bg;
+$color-dark-bg: $color-light-fg;
+
+// base
+$color-base-1: #0ac;
+$color-base-2: $color-base-1 - #111;
+$color-base-fg: #D5E1E4;
+//$color-base-fg: #f5f5f5;
