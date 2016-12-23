@@ -1,0 +1,14 @@
+extends layout.pug
+
+block body
+  #body
+    .container
+      .row
+        section#sidebar.col-xs-12.col-md-2
+          block sidebar
+            a.sidebar-lg.active(href='/') Wiki Home
+            a.sidebar-md(href='/special/random') Random Page
+            a.sidebar-md(href='/special/search') Page Search
+            hr
+        section#content.col-xs-12.col-md-10
+          block content

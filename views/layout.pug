@@ -1,7 +1,7 @@
 doctype html
 html
   head
-    title #{repository.title || 'Wiki'} &#183; #{config.oem_name || config.name}
+    title #{repository.title || 'Wiki'} &#183; #{config.oem.name}
 
     // vendor files
     link(href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -15,7 +15,21 @@ html
     block scripts
   body
     include layout/navbar.pug
-    block content
+    block header
+      #header.jumbotron
+        .container
+          h1 Page Title
+          h2 The page's description would go here.
+    block banner
+      #banner
+        .container
+          p Welcome to Skribki!
+          span.banner-dash &#8211;
+          a(href='http://wiki.vevox.io/app/skribki/getting-started') Getting Started
+    block body
     block footer
       footer
-        p footer content
+        .container
+          p
+            | #{config.oem.name}, a free wiki powered by&nbsp;
+            a(href='https://github.com/VevoxDigital/Skribki') Skribki.
