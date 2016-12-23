@@ -4,7 +4,7 @@ auth.secret   : secret-key-for-web
 // OEM Information
 oem.name    : Skribki
 oem.url     : https://github.com/VevoxDigital/Skribki
-oem.icon    : /img/icon.png
+oem.icon    : /img/icon.svg
 
 // Navigation
 navbar.items.text (Object)    : ['Home', 'GitHub'                                 ]
