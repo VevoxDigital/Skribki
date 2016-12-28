@@ -38,10 +38,6 @@ exports.install = opts => {
   Controller.prototype.view = function (name, model = { }, headers, isPartial) {
     let self = this;
 
-    // init some varaiables for the model.
-    model.controller = self;
-    model.global = F.global;
-
     // shift arguments if needed
     if (isPartial === undefined && typeof headers === 'boolean') {
       isPartial = headers;
