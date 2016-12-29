@@ -82,6 +82,7 @@ exports.write = (route, data) => {
   lockfile.lock(F.path.wiki(route + '.lck'), { wait: 2000 }, err => {
     if (err) return deferred.reject(err);
     fs.writeFile(F.path.wiki(route), data.body, err => {
+      if (err) deferred.reject(err);
 
       // file written with new data, commit to git
       git(F.path.wiki()).add(route.substring(1))
@@ -132,7 +133,7 @@ exports.parse = body => {
     if (err) deferred.reject(err);
 
     body = q(body);
-    for (const file of files) body = body.then(require(F.path.models('parsers/' + file)).run);
+    for (const file of files) body = body.then(require(F.path.models('parsers/' + file)).run); // eslint-disable-line
     deferred.resolve(body);
   });
 

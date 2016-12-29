@@ -35,6 +35,7 @@ const createParserFunction = (self, key, name, filename) => {
 
 exports.install = opts => {
   frameworkEngine = Controller.prototype.view;
+  /* eslint complexity: ['error', 7] */
   Controller.prototype.view = function (name, model = { }, headers, isPartial) {
     let self = this;
 

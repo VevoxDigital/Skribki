@@ -20,6 +20,7 @@ exports.install = () => {
   };
 };
 
+/* eslint complexity: ['error', 7] */
 function scssCompiler(req, res, isValidation) {
   if (isValidation)
     return req.url.endsWith('.scss') || req.url.endsWith('.sass');
@@ -40,4 +41,4 @@ function scssCompiler(req, res, isValidation) {
       else self.response500(req, res, e);
     }
   }
-};
+}

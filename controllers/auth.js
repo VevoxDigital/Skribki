@@ -28,7 +28,7 @@ function viewLogin() {
       model[providerName] = F.config.auth.providers[providerName].button;
 
   this.view('login', model);
-};
+}
 
 // initial login attempt
 function processLogin(providerName) {
@@ -38,7 +38,7 @@ function processLogin(providerName) {
   if (!provider) return this.response400('Unknown provider: ' + provider);
 
   passport.authenticate(providerName, provider.options || { })(this.req, this.res, () => { });
-};
+}
 
 // process the callback
 function processLoginCallback(providerName) {
@@ -63,9 +63,9 @@ function processLoginCallback(providerName) {
   })(this.req, this.res, err => {
     this.response500(err);
   });
-};
+}
 
 function processLogout() {
   this.req.logout();
   this.redirect(this.query.page || '/');
-};
+}

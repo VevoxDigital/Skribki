@@ -25,7 +25,7 @@ F.middleware('passport-session', passport.session());
 let files = fs.readdirSync(F.path.definitions('auth'));
 F.config.auth.providers = { };
 for (const name of files) {
-  let provider = require('./auth/' + name);
+  let provider = require('./auth/' + name); // eslint-disable-line
   F.config.auth.providers[path.basename(name, '.js')] = provider;
   passport.use(provider.strategy);
 }

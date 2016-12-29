@@ -63,7 +63,7 @@ class Session extends EventEmitter {
     req._sessionId = id;
     req._session = this;
     req.session = { };
-    res && res.statusCode && res.cookie(this.options.cookie, json);
+    if (res && res.statusCode) res.cookie(this.options.cookie, json);
 
     next();
   }
