@@ -8,3 +8,12 @@ block header
 
 block content
   div.content-page!= model.page.body
+
+append sidebar
+  each link in (model.page.toc || [])
+    if link.level === 1
+      a.sidebar-lg(href='#'+link.id)= link.content
+    else if link.level === 2
+      a.sidebar-md(href='#'+link.id)= link.content
+    else if link.level === 3
+      a.sidebar-sm(href='#'+link.id)= link.content

@@ -103,7 +103,7 @@ exports.parseDocument = doc => {
       header = doc.substring(0, bodyIndex),
       body = doc.substring(bodyIndex);
 
-  let result = { header: { } };
+  let result = { header: { }, toc: [] };
   for (let headerLine of header.split('\n')) {
     headerLine = headerLine.trim();
     let key = headerLine.substring(1, headerLine.indexOf(' ')),
@@ -113,6 +113,13 @@ exports.parseDocument = doc => {
 
   return exports.parse(body).then(r => {
     result.body = r;
+    let headerPattern = /<h([1-3]).*id="([^"]+)">([^<]+)/gi, match;
+    while ((match = headerPattern.exec(result.body)) !== null)
+      result.toc.push({
+        level: parseInt(match[1], 10),
+        id: match[2],
+        content: match[3]
+      });
     return result;
   });
 };
