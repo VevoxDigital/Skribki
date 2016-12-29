@@ -1,0 +1,15 @@
+extends layout-sidebar.pug
+
+block content
+  h1 #{config.wiki.name || 'Wiki'} Login
+  p This wiki allows you log in with the following options#{config.auth.whitelist ? ' and is on a whitelist' : ''}:
+
+  each button, name in model
+    if button && button.text
+      a.btn.btn-lg(href='/special/login/'+name
+        style='color:'+button.color.foreground+'; background-color:'+button.color.background)
+        if button.icon.startsWith('fa-')
+          i(class='fa '+button.icon)
+        else
+          img(src=button.icon)
+        | #{button.text}

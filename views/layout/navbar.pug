@@ -15,6 +15,7 @@ nav.navbar.navbar-default.navbar-fixed-top
           li
             a(href='/special/login') Login
         else
-          li Hi, #{user.name}
           li
-            a(href='/special/login') Logout
+            a Hi, #{user.shortName}
+          li
+            a(href='/special/logout') Logout
