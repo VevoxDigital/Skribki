@@ -96,3 +96,38 @@ exports.write = (route, data) => {
 
   return deferred.promise;
 };
+
+exports.parseDocument = doc => {
+  assert.equal(typeof doc, 'string', 'document should be a string');
+  let bodyIndex = /\n[^\$]/.exec(doc).index + 1,
+      header = doc.substring(0, bodyIndex),
+      body = doc.substring(bodyIndex);
+
+  let result = { header: { } };
+  for (let headerLine of header.split('\n')) {
+    headerLine = headerLine.trim();
+    let key = headerLine.substring(1, headerLine.indexOf(' ')),
+        val = headerLine.substring(headerLine.indexOf(' ')).trim();
+    result.header[key] = val;
+  }
+
+  return exports.parse(body).then(r => {
+    result.body = r;
+    return result;
+  });
+};
+
+exports.parse = body => {
+  assert.equal(typeof body, 'string', 'body should be a string');
+  let deferred = q.defer();
+
+  fs.readdir(F.path.models('parsers'), (err, files) => {
+    if (err) deferred.reject(err);
+
+    body = q(body);
+    for (const file of files) body = body.then(require(F.path.models('parsers/' + file)).run);
+    deferred.resolve(body);
+  });
+
+  return deferred.promise;
+};
