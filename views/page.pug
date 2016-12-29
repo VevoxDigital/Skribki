@@ -1,0 +1,10 @@
+extends layout-sidebar.pug
+
+block header
+  #header.jumbotron
+    .container
+      h1= model.page.header.title
+      h2= model.page.header.desc
+
+block content
+  div.content-page!= model.page.body
