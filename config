@@ -1,8 +1,21 @@
 // Auth
 auth.secret   : secret-key-for-web
+auth.timeout  : 1 hour
+auth.cookie   : __skrSS
+
+// whitelist/blacklist
+// emails are a whitelist when `auth.whitelist` is true or a blacklist otherwise
+// emails may be a string or a valid JavaScript regular expression
+// string matches are case sensitive!
+auth.whitelist (boolean) : false
+auth.emails  (Object)    : ['postmaster@localhost']
+
+// Wiki Information
+wiki.name     : Skribki
+wiki.icon     : /img/icon.svg
 
 // OEM Information
-oem.name    : Skribki
+oem.name    : Vevox Digital
 oem.url     : https://github.com/VevoxDigital/Skribki
 oem.icon    : /img/icon.svg
 
