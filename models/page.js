@@ -100,11 +100,11 @@ exports.write = (route, data) => {
 
 exports.parseDocument = doc => {
   assert.equal(typeof doc, 'string', 'document should be a string');
-  let bodyIndex = /\n[^\$]/.exec(doc).index + 1,
+  let bodyIndex = doc.startsWith('$') ? /\n[^\$]/.exec(doc).index + 1 : 0,
       header = doc.substring(0, bodyIndex),
       body = doc.substring(bodyIndex);
 
-  let result = { header: { }, toc: [] };
+  let result = { header: { title: 'Page', desc: 'An unnamed wiki page.' }, toc: [] };
   for (let headerLine of header.split('\n')) {
     headerLine = headerLine.trim();
     let key = headerLine.substring(1, headerLine.indexOf(' ')),
