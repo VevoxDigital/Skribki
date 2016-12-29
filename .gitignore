@@ -43,3 +43,6 @@ dist/
 repo/
 /wiki/
 tmp/
+
+# Debug files
+config-debug
