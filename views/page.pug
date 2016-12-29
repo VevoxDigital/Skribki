@@ -7,6 +7,14 @@ block header
       h2= model.page.header.desc
 
 block content
+  div.content-options.text-right
+    if model.action === 'edit'
+
+    else
+      a(href='?a=history') History
+      if user
+        a(href='?a=edit') Edit
+        a.danger(href='?a=delete') Delete
   div.content-page!= model.page.body
 
 append sidebar

@@ -11,5 +11,17 @@
   padding: 20px 40px;
   margin-top: 0;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border-radius: 0 0 5px 5px
+  border-radius: 0 0 5px 5px;
+  .content-options > a {
+    padding: 5px 10px;
+    display: inline-block;
+    transition: opacity 250ms;
+    color: $color-base-1;
+    &:hover, &:focus {
+      text-decoration: none;
+      opacity: 0.7;
+      color: $color-base-1;
+    }
+    &.danger { color: #e74c3c; }
+  }
 }
