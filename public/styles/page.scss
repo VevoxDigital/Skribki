@@ -1,0 +1,49 @@
+.content-page {
+  // paragraph
+  p {
+    padding: 0 10px;
+    color: #555;
+    text-indent: 10px;
+  }
+  code {
+    background-color: #f8f8f8;
+    color: #999;
+    border-radius: 2px;
+    padding: 2px 5px;
+  }
+
+
+  // headers
+  h1 {
+    font-family: 'Raleway Black', sans-serif;
+    font-size: 30pt;
+    border-bottom: 1px rgba(0,0,0,0.1) solid;
+    color: #555;
+  }
+  h2, h3, h4, h5, h6 {
+    font-family: Raleway, sans-serif;
+  }
+  h2 {
+    font-weight: bold;
+    font-size: 20pt;
+    color: #777;
+  }
+  h3 {
+    font-weight: bold;
+    font-size: 16pt;
+    color: #777;
+  }
+  h4 {
+    font-size: 14pt;
+    color: #777;
+  }
+  h5 {
+    font-weight: bold;
+    font-size: 13pt;
+    color: #999;
+  }
+  h6 {
+    font-size: 12pt;
+    color: #999;
+  }
+}
