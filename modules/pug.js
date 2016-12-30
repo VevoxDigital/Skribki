@@ -64,7 +64,8 @@ exports.install = opts => {
       repository: self.repository,
       user: self.user,
       global: F.global,
-      url: self.url
+      url: self.url,
+      translate: (key) => { return F.localize(self.req, key); }
     };
 
     self.subscribe.success();

@@ -13,6 +13,7 @@ auth.emails  (Object)    : ['postmaster@localhost']
 // Wiki Information
 wiki.name     : Skribki
 wiki.icon     : /img/icon.svg
+wiki.lang     : en-us
 
 // OEM Information
 oem.name    : Vevox Digital
