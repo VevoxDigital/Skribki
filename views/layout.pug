@@ -31,8 +31,11 @@ html
       footer
         .container
           p
-            | #{config.oem.name}, a free wiki powered by&nbsp;
+            | #{config.wiki.name}, a free wiki by #{config.oem.name} powered by&nbsp;
             a(href='https://github.com/VevoxDigital/Skribki') Skribki.
+            |  Unless otherwise noted, content is available under&nbsp;
+            a(href=F.config.license.url)= F.config.license.name
+            | .
           p
             | View in:
             each lang, id in config.languages

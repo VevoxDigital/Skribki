@@ -15,6 +15,10 @@ wiki.name     : Skribki
 wiki.icon     : /img/icon.svg
 wiki.lang     : en-us
 
+// Content Licensing
+license.name  : CC-BY-SA
+license.url   : https://creativecommons.org/licenses/by-sa/4.0/
+
 // OEM Information
 oem.name    : Vevox Digital
 oem.url     : https://github.com/VevoxDigital/Skribki
