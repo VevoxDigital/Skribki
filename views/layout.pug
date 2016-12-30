@@ -33,3 +33,15 @@ html
           p
             | #{config.oem.name}, a free wiki powered by&nbsp;
             a(href='https://github.com/VevoxDigital/Skribki') Skribki.
+          p
+            | View in:
+            each lang, id in config.languages
+              |  &nbsp;
+              if (id === controller.req.language)
+                = lang.name
+                if (lang.region)
+                  |  (#{lang.region})
+              else
+                a(href='?language='+id)= lang.name
+                  if (lang.region)
+                    |  (#{lang.region})

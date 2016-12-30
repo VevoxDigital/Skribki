@@ -13,9 +13,9 @@ nav.navbar.navbar-default.navbar-fixed-top
       ul.nav.navbar-nav.navbar-right#navbarRight
         unless user
           li
-            a(href='/special/login') Login
+            a(href='/special/login')= translate('page.navbar.login')
         else
           li
-            a Hi, #{user.shortName}
+            a= translate('page.navbar.userPrefix') + user.shortName + translate('page.navbar.userSuffix')
           li
-            a(href='/special/logout') Logout
+            a(href='/special/logout')= translate('page.navbar.logout')

@@ -11,10 +11,10 @@ block content
     if model.action === 'edit'
 
     else
-      a(href='?a=history') History
+      a(href='?a=history')= translate('page.action.history')
       if user
-        a(href='?a=edit') Edit
-        a.danger(href='?a=delete') Delete
+        a(href='?a=edit')= translate('page.action.edit')
+        a.danger(href='?a=delete')= translate('page.action.delete')
   div.content-page!= model.page.body
 
 append sidebar
