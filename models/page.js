@@ -17,12 +17,29 @@ exports.install = () => {
   } catch (e) { /* no-op */ }
   try {
     lockfile.lockSync(F.path.wiki('repo.lck'));
-    git(F.path.wiki()).init();
-    // TODO Inital commit so tests won't fail trying to reset to HEAD^1
   } catch (e) {
     console.error('failed to lock repository, it may be in use');
     console.error(e);
     F.kill(-1);
+  }
+
+  let repo = git(F.path.wiki());
+  F.repository = repo;
+
+  try {
+    if (!fs.statSync(F.path.wiki('.git')).isDirectory()) throw new Error();
+  } catch (e) {
+    // repo isn't initialized, need to do so.
+    repo.init().addConfig('user.email', 'skribki@localhost')
+      .addConfig('user.name', 'Skribki');
+
+    let data = {
+      body: fs.readFileSync(path.join(__dirname, '..', 'readme.md')).toString(),
+      name: 'Skribki',
+      email: 'skribki@localhost',
+      message: 'Initial Commit'
+    };
+    exports.write('index', data).then(() => { }).catch(e => { throw e; }).done();
   }
 };
 
@@ -85,8 +102,8 @@ exports.write = (route, data) => {
       if (err) deferred.reject(err);
 
       // file written with new data, commit to git
-      git(F.path.wiki()).add(route.substring(1))
-        .commit(data.message || 'Update ' + route, { '--author': `${data.name} <${data.email}>` }, () => {
+      F.repository.add(route.substring(1))
+        .commit(data.message || 'Update ' + route, { '--author': `"${data.name} <${data.email}>"` }, () => {
           lockfile.unlock(F.path.wiki(route + '.lck'), (err) => {
             if (err) return deferred.reject(err);
             deferred.resolve();
