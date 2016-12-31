@@ -16,6 +16,6 @@ nav.navbar.navbar-default.navbar-fixed-top
             a(href='/special/login')= translate('page.navbar.login')
         else
           li
-            a= translate('page.navbar.userPrefix') + user.shortName + translate('page.navbar.userSuffix')
+            a= translate('page.navbar.user', [ user.shortName ])
           li
             a(href='/special/logout')= translate('page.navbar.logout')

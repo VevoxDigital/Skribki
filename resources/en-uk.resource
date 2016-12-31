@@ -9,15 +9,14 @@ page.action.delete    : Delete
 page.action.back      : Back
 
 // navbar
-page.navbar.login               : Login
-page.navbar.logout              : Logout
-page.navbar.userPrefix (Object) : 'Hi, '
-page.navbar.userSuffix (Object) : ' '
+page.navbar.login   : Login
+page.navbar.logout  : Logout
+page.navbar.user    : Hi, {0}
 
 // Login page
-page.auth.login  (Object) : ' Login'
-page.auth.whitelist       : This wiki is private and only available to certain users.
-page.auth.blacklist       : This wiki is public: any non-banned user may log in.
+page.auth.login     : {0} Login
+page.auth.whitelist : This wiki is private and only available to certain users.
+page.auth.blacklist : This wiki is public: any non-banned user may log in.
 
 // History page
 page.history.title            : History

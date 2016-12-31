@@ -1,7 +1,7 @@
 extends layout-sidebar.pug
 
 block content
-  h1= (config.wiki.name || 'Wiki') + translate('page.auth.login')
+  h1= translate('page.auth.login', [ config.wiki.name || 'Wiki' ])
   if config.auth.whitelist
     p= translate('page.auth.whitelist')
   else
