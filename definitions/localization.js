@@ -17,8 +17,11 @@ F.onLocale = (req, res) => {
   }
 };
 
-F.localize = (req, key) => {
-  return F.resource(req.language, key) || F.resource(F.config['wiki.lang'], key) || key;
+F.localize = (req, key, args = []) => {
+  let localized = F.resource(req.language, key) || F.resource(F.config['wiki.lang'], key) || key;
+  for (let i = 0; i < args.length; i++)
+    localized = localized.replace(new RegExp('\\{' + i + '\\}', 'g'), args[i]);
+  return localized;
 };
 
 F.config.languages = { };

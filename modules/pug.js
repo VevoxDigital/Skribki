@@ -33,6 +33,8 @@ const createParserFunction = (self, key, name, filename) => {
   return fn;
 };
 
+
+
 exports.install = opts => {
   frameworkEngine = Controller.prototype.view;
   /* eslint complexity: ['error', 7] */
@@ -65,7 +67,7 @@ exports.install = opts => {
       user: self.user,
       global: F.global,
       url: self.url,
-      translate: (key) => { return F.localize(self.req, key); },
+      translate: (key, args = []) => { return F.localize(self.req, key, args); },
       name: name
     };
 
