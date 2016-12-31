@@ -156,3 +156,29 @@ exports.parse = body => {
 
   return deferred.promise;
 };
+
+exports.history = (route) => {
+  assert.equal(typeof route, 'string', 'route must be a string');
+  route = exports.normalizePath(route);
+
+  let deferred = q.defer();
+
+  fs.stat(F.path.wiki(route), (err, stats) => {
+    if (err) {
+      if (err.message.startsWith('ENOENT'))
+        return deferred.resolve([]);
+      else return deferred.reject(err);
+    }
+    if (stats.isDirectory()) {
+      route += '/index';
+      return deferred.resolve(exports.history(route));
+    } else {
+      F.repository.log([route.substring(1)], (err, results) => {
+        if (err) deferred.reject(err);
+        deferred.resolve(results.all);
+      });
+    }
+  });
+
+  return deferred.promise;
+};

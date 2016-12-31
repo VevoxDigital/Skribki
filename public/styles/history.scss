@@ -1,0 +1,26 @@
+@import '../page';
+
+.commit {
+  a {
+    display: inline-block;
+    font-weight: bold;
+    font-size: 12pt;
+    font-family: monospace;
+    padding-right: 10px;
+    &:hover, &:focus {
+      text-decoration: none;
+    }
+  }
+  strong {
+    font-size: 12pt;
+    padding: 0 5px;
+  }
+  .commit-email {
+    font-family: monospace;
+    padding: 0 4px;
+  }
+  .commit-date {
+    font-size: 8pt;
+    opacity: 0.6;
+  }
+}

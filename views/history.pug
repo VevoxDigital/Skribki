@@ -1,0 +1,26 @@
+extends layout-sidebar.pug
+
+block header
+  #header.jumbotron
+    .container
+      h1= translate('page.history.title')
+      h2= translate('page.history.desc', [url])
+
+block content
+  .content-options.text-right
+    a(href=url)= translate('page.action.back')
+  .content-page
+    h1= translate('page.history.header')
+    if model.history.length === 1
+      p= translate('page.history.changesSingular')
+    else
+      p= translate('page.history.changesPlural', [model.history.length])
+
+    each log in model.history
+      p.commit(id='commit-' + log.hash)
+        a(href='/special/commit/' + log.hash)= log.hash.substring(0, 6)
+        strong= log.message
+
+        span.commit-name= log.author_name
+        span.commit-email= '<' + log.author_email + '>'
+        span.commit-date= log.date
