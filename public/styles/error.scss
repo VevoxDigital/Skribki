@@ -1,4 +1,10 @@
 section#content {
   text-align: center;
   p { font-size: 14pt; }
+  pre {
+    text-align: left;
+    border: 1px rgba(0,0,0,0.05) solid;
+    border-radius: 0;
+    color: #777;
+  }
 }
