@@ -1,0 +1,20 @@
+extends layout-sidebar.pug
+
+block header
+  #header.jumbotron
+    .container
+      h1= translate('error.header', [ model.errno ])
+      h2= translate('error.err.' + model.errno, [ model.url ])
+
+block content
+  if F.locked(model.url)
+    p= translate('error.body.locked')
+    a.btn.btn-lg(href='?a=history')= translate('page.action.home')
+  else
+    p= translate('error.body.unlocked')
+    a.btn.btn-lg(href='?a=history')= translate('page.action.history')
+    a.btn.btn-lg(href='?a=create')= translate('page.action.create')
+  if model.info
+    hr
+    p= translate('error.body.info')
+    pre= model.info

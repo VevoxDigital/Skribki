@@ -19,3 +19,11 @@ F.middleware('public-files', (req, res, next) => {
   next();
 });
 F.use('public-files');
+
+Controller.prototype.viewError = function (code, url) {
+  this.repository.title = F.localize(this.req, 'error.header', [ code ]);
+  this.view('error', {
+    errno: code,
+    url: url || this.url
+  });
+}
