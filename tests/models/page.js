@@ -57,8 +57,26 @@ exports.run = () => {
     }).then(() => {
       return page.read(TEST_PATH).then(data => {
         assert.equal(data, 'foobarbaz', 'should have written file to disk');
-        require('simple-git')(F.path.wiki()).reset(['HEAD^1', '--hard'], next);
+        F.repository.reset(['HEAD^1', '--hard'], next);
       });
+    }).catch(assert.ifError).done();
+  });
+
+  F.assert('models:page:parseDocument', next => {
+    page.parseDocument('$title foo\n$desc bar\n\n*body*').then(res => {
+      assert.equal(res.header.title, 'foo', 'title should be from document');
+      assert.equal(res.header.desc, 'bar', 'description should be from document');
+
+      // no need to overly test parsing, should be handled in parser testing
+      assert.equal(res.body, '<p><em>body</em></p>\n', 'body should have been parsed');
+      next();
+    }).catch(assert.ifError).done();
+  });
+
+  F.assert('models:page:parseDocumentEmpty', next => {
+    page.parseDocument().then(res => {
+      assert.ok(!res, 'should yield empty response');
+      next();
     }).catch(assert.ifError).done();
   });
 
