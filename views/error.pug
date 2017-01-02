@@ -9,7 +9,7 @@ block header
 block content
   if F.locked(model.url)
     p= translate('error.body.locked')
-    a.btn.btn-lg(href='?a=history')= translate('page.action.home')
+    a.btn.btn-lg(href='/')= translate('page.action.home')
   else
     p= translate('error.body.unlocked')
     a.btn.btn-lg(href='?a=history')= translate('page.action.history')
