@@ -116,6 +116,7 @@ exports.write = (route, data) => {
 };
 
 exports.parseDocument = doc => {
+  if (!doc) return q(); // if we get empty input, resolve an empty promise;
   assert.equal(typeof doc, 'string', 'document should be a string');
   let bodyIndex = doc.startsWith('$') ? /\n[^\$]/.exec(doc).index + 1 : 0,
       header = doc.substring(0, bodyIndex),
