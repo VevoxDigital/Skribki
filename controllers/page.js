@@ -17,8 +17,13 @@ function routePage() {
       break;
     default:
       page.read(this.url).then(page.parseDocument).then(doc => {
-        this.repository.title = doc.header.title;
-        this.view('page', { page: doc });
+        if (!doc) {
+          this.repository.title = 'Not Found';
+          this.viewError(404);
+        } else {
+          this.repository.title = doc.header.title;
+          this.view('page', { page: doc });
+        }
       }).catch(this.response500).done();
       break;
   }
