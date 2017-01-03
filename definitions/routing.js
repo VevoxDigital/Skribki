@@ -40,3 +40,8 @@ Controller.prototype.view500 = Controller.prototype.throw500 = function (err) {
 Controller.prototype.view707 = Controller.prototype.view707 = function () {
   this.viewError(707, this.url, 'lol matt');
 };
+
+F.on('error404', (req, res, exception) => {
+  if (req.url.startsWith('/special'))
+    res.redirect(req.url.substring(8));
+});
