@@ -12,11 +12,13 @@ body {
 }
 
 @import 'colors';
+@import 'functions';
 
 // layout partials
 @import 'header';
 @import 'navbar';
 @import 'footer';
+@import 'objects';
 
 // layouts
 @import 'layout-sidebar';
