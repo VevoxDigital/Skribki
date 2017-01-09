@@ -15,6 +15,13 @@ function routePage() {
         this.view('history', { history: history });
       }).catch(this.response500).done();
       break;
+    case 'edit':
+      // TODO Ensure user is logged in
+      page.read(this.url).then(data => {
+        this.repository.title = F.localize(this.req, 'title.page.edit');
+        this.view('edit', { data: data });
+      }).catch(this.response500).done();
+      break;
     default:
       page.read(this.url).then(page.parseDocument).then(doc => {
         if (!doc) {

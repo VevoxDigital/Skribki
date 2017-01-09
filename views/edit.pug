@@ -1,0 +1,34 @@
+extends layout-sidebar.pug
+
+block header
+block banner
+block content
+  .content-options.text-right
+    a(href=url)= translate('page.action.back')
+  .content-page
+    h1.text-center= translate('page.edit.header')
+    h3.text-center= translate('page.edit.desc', [ url ])
+    form#editForm(action=url method='POST')
+      input(name='message' type='text' placeholder='update ' + url)
+      input.btn.btn-success(type='submit' value=translate('page.edit.commit'))
+      textarea#editBody.monospace(name='body' rows=30)= model.data
+
+    form#previewForm(action='javascript:')
+      h2.text-center= translate('page.edit.previewTitle')
+      p.text-center
+        input.btn.btn-primary(type='submit', value=translate('page.edit.previewUpdate'))
+      hr
+      #preview
+        p.text-center= translate('page.edit.previewEmpty')
+
+append scripts
+  script.
+    $(function () {
+      $('#previewForm').submit(function (e) {
+        e.preventDefault();
+        $('#preview').html('<p class="text-center">Just a moment...</p>');
+        $.post('/special/parsers', { body: $('#editBody').val() }, function (data) {
+          $('#preview').html(data);
+        });
+      });
+    });
