@@ -43,7 +43,7 @@ function processLogin(providerName) {
 // process the callback
 function processLoginCallback(providerName) {
   let provider = F.config.auth.providers[providerName];
-  if (!provider) return this.response400('Unknown provider: ' + provider);
+  if (!provider) return this.throw400('Unknown provider: ' + provider);
 
   provider.callback = U.extend({ successRedirect: '/', failureRedirect: '/special/login' }, provider.callback, true);
 
@@ -54,14 +54,14 @@ function processLoginCallback(providerName) {
     // check the email against the white/black-list
     if (F.config.auth.whitelist === exports.checkEmail(user.email))
       this.req.login(user, err => {
-        if (err) return this.response500(err);
+        if (err) return this.throw500(err);
         this.redirect(provider.callback.successRedirect);
       });
     else this.redirect(provider.callback.failureRedirect + '?err=auth.'
       + (F.config.auth.whitelist ? 'whitelist' : 'blacklist'));
 
   })(this.req, this.res, err => {
-    this.response500(err);
+    this.throw500(err);
   });
 }
 

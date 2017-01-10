@@ -18,5 +18,5 @@ function displayRandom() {
 function parseBody() {
   F.model('page').parseDocument(this.body.body).then((res) => {
     this.res.send(200, res.body, 'text/html');
-  }).catch(this.response500).done();
+  }).catch(err => { this.throw500(err); }).done();
 }

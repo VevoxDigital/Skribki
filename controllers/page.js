@@ -23,7 +23,7 @@ function routePage() {
       page.read(this.url).then(data => {
         this.repository.title = F.localize(this.req, 'title.page.edit');
         this.view('edit', { data: data });
-      }).catch(this.response500).done();
+      }).catch(err => { this.throw500(err); }).done();
       break;
     default:
       page.read(this.url).then(page.parseDocument).then(doc => {
@@ -34,7 +34,7 @@ function routePage() {
           this.repository.title = doc.header.title;
           this.view('page', { page: doc });
         }
-      }).catch(this.response500).done();
+      }).catch(err => { this.throw500(err); }).done();
       break;
   }
 }
@@ -50,5 +50,5 @@ function editPage() {
     message: this.body.message
   }).then(() => {
     this.redirect(this.url);
-  }).catch(this.response500).done();
+  }).catch(err => { this.throw500(err); }).done();
 }
