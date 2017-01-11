@@ -5,6 +5,9 @@ exports.install = () => {
   F.route('/special/random', displayRandom);
   F.route('/special/search', displaySearch);
 
+  // commit stuff
+  F.route('/special/commit/{commit}', showCommit);
+
   // a few easter-egg routes
   F.route('/special/ashley', function () { this.view707() });
   F.route('/special/brew', function () { this.view418() });
@@ -18,6 +21,10 @@ function displayRandom() {
 
 function displaySearch() {
   this.throw501('search not yet implemented');
+}
+
+function showCommit() {
+  this.throw501('commit viewing not yet implemented');
 }
 
 function parseBody() {
