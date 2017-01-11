@@ -187,16 +187,11 @@ exports.history = (route) => {
   let deferred = q.defer();
 
   fs.stat(F.path.wiki(route), (err, stats) => {
-    if (err) {
-      if (err.message.startsWith('ENOENT'))
-        return deferred.resolve([]);
-      else return deferred.reject(err);
-    }
-    if (stats.isDirectory()) {
+    if (!err && stats.isDirectory()) {
       route += '/index';
       return deferred.resolve(exports.history(route));
     } else {
-      F.repository.log([route.substring(1)], (err, results) => {
+      F.repository.log(['--', route.substring(1)], (err, results) => {
         if (err) deferred.reject(err);
         deferred.resolve(results.all);
       });
