@@ -1,18 +1,21 @@
 extends layout-sidebar.pug
 
 block content
-  h1= translate('page.auth.login', [ config.wiki.name || 'Wiki' ])
-  if config.auth.whitelist
-    p= translate('page.auth.whitelist')
-  else
-    p= translate('page.auth.blacklist')
+  .content-options.text-right
+    a(href=url)= translate('page.action.back')
+  .content-page
+    h1= translate('page.auth.login', [ config.wiki.name || 'Wiki' ])
+    if config.auth.whitelist
+      p= translate('page.auth.whitelist')
+    else
+      p= translate('page.auth.blacklist')
 
-  each button, name in model
-    if button && button.text
-      a.btn.btn-lg(href='/special/login/'+name
-        style='color:'+button.color.foreground+'; background-color:'+button.color.background)
-        if button.icon.startsWith('fa-')
-          i(class='fa '+button.icon)
-        else
-          img(src=button.icon)
-        | #{button.text}
+    each button, name in model
+      if button && button.text
+        a.btn.btn-lg.btn-login(href='/special/login/'+name
+          style='color:'+button.color.foreground+'; background-color:'+button.color.background)
+          if button.icon.startsWith('fa-')
+            i(class='fa '+button.icon)
+          else
+            img(src=button.icon)
+          | #{button.text}

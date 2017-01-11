@@ -1,0 +1,8 @@
+@import '../page';
+
+.btn-login {
+  transition: 250ms;
+  &:hover, &:focus {
+    opacity: 0.9;
+  }
+}
