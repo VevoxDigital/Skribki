@@ -5,10 +5,10 @@ const MODEL = 'page';
 exports.install = () => {
   F.route(r => { return !F.locked(r); }, routePage);
   F.route(r => { return !F.locked(r); }, editPage, [ 'post' ]);
+  F.route(r => { return !F.locked(r); }, deletePage, [ 'delete' ]);
 };
 
-// TODO Fix and use `response500` instead of `response500`
-
+/* eslint complexity: ['error', 7] */
 function routePage() {
   let page = F.model('page');
   switch (this.query.a || '') {
@@ -17,6 +17,11 @@ function routePage() {
         this.repository.title = 'History of ' + this.url;
         this.view('history', { history: history });
       }).catch(this.response500).done();
+      break;
+    case 'delete':
+      if (!this.user) return this.redirect(this.url);
+      this.repository.title = F.localize(this.req, 'title.page.delete');
+      this.view('delete');
       break;
     case 'edit':
       if (!this.user) return this.redirect(this.url);
@@ -47,6 +52,18 @@ function editPage() {
     email: this.user.email,
     name: this.user.name,
     body: this.body.body,
+    message: this.body.message
+  }).then(() => {
+    this.redirect(this.url);
+  }).catch(err => { this.throw500(err); }).done();
+}
+
+function deletePage() {
+  if (!this.user) return this.throw401('must be logged in');
+
+  F.model('page').delete(this.url, {
+    name: this.user.name,
+    email: this.user.email,
     message: this.body.message
   }).then(() => {
     this.redirect(this.url);

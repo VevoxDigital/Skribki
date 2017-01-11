@@ -84,6 +84,29 @@ exports.read = route => {
   });
 };
 
+exports.modifyFile = (rt, func) => {
+  let deferred = q.defer();
+
+  exports.workingFile(rt).then(route => {
+    route = route ? route : '.' + exports.normalizePath(rt);
+    if (route === '.') return deferred.reject(new Error('cannot create file at "/"'));
+
+    // lock the file to avoid any weird commits with two simultanious edits
+    // wait 2 seconds for other locks to be released
+    lockfile.lock(F.path.wiki(route + '.lck'), { wait: 2000 }, err => {
+      if (err) return deferred.reject(err);
+      func(route, e => {
+        lockfile.unlock(F.path.wiki(route + '.lck'), err => {
+          if (e || err) return deferred.reject(e || err);
+          deferred.resolve();
+        });
+      });
+    });
+  });
+
+  return deferred.promise;
+};
+
 exports.write = (rt, data) => {
   assert.equal(typeof data, typeof { }, 'data should be an object, got ' + typeof data);
   assert.equal(typeof data.name, 'string', 'data should have string name');
@@ -91,29 +114,26 @@ exports.write = (rt, data) => {
   assert.equal(typeof data.body, 'string', 'data should have string body');
   data.body = data.body.replace(/\r(?:\n)?/g, '\n');
 
-  return exports.workingFile(rt).then(route => {
-    route = route ? route : '.' + exports.normalizePath(rt);
-    if (route === '.') return deferred.reject(new Error('cannot create file at "/"'));
-    let deferred = q.defer();
-    // lock the file to avoid any weird commits with two simultanious edits
-    // wait 2 seconds for other locks to be released
-    lockfile.lock(F.path.wiki(route + '.lck'), { wait: 2000 }, err => {
-      if (err) return deferred.reject(err);
-      fs.writeFile(F.path.wiki(route), data.body, err => {
-        if (err) deferred.reject(err);
-
-        // file written with new data, commit to git
-        F.repository.add(route)
-          .commit(data.message || 'Update ' + route.substring(1), { '--author': `"${data.name} <${data.email}>"` }, () => {
-            lockfile.unlock(F.path.wiki(route + '.lck'), (err) => {
-              if (err) return deferred.reject(err);
-              deferred.resolve();
-            });
-          });
-      });
+  return exports.modifyFile(rt, (route, done) => {
+    fs.writeFile(F.path.wiki(route), data.body, err => {
+      if (err) return done(err);
+      F.repository.add('.' + route)
+        .commit(data.message || 'Update ' + route, { '--author': `"${data.name} <${data.email}>"` }, done);
     });
+  });
+};
 
-    return deferred.promise;
+exports.delete = (rt, data = { }) => {
+  assert.equal(typeof data, typeof { }, 'data should be an object, got ' + typeof data);
+  assert.equal(typeof data.name, 'string', 'data should have string name');
+  assert.equal(typeof data.email, 'string', 'data should have string email');
+
+  return exports.modifyFile(rt, (route, done) => {
+    fs.unlink(F.path.wiki(route), err => {
+      if (err) return done(err);
+      F.repository.add('.' + route)
+        .commit(data.message || 'Delete ' + route, { '--author': `"${data.name} <${data.email}>"` }, done)
+    });
   });
 };
 

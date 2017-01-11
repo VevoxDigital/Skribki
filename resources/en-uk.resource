@@ -20,6 +20,7 @@ error.err.501 : The requested feature at {0} is under development.
 
 // titles
 title.page.edit     : Editing Page
+title.page.delete   : Deleting Page
 
 // page actions
 page.action.history   : History
@@ -53,3 +54,10 @@ page.edit.commit        : Commit Changes
 page.edit.previewTitle  : Page Preview
 page.edit.previewUpdate : Update Preview
 page.edit.previewEmpty  : Preview is empty. Press "Update Preview" to preview your changes.
+
+// delete page
+page.delete.title       : Deletion
+page.delete.desc        : Please confirm the deletion of {0}
+page.delete.header      : Deleting Page
+page.delete.confirm     : Enter a commit message to confirm the deletion of this page.
+page.delete.commit      : Commit Deletion

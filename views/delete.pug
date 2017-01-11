@@ -1,0 +1,29 @@
+extends layout-sidebar.pug
+
+block header
+  #header.jumbotron
+    .container
+      h1= translate('page.delete.title')
+      h2= translate('page.delete.desc', [ url ])
+
+block content
+  h1= translate('page.delete.header')
+  p= translate('page.delete.confirm')
+
+  form#deleteForm(action='javascript:')
+    input(type='text' name='message' placeholder='delete ' + url)
+    input.btn.btn-success(type='submit' value=translate('page.delete.commit'))
+
+append scripts
+  script.
+    $(function () {
+      $('#deleteForm').submit(function (e) {
+        e.preventDefault();
+        $.ajax({
+          url: '#{url}',
+          type: 'DELETE'
+        }).done(function () {
+          window.location = '#{url}';
+        });
+      });
+    });
