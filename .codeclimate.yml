@@ -13,12 +13,6 @@ engines:
       - javascript
   eslint:
     enabled: true
-    checks:
-      # Disable these as well: same issue as 'Similar code' check.
-      complexity:
-        enabled: false
-      global-require:
-        enabled: false
   fixme:
     enabled: true
 ratings:
