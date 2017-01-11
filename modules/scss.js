@@ -4,11 +4,13 @@ const sass  = require('node-sass'),
       fs    = require('fs');
 
 exports.compile = (content) => {
-  return sass.renderSync({
-    data: content,
-    outputStyle: 'compressed',
-    includePaths: [ F.path.public('/styles/partials') ]
-  }).css.toString();
+  try {
+    return sass.renderSync({
+      data: content,
+      outputStyle: 'compressed',
+      includePaths: [ F.path.public('/styles/partials') ]
+    }).css.toString();
+  } catch (e) { return ''; }
 };
 
 exports.install = () => {
