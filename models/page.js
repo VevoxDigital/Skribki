@@ -34,7 +34,8 @@ exports.install = () => {
       .addConfig('user.name', 'Skribki');
 
     let data = {
-      body: fs.readFileSync(path.join(__dirname, '..', 'readme.md')).toString(),
+      body: '$title Home\n$desc  Welcome to your new Skribki!\n'
+        + fs.readFileSync(path.join(__dirname, '..', 'readme.md')).toString(),
       name: 'Skribki',
       email: 'skribki@localhost',
       message: 'Initial Commit'
