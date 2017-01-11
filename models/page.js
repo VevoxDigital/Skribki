@@ -118,7 +118,7 @@ exports.write = (rt, data) => {
   return exports.modifyFile(rt, (route, done) => {
     fs.writeFile(F.path.wiki(route), data.body, err => {
       if (err) return done(err);
-      F.repository.add('.' + route)
+      F.repository.add(route)
         .commit(data.message || 'Update ' + route, { '--author': `"${data.name} <${data.email}>"` }, done);
     });
   });
