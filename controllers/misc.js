@@ -3,6 +3,7 @@
 exports.install = () => {
   F.route('/special/error/{errno}', function (errno) { this.viewError(errno, '/') });
   F.route('/special/random', displayRandom);
+  F.route('/special/search', displaySearch);
 
   // a few easter-egg routes
   F.route('/special/ashley', function () { this.view707() });
@@ -13,6 +14,10 @@ exports.install = () => {
 
 function displayRandom() {
   this.throw501('random not yet implemented');
+}
+
+function displaySearch() {
+  this.throw501('search not yet implemented');
 }
 
 function parseBody() {
