@@ -12,7 +12,7 @@ auth.emails  (Object)    : ['postmaster@localhost']
 
 // Wiki Information
 wiki.name     : Skribki
-wiki.icon     : /img/icon.svg
+wiki.icon     : /img/logo.svg
 wiki.lang     : en-us
 
 // Content Licensing

@@ -3,6 +3,10 @@
 #sidebar {
   padding: 10px;
 //  background-color: $color-light-bg - #111;
+  img {
+    max-width: 100%;
+    padding: 20px;
+  }
   a {
     display: block;
     color: $color-base-1;
