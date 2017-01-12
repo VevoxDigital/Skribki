@@ -123,7 +123,7 @@ exports.run = () => {
       let commit = history[history.length - 1];
       expect(commit.author_name).to.be('Skribki');
       expect(commit.author_email).to.be('skribki@localhost');
-      expect(commit.message).to.be('Update /index');
+      expect(commit.message.startsWith('Initial Commit')).to.be(true);
 
       next();
     }).catch(assert.ifError).done();
