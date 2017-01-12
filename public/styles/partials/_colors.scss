@@ -1,15 +1,35 @@
-/**
-  * Skribki global colors
-  */
-
 // generic
+$color-white: #fff;
+$color-black: #000;
+$color-gray: #555;
+$color-lightgray: #d8d8d8;
+
+$color-red1: #e74c3c;
+$color-red2: #c0392b;
+$color-orange1: #e67e22;
+$color-orange2: #d35400;
+$color-yellow1: #f1c40f;
+$color-yellow2: #f39c12;
+$color-green1: #2ecc71;
+$color-green2: #27ae60;
+$color-blue1: #3498db;
+$color-blue2: #2980b9;
+$color-purple1: #9b59b6;
+$color-purple2: #8e44ad;
+
+@import 'functions';
+
+// layout
 $color-light-fg: #333;
 $color-light-bg: #f5f5f5;
 $color-dark-fg: $color-light-bg;
 $color-dark-bg: $color-light-fg;
 
+// banner
+$color-banner-bg: #34495e;
+$color-banner-fg: #bdc3c7;
+
 // base
 $color-base-1: #0ac;
-$color-base-2: $color-base-1 - #111;
-$color-base-fg: #D5E1E4;
-//$color-base-fg: #f5f5f5;
+$color-base-2: shade($color-base-1, 10%);
+$color-base-fg: #d5e1e4;

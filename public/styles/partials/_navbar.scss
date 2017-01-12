@@ -1,14 +1,16 @@
 // navbar
 .navbar-brand {
-  vertical-align: middle;
   font-size: 16px;
-  & > img {
+  vertical-align: middle;
+
+  > img {
     display: inline-block;
     height: 100%;
-    vertical-align: middle;
     padding-right: 3px;
+    vertical-align: middle;
   }
-  & > span {
+
+  > span {
     display: inline-block;
     vertical-align: middle;
   }
@@ -17,27 +19,35 @@
 .navbar-default {
   background-color: $color-base-1;
   border-color: $color-base-2;
-  box-shadow: 0 1px 0 rgba(255,255,255,0.07);
+  box-shadow: 0 1px 0 rgba($color-white, .07);
   min-height: 60px;
+
   .navbar-brand {
     color: $color-base-fg;
-    transition: color 250ms;
     font-size: 20px;
     font-weight: lighter;
     height: 60px;
     padding: 18px;
-    &:hover, &:focus {
+    transition: color 250ms;
+
+    &:hover,
+    &:focus {
       color: $color-dark-fg;
     }
   }
+
   .navbar-nav > li {
+    // scss-lint:disable SelectorDepth, NestingDepth
     vertical-align: middle;
-    & > a {
+
+    > a {
       color: $color-base-fg;
-      transition: color 250ms;
-      padding: 20px;
       font-size: 14px;
-      &:hover, &:focus {
+      padding: 20px;
+      transition: color 250ms;
+
+      &:hover,
+      &:focus {
         color: $color-dark-fg;
       }
     }

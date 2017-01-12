@@ -1,7 +1,7 @@
 extends layout-sidebar.pug
 
 block header
-  #header.jumbotron
+  .jumbotron.jumbotron-header
     .container
       h1= translate('error.header', [ model.errno ])
       h2= translate('error.err.' + model.errno, [ model.url ])

@@ -1,43 +1,53 @@
 @import 'layout-content';
 
-#sidebar {
+.section-sidebar {
   padding: 10px;
 //  background-color: $color-light-bg - #111;
+
   img {
     max-width: 100%;
     padding: 20px;
   }
+
   a {
-    display: block;
+    border-right: 0 $color-base-1 solid;
     color: $color-base-1;
+    display: block;
+    padding-left: 30px;
     text-decoration: none;
     transition: 250ms;
-    padding-left: 30px;
-    border-right: 0 $color-base-1 solid;
+
     &.sidebar-lg {
-      font-weight: bold;
       font-size: 12pt;
+      font-weight: bold;
       margin: 10px 0;
     }
+
     &.sidebar-md {
       font-size: 10pt;
       margin: 5px 0;
     }
+
     &.sidebar-sm {
       font-size: 8pt;
     }
-    &:hover, &:focus {
-      opacity: 0.6;
+
+    &:hover,
+    &:focus {
+      opacity: .6;
       padding-left: 35px;
     }
-    &:active, &.active {
+
+    &:active,
+    &.active {
       border-width: 1px;
     }
   }
+
   hr {
     border-color: $color-base-1;
     margin: 20px auto;
+    opacity: .2;
     width: 80%;
-    opacity: 0.2;
   }
 }
