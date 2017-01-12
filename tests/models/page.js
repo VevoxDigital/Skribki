@@ -9,7 +9,7 @@ const fs    = require('fs'),
 const TEST_PATH = '/test~';
 
 function resetCommit(cb) {
-  F.repository.reset(['HEAD^1', '--hard'], cb);
+  F.repository.reset(['HEAD^1', '--hard', '--'], cb);
 }
 
 exports.run = () => {
