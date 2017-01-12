@@ -8,7 +8,7 @@ exports.install = () => {
   F.route(r => { return !F.locked(r); }, deletePage, [ 'delete' ]);
 };
 
-/* eslint complexity: ['error', 7] */
+/* eslint complexity: ["error", 7] */
 function routePage() {
   let page = F.model('page');
   switch (this.query.a || '') {
