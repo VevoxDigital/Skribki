@@ -1,18 +1,8 @@
-/**
-  * Skribki layout styles
-  */
-
-// clean the page up a bit
-* { box-sizing: border-box; }
-body {
-  padding-top: 50px;
-  background-color: #d8d8d8;
-  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  &, html { margin: 0; }
-}
+//
+// Skribki layout styles
+//
 
 @import 'colors';
-@import 'functions';
 
 // layout partials
 @import 'header';
@@ -22,6 +12,17 @@ body {
 
 // layouts
 @import 'layout-sidebar';
+
+// clean the page up a bit
+* { box-sizing: border-box; }
+body {
+  background-color: $color-lightgray;
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  padding-top: 50px;
+
+  &,
+  html { margin: 0; }
+}
 
 // generic styles
 @media screen and (min-width: 1400px) {

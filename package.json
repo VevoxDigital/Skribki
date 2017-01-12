@@ -1,6 +1,6 @@
 {
   "name": "skribki",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "An open-source wiki software based on git.",
   "main": "release.js",
   "private": true,
@@ -39,5 +39,8 @@
     "q": "^1.4.1",
     "simple-git": "^1.65.0",
     "total.js": "^2.3.0"
+  },
+  "devDependencies": {
+    "expect.js": "^0.3.1"
   }
 }

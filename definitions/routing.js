@@ -2,7 +2,8 @@
 
 const LOCKED = [
   /^\/special\//i, // Special pages/directores
-  /^\/categor(?:y|ies)\//i
+  /^\/categor(?:y|ies)\//i,
+  /^\/\./ // anything that starts with a dot
 ];
 
 F.lockedPatterns = LOCKED;
@@ -20,11 +21,11 @@ F.middleware('public-files', (req, res, next) => {
 });
 F.use('public-files');
 
-Controller.prototype.viewError = function (code, url, info) {
+Controller.prototype.viewError = function (code, url = this.url, info) {
   this.repository.title = F.localize(this.req, 'error.header', [ code ]);
   this.view('error', {
     errno: code,
-    url: url || this.url,
+    url: url,
     info: info
   });
 }
@@ -44,4 +45,6 @@ Controller.prototype.view707 = Controller.prototype.view707 = function () {
 F.on('error404', (req, res, exception) => {
   if (req.url.startsWith('/special'))
     res.redirect(req.url.substring(8));
+  else if (req.url.startsWith('/.'))
+    res.redirect('/' + req.url.substring(2));
 });

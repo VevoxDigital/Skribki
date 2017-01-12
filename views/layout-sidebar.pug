@@ -1,14 +1,15 @@
 extends layout.pug
 
 block body
-  #body
+  .section-body
     .container
       .row
-        section#sidebar.col-xs-12.col-md-2
+        section.section-sidebar.col-xs-12.col-md-2
+          img(src=config.wiki.icon)
           block sidebar
             a.sidebar-lg.active(href='/') Wiki Home
             a.sidebar-md(href='/special/random') Random Page
             a.sidebar-md(href='/special/search') Page Search
             hr
-        section#content.col-xs-12.col-md-10
+        section.section-content.col-xs-12.col-md-10
           block content

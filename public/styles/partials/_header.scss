@@ -1,37 +1,42 @@
-#header {
+.jumbotron-header {
   background-color: $color-base-1;
+  color: $color-dark-fg;
   margin: 0;
   padding: 60px 10%;
-  color: $color-dark-fg;
+
   h1 {
+    font-family: 'Raleway Black', sans-serif;
+    font-weight: bold;
     margin: 0;
     margin-bottom: 10px;
-    font-weight: bold;
-    font-family: 'Raleway Black', sans-serif;
   }
+
   h2 {
-    margin: 0;
+    color: $color-base-fg;
     font-size: 21px;
     font-weight: lighter;
-    color: $color-base-fg;
+    margin: 0;
   }
 }
 
-#banner {
+.banner {
+  background-color: $color-banner-bg;
+  border-bottom: 1px shade($color-banner-bg, 10%) solid;
+  color: $color-banner-fg;
   padding: 15px 20px;
-  background-color: #34495e;
-  border-bottom: 1px #34495e solid;
-  color: #bdc3c7;
+
   p {
     display: inline;
   }
+
   .banner-dash {
     display: inline-block;
+    opacity: .5;
     padding: 0 5px;
-    opacity: 0.5;
   }
+
   a {
-    font-weight: bold;
     color: $color-base-1;
+    font-weight: bold;
   }
 }

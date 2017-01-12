@@ -49,20 +49,25 @@ exports.uninstall = () => {
   lockfile.unlockSync(F.path.wiki('repo.lck'));
 };
 
-exports.normalizePath = route => {
+exports.normalizePath = (route = '') => {
   assert.strictEqual(typeof route, 'string', 'route should be a string');
 
-  // normalize to root to avoid stepping out of cwd
-  if (!route.startsWith('/')) route = '/' + route;
-  if (route.endsWith('/')) route = route.slice(0, -1);
-  route = path.normalize(route);
+  // remove any leading dots (non-leading dots are handled later)
+  while (route.startsWith('.')) route = route.substring(1);
 
+  // normalize slashes
+  if (route.endsWith('/')) route = route.slice(0, -1);
+  if (!route.startsWith('/')) route = '/' + route;
+
+  // normalize the path
+  route = path.normalize(route);
   return route;
 };
 
 exports.workingFile = route => {
   let deferred = q.defer();
   route = exports.normalizePath(route);
+  if (route === '/') route = '';
 
   fs.stat(path.join(exports.wikiPath, route), (err, stats) => {
     if (err) return deferred.resolve(); // missing file means we resolve with no data.
@@ -88,9 +93,7 @@ exports.read = route => {
 exports.modifyFile = (rt, func) => {
   let deferred = q.defer();
 
-  exports.workingFile(rt).then(route => {
-    route = route ? route : '.' + exports.normalizePath(rt);
-    if (route === '.') return deferred.reject(new Error('cannot create file at "/"'));
+  exports.workingFile(rt).then((route = exports.normalizePath(rt)) => {
 
     // lock the file to avoid any weird commits with two simultanious edits
     // wait 2 seconds for other locks to be released
@@ -181,22 +184,15 @@ exports.parse = body => {
   return deferred.promise;
 };
 
-exports.history = (route) => {
-  assert.equal(typeof route, 'string', 'route must be a string');
-  route = exports.normalizePath(route);
-
+exports.history = rt => {
+  assert.equal(typeof rt, 'string', 'route must be a string');
   let deferred = q.defer();
 
-  fs.stat(F.path.wiki(route), (err, stats) => {
-    if (!err && stats.isDirectory()) {
-      route += '/index';
-      return deferred.resolve(exports.history(route));
-    } else {
-      F.repository.log(['--', route.substring(1)], (err, results) => {
-        if (err) deferred.reject(err);
-        deferred.resolve(results.all);
-      });
-    }
+  exports.workingFile(rt).then((route = exports.normalizePath(rt)) => {
+    F.repository.log(['--', route.substring(1)], (err, results) => {
+      if (err) deferred.reject(err);
+      deferred.resolve(results.all);
+    });
   });
 
   return deferred.promise;

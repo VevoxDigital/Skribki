@@ -1,88 +1,103 @@
-$color-btn-success: mix( tint( green, 40% ), $color-base-1, 40% );
+$color-btn-success: mix($color-green1, $color-base-1, 40%);
 
 // paragraph styles
 .monospace { font-family: monospace; }
 
 // buttons
 .btn {
-  display: inline-block;
+  border: 0 $color-white solid;
+  border-bottom-width: 3px;
   border-radius: 0;
-  border: none;
+  color: rgba($color-white, .9);
+  display: inline-block;
+  font-size: 11pt;
+  margin: 0 5px;
+  outline: none;
   padding: 5px 15px;
   text-indent: 0;
-  margin: 0 5px;
-  color: rgba(255, 255, 255, 0.9);
   transition: 250ms;
-  font-size: 11pt;
   vertical-align: middle;
-  border: 0 white solid;
-  border-bottom-width: 3px;
-  outline: none !important;
-  &:hover, &:focus {
-    color: #f5f5f5;
-  }
-  &:active {
-    box-shadow: 0 3px 3px 0 rgba(0,0,0,0.3) inset;
-    padding-top: 8px;
-    padding-bottom: 2px;
+
+  &:hover,
+  &:focus {
+    color: $color-light-bg;
     outline: none;
   }
-  &.btn-lg {
-    padding: 10px 20px;
-    font-size: 13pt;
+
+  &:active {
+    box-shadow: 0 3px 3px 0 rgba($color-black, .3) inset;
+    outline: none;
+    padding-bottom: 2px;
+    padding-top: 8px;
   }
+
+  &.btn-lg {
+    font-size: 13pt;
+    padding: 10px 20px;
+  }
+
   &.btn-primary {
     background-color: $color-base-1;
-    border-color: shade( $color-base-1, 10% );
-    &:hover, &:focus {
-      background-color: tint( $color-base-1, 10% );
+    border-color: shade($color-base-1, 10%);
+
+    &:hover,
+    &:focus {
+      background-color: tint($color-base-1, 10%);
       border-color: $color-base-1;
     }
+
     &:active {
-      background-color: shade( $color-base-1, 15% );
-      border-color: shade( $color-base-1, 15% );
+      background-color: shade($color-base-1, 15%);
+      border-color: shade($color-base-1, 15%);
     }
   }
+
   &.btn-success {
     background-color: $color-btn-success;
-    border-color: shade( $color-btn-success, 10% );
-    &:hover, &:focus {
-      background-color: tint( $color-btn-success, 10% );
+    border-color: shade($color-btn-success, 10%);
+
+    &:hover,
+    &:focus {
+      background-color: tint($color-btn-success, 10%);
       border-color: $color-btn-success;
     }
+
     &:active {
-      background-color: shade( $color-btn-success, 15% );
-      border-color: shade( $color-btn-success, 15% );
+      background-color: shade($color-btn-success, 15%);
+      border-color: shade($color-btn-success, 15%);
     }
   }
 }
 
 // form elements
-input[type=text] {
+[type=text] {
+  background-color: rgba($color-black, .03);
+  border: 1px rgba($color-black, .07) solid;
+  color: $color-gray;
   display: inline-block;
   min-width: 30%;
-  vertical-align: middle;
   padding: 5px 15px;
-  background-color: rgba(0,0,0,0.03);
-  border: 1px rgba(0,0,0,0.07) solid;
   transition: 250ms;
-  color: #555;
+  vertical-align: middle;
+
   &:focus {
+    border-color: rgba($color-base-1, .3);
     outline: none;
-    border-color: rgba( $color-base-1, 0.3 )
   }
 }
+
 textarea {
+  background-color: rgba($color-black, .03);
+  border: 1px rgba($color-black, .07) solid;
+  color: $color-gray;
   display: block;
-  width: 100%;
   margin: 10px 0;
-  background-color: rgba(0,0,0,0.03);
-  border: 1px rgba(0,0,0,0.07) solid;
-  transition: 250ms;
-  color: #555;
   padding: 10px;
+  transition: 250ms;
+  width: 100%;
+
   &:focus {
+    border-color: rgba($color-base-1, .3);
     outline: none;
-    border-color: rgba( $color-base-1, 0.3 )
   }
 }

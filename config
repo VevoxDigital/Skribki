@@ -8,11 +8,11 @@ auth.cookie   : __skrSS
 // emails may be a string or a valid JavaScript regular expression
 // string matches are case sensitive!
 auth.whitelist (boolean) : false
-auth.emails  (Object)    : ['postmaster@localhost']
+auth.emails  (Object)    : [/@localhost$/i, 'user@example.com']
 
 // Wiki Information
 wiki.name     : Skribki
-wiki.icon     : /img/icon.svg
+wiki.icon     : /img/logo.svg
 wiki.lang     : en-us
 
 // Content Licensing
