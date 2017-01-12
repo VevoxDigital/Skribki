@@ -10,7 +10,10 @@ exports.compile = (content) => {
       outputStyle: 'compressed',
       includePaths: [ F.path.public('/styles/partials') ]
     }).css.toString();
-  } catch (e) { return ''; }
+  } catch (e) {
+    console.log(e.stack);
+    return '';
+  }
 };
 
 exports.install = () => {
