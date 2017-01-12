@@ -39,5 +39,8 @@
     "q": "^1.4.1",
     "simple-git": "^1.65.0",
     "total.js": "^2.3.0"
+  },
+  "devDependencies": {
+    "expect.js": "^0.3.1"
   }
 }
