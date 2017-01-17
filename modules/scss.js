@@ -30,6 +30,7 @@ function scssCompiler(req, res, isValidation) {
   let output = data => {
     if (!this.config.debug) F.cache.set(key, data, F.datetime.add('m', 5)); // cache the stylesheet for 5 minutes
     this.responseContent(req, res, 200, data, 'text/css', true);
+    F.stats.response.file++;
   };
 
   if (cached) output(cached);
