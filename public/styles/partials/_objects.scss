@@ -86,6 +86,65 @@ $color-btn-success: mix($color-green1, $color-base-1, 40%);
   }
 }
 
+// scss-lint:disable SelectorDepth, NestingDepth
+[type=checkbox] {
+  left: 0;
+  position: fixed;
+
+  + label {
+    color: $color-white2;
+    cursor: pointer;
+    display: inline-block;
+    font-weight: normal;
+    margin-bottom: 0;
+    transition: 300ms;
+    user-select: none;
+    vertical-align: middle;
+
+    .box {
+      background-color: $color-white2;
+      border-radius: 5px;
+      display: inline-block;
+      height: 10px;
+      margin: 0 10px;
+      position: relative;
+      transition: 300ms;
+      vertical-align: middle;
+      width: 25px;
+
+      &::before {
+        background-color: $color-gray2;
+        border-radius: 50%;
+        content: '';
+        display: block;
+        height: 20px;
+        left: -5px;
+        position: relative;
+        top: -5px;
+        transition: 300ms;
+        width: 20px;
+      }
+    }
+  }
+
+  &:checked + label {
+    color: $color-gray2;
+
+    .box {
+      background-color: tint($color-base-2, 40%);
+
+      &::before {
+        background-color: $color-base-1;
+        left: 10px;
+      }
+    }
+  }
+
+  &:disabled {
+    opacity: .5;
+  }
+}
+
 textarea {
   background-color: rgba($color-black, .03);
   border: 1px rgba($color-black, .07) solid;

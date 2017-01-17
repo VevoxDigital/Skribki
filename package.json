@@ -30,6 +30,7 @@
     "node": ">=6.0"
   },
   "dependencies": {
+    "fs-extra": "^2.0.0",
     "lockfile": "^1.0.3",
     "marked": "^0.3.6",
     "node-sass": "^4.0.0",

@@ -8,7 +8,7 @@ exports.install = () => {
   F.route(r => { return !F.locked(r); }, deletePage, [ 'delete' ]);
 };
 
-/* eslint complexity: ["error", 7] */
+/* eslint complexity: 0 */
 function routePage() {
   let page = F.model('page');
   switch (this.query.a || '') {
@@ -48,7 +48,7 @@ function editPage() {
   if (!this.user) return this.throw401('must be logged in');
   if (!this.body.body) return this.throw400('must have a body');
 
-  F.model('page').write(this.url, {
+  F.model('page').write(this.url + (this.body.useDir ? 'index' : ''), {
     email: this.user.email,
     name: this.user.name,
     body: this.body.body,

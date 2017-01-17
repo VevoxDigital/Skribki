@@ -11,7 +11,14 @@ block content
     form#editForm(action=url method='POST')
       input(name='message' type='text' placeholder='update ' + url)
       input.btn.btn-success(type='submit' value=translate('page.edit.commit'))
+
+      input(name='useDir' type='checkbox' id='editUseDir')
+      label(for='editUseDir' title=translate('page.edit.useDirTip'))
+        .box
+        =translate('page.edit.useDir')
+
       textarea#editBody.monospace(name='body' rows=30)= model.data
+
 
     form#previewForm(action='javascript:')
       h2.text-center= translate('page.edit.previewTitle')
