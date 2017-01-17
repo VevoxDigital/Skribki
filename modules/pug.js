@@ -37,10 +37,8 @@ const createParserFunction = (self, key, name, filename) => {
 
 exports.install = opts => {
   frameworkEngine = Controller.prototype.view;
-  /* eslint complexity: ["error", 7] */
+  /* eslint complexity: 0 */
   Controller.prototype.view = function (name, model = { }, headers, isPartial) {
-    let self = this;
-
     // shift arguments if needed
     if (isPartial === undefined && typeof headers === 'boolean') {
       isPartial = headers;
@@ -48,7 +46,7 @@ exports.install = opts => {
     }
 
     // if it already succeeded and didn't need to be parsed
-    if (self.res.success && !isPartial) return self;
+    if (this.res.success && !isPartial) return this;
 
     let skip = name.startsWith('~'),
         filename = name;
@@ -56,28 +54,28 @@ exports.install = opts => {
     if (skip) filename = name.substring(1);
 
     let key = 'pug_' + filename,
-        fn = F.cache.read2(key) || createParserFunction(self, key, name, filename);
-    if (typeof fn !== 'function') return self;
+        fn = F.cache.read2(key) || createParserFunction(this, key, name, filename);
+    if (typeof fn !== 'function') return this;
 
     let locals = {
       model: model,
-      controller: self,
+      controller: this,
       config: F.config,
-      repository: self.repository,
-      user: self.user,
+      repository: this.repository,
+      user: this.user,
       global: F.global,
-      url: self.url,
-      translate: (key, args = []) => { return F.localize(self.req, key, args); },
+      url: this.url,
+      translate: (key, args = []) => { return F.localize(this.req, key, args); },
       name: name
     };
 
-    self.subscribe.success();
-    if (self.isConnected) {
-      F.responseContent(self.req, self.res, self.status, fn(locals), 'text/html', true, headers);
+    this.subscribe.success();
+    if (this.isConnected) {
+      F.responseContent(this.req, this.res, this.status, fn(locals), 'text/html', true, headers);
       F.stats.response.view++;
     }
 
-    return self;
+    return this;
   };
 };
 
