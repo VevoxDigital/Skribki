@@ -51,6 +51,8 @@ page.history.changesPlural    : There have been {0} changes to this page.
 page.edit.header        : Edit Page
 page.edit.desc          : Changing page contents for {0}
 page.edit.commit        : Commit Changes
+page.edit.useDir        : Create as Directory
+page.edit.useDirTip     : Create as index of directory instead 
 page.edit.previewTitle  : Page Preview
 page.edit.previewUpdate : Update Preview
 page.edit.previewEmpty  : Preview is empty. Press "Update Preview" to preview your changes.
