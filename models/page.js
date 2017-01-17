@@ -1,7 +1,7 @@
 'use strict';
 
 const lockfile  = require('lockfile'),
-      fs        = require('fs'),
+      fs        = require('fs-extra'),
       path      = require('path'),
       q         = require('q'),
       assert    = require('assert'),
@@ -69,7 +69,10 @@ exports.workingFile = route => {
   route = exports.normalizePath(route);
   if (route === '/') route = '';
 
-  fs.stat(path.join(exports.wikiPath, route), (err, stats) => {
+  if (path.dirname(route).split(/\//g).indexOf('index') >= 0)
+    deferred.reject(new Error(`'index' cannot be a directory`));
+
+  fs.stat(F.path.wiki(route), (err, stats) => {
     if (err) return deferred.resolve(); // missing file means we resolve with no data.
     route = stats.isDirectory() ? route + '/index' : route;
     deferred.resolve(route);
@@ -90,10 +93,15 @@ exports.read = route => {
   });
 };
 
-exports.modifyFile = (rt, func) => {
-  let deferred = q.defer();
+exports.makeDirs = rt => {
+  return (route = exports.normalizePath(rt)) => {
+    return q.nfcall(fs.ensureDir, F.path.wiki(path.dirname(route))).then(() => { return route; });
+  };
+};
 
-  exports.workingFile(rt).then((route = exports.normalizePath(rt)) => {
+exports.modifyFile = (rt, func) => {
+  return exports.workingFile(rt).then(exports.makeDirs(rt)).then(route => {
+    let deferred = q.defer();
 
     // lock the file to avoid any weird commits with two simultanious edits
     // wait 2 seconds for other locks to be released
@@ -106,11 +114,13 @@ exports.modifyFile = (rt, func) => {
         });
       });
     });
-  });
 
-  return deferred.promise;
+    return deferred.promise;
+  });
 };
 
+// TODO Patch in the changes instead of writing over.
+// If two edits occur, one overwrites the other.
 exports.write = (rt, data) => {
   assert.equal(typeof data, typeof { }, 'data should be an object, got ' + typeof data);
   assert.equal(typeof data.name, 'string', 'data should have string name');

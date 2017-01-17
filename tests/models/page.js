@@ -3,7 +3,7 @@
 const assert = require('assert'),
       expect = require('expect.js');
 
-const fs    = require('fs'),
+const fs    = require('fs-extra'),
       path  = require('path');
 
 const TEST_PATH = '/test~';
@@ -65,6 +65,20 @@ exports.run = () => {
         fs.unlinkSync(F.path.wiki(TEST_PATH));
         next();
       });
+    }).catch(assert.ifError).done();
+  });
+
+  F.assert('model:page#makeDirs', next => {
+    page.makeDirs('foo/bar/baz')().then(route => {
+
+      try {
+        expect(fs.statSync(F.path.wiki(path.dirname(route))).isDirectory()).to.be(true);
+      } catch (e) { assert.ifError(e); }
+      expect(fs.statSync).withArgs(F.path.wiki(route)).to.throwException(/^ENOENT/);
+
+      fs.removeSync(F.path.wiki('foo'));
+      next();
+
     }).catch(assert.ifError).done();
   });
 
