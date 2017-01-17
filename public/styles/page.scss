@@ -8,8 +8,8 @@
     text-indent: 10px;
   }
 
-  code {
-    background-color: $color-white;
+  :not(pre) > code {
+    background-color: $color-white1;
     border-radius: 2px;
     color: tint($color-gray, 40%);
     padding: 2px 5px;
@@ -58,5 +58,13 @@
   h6 {
     color: tint($color-gray, 40%);
     font-size: 12pt;
+  }
+
+  // block
+  pre {
+    background-color: tint($color-white1, 20%);
+    border: 0;
+    border-radius: 0;
+    color: tint($color-gray, 20%);
   }
 }
