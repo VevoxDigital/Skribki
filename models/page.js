@@ -74,8 +74,7 @@ exports.workingFile = route => {
 
   fs.stat(F.path.wiki(route), (err, stats) => {
     if (err) return deferred.resolve(); // missing file means we resolve with no data.
-    route = stats.isDirectory() ? route + '/index' : route;
-    deferred.resolve(route);
+    deferred.resolve(stats.isDirectory() ? exports.workingFile(route + '/index') : route);
   });
 
   return deferred.promise;
@@ -107,10 +106,10 @@ exports.modifyFile = (rt, func) => {
     // wait 2 seconds for other locks to be released
     lockfile.lock(F.path.wiki(route + '.lck'), { wait: 2000 }, err => {
       if (err) return deferred.reject(err);
-      func(route, e => {
+      func(route, (e, v) => {
         lockfile.unlock(F.path.wiki(route + '.lck'), err => {
           if (e || err) return deferred.reject(e || err);
-          deferred.resolve();
+          deferred.resolve(v);
         });
       });
     });
@@ -137,6 +136,13 @@ exports.write = (rt, data) => {
   });
 };
 
+exports.removeIfEmpty = route => {
+  return q.nfcall(fs.readdir, F.path.wiki(route)).then(files => {
+    if (files.length === 0) return q.nfcall(fs.rmdir, F.path.wiki(route))
+      .then(exports.removeIfEmpty(path.dirname(route)));
+  });
+};
+
 exports.delete = (rt, data = { }) => {
   assert.equal(typeof data, typeof { }, 'data should be an object, got ' + typeof data);
   assert.equal(typeof data.name, 'string', 'data should have string name');
@@ -146,7 +152,10 @@ exports.delete = (rt, data = { }) => {
     fs.unlink(F.path.wiki(route), err => {
       if (err) return done(err);
       F.repository.add('.' + route)
-        .commit(data.message || 'Delete ' + route, { '--author': `"${data.name} <${data.email}>"` }, done)
+        .commit(data.message || 'Delete ' + route, { '--author': `"${data.name} <${data.email}>"` }, (err) => {
+          if (err) done(err);
+          else done(null, exports.removeIfEmpty(path.dirname(route)));
+        });
     });
   });
 };
