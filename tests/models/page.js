@@ -38,10 +38,11 @@ exports.run = () => {
 
   F.assert('model:page#workingFile', next => {
     fs.mkdirSync(F.path.wiki(TEST_PATH));
+    fs.writeFileSync(F.path.wiki(TEST_PATH + '/index'), '');
     page.workingFile(TEST_PATH).then(file => {
 
       expect(file).to.be(TEST_PATH + '/index');
-      fs.rmdirSync(F.path.wiki(TEST_PATH));
+      fs.removeSync(F.path.wiki(TEST_PATH));
 
       return page.workingFile(TEST_PATH).then(file => {
         expect(file).to.be(undefined);
