@@ -74,8 +74,7 @@ exports.workingFile = route => {
 
   fs.stat(F.path.wiki(route), (err, stats) => {
     if (err) return deferred.resolve(); // missing file means we resolve with no data.
-    route = stats.isDirectory() ? route + '/index' : route;
-    deferred.resolve(route);
+    deferred.resolve(stats.isDirectory() ? exports.workingFile(route + '/index') : route);
   });
 
   return deferred.promise;
