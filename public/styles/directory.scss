@@ -1,0 +1,17 @@
+@import '../page';
+
+.directory {
+  display: flex;
+  flex-wrap: wrap;
+
+  a {
+    flex: 1 0 auto;
+    padding: 5px 10px;
+    transition: 250ms;
+
+    &:hover {
+      background-color: rgba($color-black, .05);
+      text-decoration: none;
+    }
+  }
+}

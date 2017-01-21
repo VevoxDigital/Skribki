@@ -35,6 +35,9 @@ function routePage() {
         if (!doc) {
           this.repository.title = 'Not Found';
           this.viewError(404);
+        } else if (!doc.header) {
+          this.repository.title = 'Viewing Directory';
+          this.view('directory', { files: doc });
         } else {
           this.repository.title = doc.header.title;
           this.view('page', { page: doc });

@@ -5,6 +5,7 @@ const lockfile  = require('lockfile'),
       path      = require('path'),
       q         = require('q'),
       assert    = require('assert'),
+      _         = require('lodash'),
       git       = require('simple-git');
 
 exports.id = 'page';
@@ -73,21 +74,32 @@ exports.workingFile = route => {
     deferred.reject(new Error(`'index' cannot be a directory`));
 
   fs.stat(F.path.wiki(route), (err, stats) => {
-    if (err) return deferred.resolve(); // missing file means we resolve with no data.
-    deferred.resolve(stats.isDirectory() ? exports.workingFile(route + '/index') : route);
+    // missing file means we resolve with no data.
+    if (err) return err.message.startsWith('ENOENT') ? deferred.resolve() : deferred.reject(err);
+    deferred.resolve(stats.isDirectory() ? route + '/index' : route);
   });
 
   return deferred.promise;
 };
 
-exports.read = route => {
+exports.read = (route, $readAnyway) => {
   return exports.workingFile(route).then(route => {
     if (!route) return;
     let deferred = q.defer();
-    fs.readFile(F.path.wiki(route), (err, data) => {
-      if (err) return deferred.reject(err);
-      deferred.resolve(data.toString());
-    });
+
+    if (route.endsWith('/index') && !$readAnyway)
+      fs.stat(F.path.wiki(route), (err, stats) => {
+        if (!err && stats.isFile()) deferred.resolve(exports.read(route, true));
+        else if (err.message.startsWith('ENOENT')) fs.readdir(F.path.wiki(path.dirname(route)), deferred.makeNodeResolver());
+        else deferred.reject(err);
+      });
+    else {
+      fs.readFile(F.path.wiki(route), (err, data) => {
+        if (err) return deferred.reject(err);
+        deferred.resolve(data.toString());
+      });
+    }
+
     return deferred.promise;
   });
 };
@@ -160,32 +172,44 @@ exports.delete = (rt, data = { }) => {
   });
 };
 
+/* eslint complexity: 0 */
 exports.parseDocument = doc => {
-  if (!doc) return q(); // if we get empty input, resolve an empty promise;
-  assert.equal(typeof doc, 'string', 'document should be a string');
-  let bodyIndex = doc.startsWith('$') ? /\n[^\$]/.exec(doc).index + 1 : 0,
-      header = doc.substring(0, bodyIndex),
-      body = doc.substring(bodyIndex);
+  if (typeof doc === 'string') {
+    let bodyIndex = doc.startsWith('$') ? /\n[^\$]/.exec(doc).index + 1 : 0,
+        header = doc.substring(0, bodyIndex),
+        body = doc.substring(bodyIndex);
 
-  let result = { header: { title: 'Page', desc: 'An unnamed wiki page.' }, toc: [] };
-  for (let headerLine of header.split('\n')) {
-    headerLine = headerLine.trim();
-    let key = headerLine.substring(1, headerLine.indexOf(' ')),
-        val = headerLine.substring(headerLine.indexOf(' ')).trim();
-    result.header[key] = val;
-  }
+    let result = { header: { title: 'Page', desc: 'An unnamed wiki page.' }, toc: [] };
+    for (let headerLine of header.split('\n')) {
+      headerLine = headerLine.trim();
+      let key = headerLine.substring(1, headerLine.indexOf(' ')),
+          val = headerLine.substring(headerLine.indexOf(' ')).trim();
+      result.header[key] = val;
+    }
 
-  return exports.parse(body).then(r => {
-    result.body = r;
-    let headerPattern = /<h([1-3]).*id="([^"]+)">([^<]+)/gi, match;
-    while ((match = headerPattern.exec(result.body)) !== null)
-      result.toc.push({
-        level: parseInt(match[1], 10),
-        id: match[2],
-        content: match[3]
-      });
-    return result;
-  });
+    return exports.parse(body).then(r => {
+      result.body = r;
+      let headerPattern = /<h([1-3]).*id="([^"]+)">([^<]+)/gi, match;
+      while ((match = headerPattern.exec(result.body)) !== null)
+        result.toc.push({
+          level: parseInt(match[1], 10),
+          id: match[2],
+          content: match[3]
+        });
+      return result;
+    });
+  } else if (doc instanceof Array) {
+    let data = { };
+
+    for (const file of doc) {
+      let name = path.basename(file),
+          letter = name.substring(0, 1).toUpperCase();
+      data[letter] = data[letter] || [];
+      data[letter].push(name);
+    }
+
+    return q(data);
+  } else return q();
 };
 
 exports.parse = body => {
