@@ -34,7 +34,7 @@ function routeViewHistory() {
   */
 function routeViewDelete() {
   if (!this.user) return this.redirect(this.url);
-  this.repository.title = F.localize(this.req, 'title.page.delete');
+  this.repository.title = Utils.localize(this.req, 'title.page.delete');
 
   this.view('delete');
 }
@@ -50,7 +50,7 @@ function routeViewEdit() {
 
   PAGE.read(this.url).then(data => {
 
-    this.repository.title = F.localize(this.req, 'title.page.edit');
+    this.repository.title = Utils.localize(this.req, 'title.page.edit');
     this.view('edit', { data: data });
 
   }).catch(err => { this.throw500(err) }).done();
