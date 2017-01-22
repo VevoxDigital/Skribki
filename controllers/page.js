@@ -3,55 +3,107 @@
 const MODEL = 'page';
 
 exports.install = () => {
-  F.route(r => { return !F.locked(r); }, routePage);
-  F.route(r => { return !F.locked(r); }, editPage, [ 'post' ]);
-  F.route(r => { return !F.locked(r); }, deletePage, [ 'delete' ]);
+  F.route(r => { return !Utils.locked(r); }, routeView);
+  F.route(r => { return !Utils.locked(r); }, editPage, [ 'post' ]);
+  F.route(r => { return !Utils.locked(r); }, deletePage, [ 'delete' ]);
+
+  var PAGE = F.model(MODEL);
 };
 
-/* eslint complexity: 0 */
-function routePage() {
-  let page = F.model('page');
-  switch (this.query.a || '') {
-    case 'history':
-      page.history(this.url).then(history => {
-        this.repository.title = 'History of ' + this.url;
-        this.view('history', { history: history });
-      }).catch(this.response500).done();
-      break;
-    case 'delete':
-      if (!this.user) return this.redirect(this.url);
-      this.repository.title = F.localize(this.req, 'title.page.delete');
-      this.view('delete');
-      break;
-    case 'edit':
-      if (!this.user) return this.redirect(this.url);
-      page.read(this.url).then(data => {
-        this.repository.title = F.localize(this.req, 'title.page.edit');
-        this.view('edit', { data: data });
-      }).catch(err => { this.throw500(err); }).done();
-      break;
-    default:
-      page.read(this.url).then(page.parseDocument).then(doc => {
-        if (!doc) {
-          this.repository.title = 'Not Found';
-          this.viewError(404);
-        } else if (!doc.header) {
-          this.repository.title = 'Viewing Directory';
-          this.view('directory', { files: doc });
-        } else {
-          this.repository.title = doc.header.title;
-          this.view('page', { page: doc });
-        }
-      }).catch(err => { this.throw500(err); }).done();
-      break;
+
+/**
+  * @function routeViewHistory
+  * routes the 'history' view
+  *
+  * @this FrameworkController
+  */
+function routeViewHistory() {
+  PAGE.history(this.url).then(history => {
+
+    this.repository.title = 'History of ' + this.url;
+    this.view('history', { history: history });
+
+  }).catch(err => { this.throw500(err) }).done();
+}
+
+/**
+  * @function routeViewDelete
+  * routes the 'delete' view
+  *
+  * @this FrameworkController
+  */
+function routeViewDelete() {
+  if (!this.user) return this.redirect(this.url);
+  this.repository.title = F.localize(this.req, 'title.page.delete');
+
+  this.view('delete');
+}
+
+/**
+  * @function routeViewEdit
+  * routes the 'edit' view
+  *
+  * @this FrameworkController
+  */
+function routeViewEdit() {
+  if (!this.user) return this.redirect(this.url);
+
+  PAGE.read(this.url).then(data => {
+
+    this.repository.title = F.localize(this.req, 'title.page.edit');
+    this.view('edit', { data: data });
+
+  }).catch(err => { this.throw500(err) }).done();
+}
+
+/**
+  * @function routeViewPage
+  * routes the 'page' view
+  *
+  * @this FrameworkController
+  */
+function routeViewPage() {
+  PAGE.read(this.url).then(page.parseDocument).then(doc => {
+    if (!doc) {
+      this.repository.title = 'Not Found';
+      this.viewError(404);
+    } else if (!doc.header) {
+      this.repository.title = 'Viewing Directory';
+      this.view('directory', { files: doc });
+    } else {
+      this.repository.title = doc.header.title;
+      this.view('page', { page: doc });
+    }
+  }).catch(err => { this.throw500(err); }).done();
+}
+
+/**
+  * @function routeView
+  * Decides which routing function to delegate to the router
+  *
+  * @this FrameworkController
+  */
+function routeView() {
+  switch (this.query.a) {
+    case 'history': return routeViewHistory.call(this);
+    case 'delete':  return routeViewDelete.call(this);
+    case 'edit':    return routeViewEdit.call(this);
+    default:        return routeViewPage.call(this);
   }
 }
 
+
+/**
+  * @function editPage
+  * Routes an edit to the model, redirecting when complete
+  *
+  * @this FrameworkController
+  */
 function editPage() {
   if (!this.user) return this.throw401('must be logged in');
   if (!this.body.body) return this.throw400('must have a body');
 
-  F.model('page').write(this.url + (this.body.useDir ? 'index' : ''), {
+  PAGE.write(this.url + (this.body.useDir ? 'index' : ''), {
     email: this.user.email,
     name: this.user.name,
     body: this.body.body,
@@ -61,10 +113,16 @@ function editPage() {
   }).catch(err => { this.throw500(err); }).done();
 }
 
+/**
+  * @function deletePage
+  * Routes a delete to the model, redirecting when complete
+  *
+  * @this FrameworkController
+  */
 function deletePage() {
   if (!this.user) return this.throw401('must be logged in');
 
-  F.model('page').delete(this.url, {
+  PAGE.delete(this.url, {
     name: this.user.name,
     email: this.user.email,
     message: this.body.message
