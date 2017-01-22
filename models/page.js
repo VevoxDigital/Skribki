@@ -165,8 +165,10 @@ exports.delete = (rt, data = { }) => {
   return exports.modifyFile(rt, (route, done) => {
     fs.unlink(F.path.wiki(route), err => {
       if (err) return done(err);
+      data.message = JSON.stringify(data.message || 'Update ' + route)
+        .substring(1).slice(0, -1).replace(/`/g, '\\`');
       F.repository.add('.' + route)
-        .commit(data.message || 'Delete ' + route, { '--author': `"${data.name} <${data.email}>"` }, (err) => {
+        .commit(data.message, { '--author': `"${data.name} <${data.email}>"` }, (err) => {
           if (err) done(err);
           else done(null, exports.removeIfEmpty(path.dirname(route)));
         });
