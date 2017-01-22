@@ -12,23 +12,32 @@ passport.deserializeUser((user, done) => {
   done(null, user);
 });
 
-F.config.auth = F.config.auth || { };
 INSTALL('module', F.path.modules('session.js'), {
-  cookie: F.config.auth.cookie,
-  secret: F.config.auth.secret,
-  timeout: F.config.auth.timeout
+  cookie: CONFIG('auth.cookie'),
+  secret: CONFIG('auth.secret'),
+  timeout: CONFIG('auth.timeout')
 });
 
 F.middleware('passport', passport.initialize());
 F.middleware('passport-session', passport.session());
 
 let files = fs.readdirSync(F.path.definitions('auth'));
-F.config.auth.providers = { };
-for (const name of files) {
-  let provider = require('./auth/' + name); // eslint-disable-line
-  F.config.auth.providers[path.basename(name, '.js')] = provider;
-  passport.use(provider.strategy);
-}
+
+let providers = { };
+LOG.info('loading providers...')
+_.each(files, file => {
+  try {
+    /* eslint global-require: 0 */
+    let provider = require(F.path.definitions('auth/' + file));
+    let providerName = path.basename(name, '.js');
+    providers[providerName] = provider;
+    passport.use(provider.strategy);
+  } catch (e) {
+    LOG.warning(' > failed to load provider: ' + providerName);
+    LOG.warning(e.stack);
+  }
+});
+F.config['auth.providers'] = providers;
 
 F.use('session');
 F.use('passport');
