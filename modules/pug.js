@@ -57,6 +57,10 @@ exports.install = opts => {
         fn = F.cache.read2(key) || createParserFunction(this, key, name, filename);
     if (typeof fn !== 'function') return this;
 
+    let localizer = function (key) {
+      return Utils.localize.apply(undefined, [ this.req, key ].concat(arguments));
+    };
+
     let locals = {
       model: model,
       controller: this,
@@ -65,14 +69,20 @@ exports.install = opts => {
       user: this.user,
       global: F.global,
       url: this.url,
-      translate: (key, args = []) => { return F.localize(this.req, key, args); },
+      translate: localizer,
       name: name
     };
 
     this.subscribe.success();
     if (this.isConnected) {
-      F.responseContent(this.req, this.res, this.status, fn(locals), 'text/html', true, headers);
-      F.stats.response.view++;
+      try {
+        F.responseContent(this.req, this.res, this.status, fn(locals), 'text/html', true, headers);
+        F.stats.response.view++;
+      } catch (e) {
+        this.throw500(e);
+        LOG.error('view engine failure');
+        LOG.error(e);
+      }
     }
 
     return this;

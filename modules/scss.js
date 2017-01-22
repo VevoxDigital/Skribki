@@ -3,12 +3,18 @@
 const sass  = require('node-sass'),
       fs    = require('fs');
 
-exports.compile = (content) => {
-  return sass.renderSync({
-    data: content,
-    outputStyle: 'compressed',
-    includePaths: [ F.path.public('/styles/partials') ]
-  }).css.toString();
+exports.compile = content => {
+  try {
+    return sass.renderSync({
+      data: content,
+      outputStyle: 'compressed',
+      includePaths: [ F.path.public('/styles/partials') ]
+    }).css.toString();
+  } catch (e) {
+    LOG.error('style engine failure');
+    LOG.error(e.stack);
+    return '';
+  }
 };
 
 exports.install = () => {
