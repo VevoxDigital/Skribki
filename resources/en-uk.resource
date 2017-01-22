@@ -63,3 +63,9 @@ page.delete.desc        : Please confirm the deletion of {0}
 page.delete.header      : Deleting Page
 page.delete.confirm     : Enter a commit message to confirm the deletion of this page.
 page.delete.commit      : Commit Deletion
+
+// directory page
+page.directory.title    : Directory
+page.directory.desc     : Viewing directory contents for {0}
+page.directory.header   : Directory Contents
+page.directory.info     : The directory {0} exists but lacks an index. Below is a list of its contents.

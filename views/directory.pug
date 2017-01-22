@@ -1,0 +1,25 @@
+extends layout-sidebar.pug
+
+block header
+  .jumbotron.jumbotron-header
+    .container
+      h1= translate('page.directory.title')
+      h2= translate('page.directory.desc', [ url ])
+
+block content
+  .content-options.text-right
+    a(href='?a=history')= translate('page.action.history')
+    if user
+      a(href='?a=edit')= translate('page.action.create')
+  .content-page
+    h1= translate('page.directory.header')
+    p= translate('page.directory.info', [ url ])
+    each files, letter in model.files
+      h3(id=letter)= letter
+      .directory
+        each file in files
+          a(href=url + file)= file
+
+append sidebar
+  each files, letter in model.files
+    a.sidebar-md(href='#' + letter)= letter

@@ -48,7 +48,9 @@ html
             a(href=F.config.license.url)= F.config.license.name
             | .
           p.langs
-            | View in:
+            | v
+            strong= config.version
+            |  :: View in:
             each lang, id in config.languages
               |  &nbsp;
               if (id === controller.req.language)

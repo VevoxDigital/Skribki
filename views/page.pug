@@ -9,7 +9,7 @@ block header
 block content
   div.content-options.text-right
     if model.action === 'edit'
-
+      a(href=url)= translate('page.action.back')
     else
       a(href='?a=history')= translate('page.action.history')
       if user
