@@ -1,6 +1,7 @@
 'use strict';
 
-const path = require('path');
+const path  = require('path'),
+      _     = require('lodash');
 
 exports.install = () => {
 
@@ -67,6 +68,21 @@ exports.install = () => {
     for (const pat of Utils.lockedPatterns)
       if (rt.match(pat)) return true;
     return false;
-  };
+  }
+
+  /**
+    * @function checkEmail
+    * Checks the email against the whitelist/blacklist
+    *
+    * @param email The email
+    * @return True if valid (whitelisted/not blacklisted), false otherwise
+    */
+  Utils.checkEmail = email => {
+    if (typeof email !== 'string') return false;
+
+    return !!_.find(CONFIG('auth.emails'), check => {
+      return (check instanceof RegExp && check.match(email)) || email === check
+    }) === CONFIG('auth.whitelist');
+  }
 
 }
