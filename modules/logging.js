@@ -1,6 +1,8 @@
 'use strict';
 
-// this is a module so it loads first
+// this module loads absolutely first before anything.
+// perform init
+require('colors');
 
 const winston = require('winston');
 require('winston-daily-rotate-file');

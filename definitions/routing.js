@@ -12,10 +12,10 @@ F.middleware('route-logging', (req, res, next, opts, controller) => {
   res.on('finish', () => {
 
     let color = (() => {
-      if (res.statusCode >= 500) color = 'red';
-      else if (res.statusCode >= 400) color = 'yellow';
-      else if (res.statusCode >= 300) color = 'cyan';
-      else if (res.statusCode >= 200) color = 'green';
+      if (res.statusCode >= 500) return 'red';
+      else if (res.statusCode >= 400) return 'yellow';
+      else if (res.statusCode >= 300) return 'cyan';
+      else if (res.statusCode >= 200) return 'green';
       else return 'white';
     })();
 
