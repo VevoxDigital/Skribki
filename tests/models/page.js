@@ -27,14 +27,15 @@ exports.run = () => {
     next();
   });
 
-  F.assert('model:page#normalizePath', next => {
+  // TODO Move this test
+  /*F.assert('model:page#normalizePath', next => {
     expect(page.normalizePath('foo/')).to.be('/foo');
     expect(page.normalizePath('../foo/bar')).to.be('/foo/bar');
     expect(page.normalizePath('/')).to.be('/');
     expect(page.normalizePath()).to.be('/');
     expect(page.normalizePath).withArgs(false).to.throwException();
     next();
-  });
+  });*/
 
   F.assert('model:page#workingFile', next => {
     fs.mkdirSync(F.path.wiki(TEST_PATH));
@@ -45,7 +46,7 @@ exports.run = () => {
       fs.removeSync(F.path.wiki(TEST_PATH));
 
       return page.workingFile(TEST_PATH).then(file => {
-        expect(file).to.be(undefined);
+        expect(file).to.be(TEST_PATH);
 
         return page.workingFile('/').then(file => {
           expect(file).to.be('/index');

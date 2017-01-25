@@ -6,12 +6,12 @@ const assert = require('assert'),
 exports.run = () => {
 
   F.assert('definition:routing#locked', next => {
-    expect(F.lockedPatterns).to.be.an('array');
+    expect(Utils.lockedPatterns).to.be.an('array');
 
-    expect(F.locked('/special/foo')).to.be(true);
-    expect(F.locked('/category/bar')).to.be(true);
-    expect(F.locked('/.git')).to.be(true);
-    expect(F.locked('/foo/bar')).to.be(false);
+    expect(Utils.locked('/special/foo')).to.be(true);
+    expect(Utils.locked('/category/bar')).to.be(true);
+    expect(Utils.locked('/.git')).to.be(true);
+    expect(Utils.locked('/foo/bar')).to.be(false);
     next();
   });
 
