@@ -183,8 +183,7 @@ exports.write = (rt, data) => {
   return exports.modifyFile(rt, (route, done) => {
     fs.writeFile(F.path.wiki(route), data.body, err => {
       if (err) return done(err);
-      data.message = JSON.stringify(data.message || 'Update ' + route)
-        .substring(1).slice(0, -1).replace(/`/g, '\\`');
+      data.message = Utils.escape(data.message || 'Update ' + route);
       F.repository.add('.' + route)
         .commit(data.message, { '--author': `"${data.name} <${data.email}>"` }, done);
     });
@@ -224,8 +223,7 @@ exports.delete = (rt, data = { }) => {
   return exports.modifyFile(rt, (route, done) => {
     fs.unlink(F.path.wiki(route), err => {
       if (err) return done(err);
-      data.message = JSON.stringify(data.message || 'Update ' + route)
-        .substring(1).slice(0, -1).replace(/`/g, '\\`');
+      data.message = Utils.escape(data.message || 'Update ' + route);
       F.repository.add('.' + route)
         .commit(data.message, { '--author': `"${data.name} <${data.email}>"` }, (err) => {
           if (err) done(err);
