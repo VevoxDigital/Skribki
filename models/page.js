@@ -69,18 +69,19 @@ exports.uninstall = () => {
   * @return Promise
   */
 exports.workingFile = route => {
+  route = Utils.normalize(route);
+  if (route === '/') route = '';
+  if (path.dirname(route).split(/\//g).indexOf('index') >= 0)
+    throw new Error(`'index' cannot be a directory`);
 
-  return q.fcall(() => {
-    route = Utils.normalize(route);
-    if (route === '/') route = '';
-    if (path.dirname(route).split(/\//g).indexOf('index') >= 0)
-      throw new Error(`'index' cannot be a directory`);
+  let deferred = q.defer();
 
-  }).then(q.nfcall(fs.stat, F.path.wiki(route))).then(stats => {
-
-    return stats.isDirectory() ? route + '/index' : route;
-
+  fs.stat(F.path.wiki(route), (err, stats) => {
+    if (err) return err.message.startsWith('ENOENT') ? deferred.resolve(route) : deferred.reject(err);
+    deferred.resolve(stats.isDirectory() ? route + '/index' : route);
   });
+
+  return deferred.promise;
 };
 
 
@@ -94,18 +95,20 @@ exports.workingFile = route => {
   */
 exports.read = (route, $readAnyway) => {
   return exports.workingFile(route).then(route => {
-
     let deferred = q.defer();
 
     if (route.endsWith('/index') && !$readAnyway)
       fs.stat(F.path.wiki(route), (err, stats) => {
         if (!err && stats.isFile()) deferred.resolve(exports.read(route, true));
-        else if (err.message.startsWith('ENOENT')) fs.readdir(F.path.wiki(path.dirname(route)), deferred.makeNodeResolver());
+        else if (err.message.startsWith('ENOENT')) fs.readdir(F.path.wiki(path.dirname(route)), (err, files) => {
+          if (err) return err.message.startsWith('ENOENT') ? deferred.resolve() : deferred.reject(err);
+          deferred.resolve(files);
+        });
         else deferred.reject(err);
       });
     else {
       fs.readFile(F.path.wiki(route), (err, data) => {
-        if (err) return deferred.reject(err);
+        if (err) return err.message.startsWith('ENOENT') ? deferred.resolve() : deferred.reject(err);
         deferred.resolve(data.toString());
       });
     }
