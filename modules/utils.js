@@ -94,10 +94,10 @@ exports.install = () => {
     * @return The localized string in the given or wiki default language, else the resource key
     */
   Utils.localize = function (lang, key) {
-    let localized = F.resource(lang instanceof Request ? req.language : lang, key)
+    let localized = F.resource(typeof lang === 'object' ? lang.language : lang, key)
       || F.resource(CONFIG('wiki.lang'), key)
       || key;
-    _.each(Array.prototype.subarray.call(arguments, 2), (arg, i) => {
+    _.each(Array.prototype.slice.call(arguments, 2), (arg, i) => {
       localized = localized.replace(new RegExp('\\{' + i + '\\}', 'g'), arg);
     });
     return localized;
