@@ -57,8 +57,9 @@ exports.install = opts => {
         fn = F.cache.read2(key) || createParserFunction(this, key, name, filename);
     if (typeof fn !== 'function') return this;
 
+    let req = this.req;
     let localizer = function (key) {
-      return Utils.localize.apply(undefined, [ this.req, key ].concat(arguments));
+      return Utils.localize.apply(undefined, [ req ].concat(Array.prototype.slice.call(arguments)));
     };
 
     let locals = {
@@ -79,7 +80,7 @@ exports.install = opts => {
         F.responseContent(this.req, this.res, this.status, fn(locals), 'text/html', true, headers);
         F.stats.response.view++;
       } catch (e) {
-        this.throw500(e);
+        F.response500(this.req, this.res, e);
         LOG.error('view engine failure');
         LOG.error(e);
       }
