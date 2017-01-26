@@ -53,6 +53,7 @@ exports.install = () => {
   Utils.lockedPatterns = [
     /^\/special\//i, // Special pages/directores
     /^\/categor(?:y|ies)\//i,
+    /^\/(?:img\/|styles\/|favicon)/i, // public files
     /^\/\./ // anything that starts with a dot
   ];
 
