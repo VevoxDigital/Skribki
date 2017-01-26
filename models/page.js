@@ -244,9 +244,18 @@ exports.delete = (rt, data = { }) => {
 /* eslint complexity: 0 */
 exports.parseDocument = doc => {
   if (typeof doc === 'string') {
-    let bodyIndex = doc.startsWith('$') ? /\n[^\$]/.exec(doc).index + 1 : 0,
-        header = doc.substring(0, bodyIndex),
-        body = doc.substring(bodyIndex);
+    let docPattern = /\n[^\$]/;
+
+    let bodyIndex, header, body;
+    if (doc.match(docPattern)) {
+      bodyIndex = doc.startsWith('$') ? docPattern.exec(doc).index + 1 : 0;
+      header = doc.substring(0, bodyIndex);
+      body = doc.substring(bodyIndex);
+    } else {
+      bodyIndex = 0;
+      header = doc.startsWith('$') ? doc : '';
+      body = doc.startsWith('$') ? '' : doc;
+    }
 
     let result = { header: { title: 'Page', desc: 'An unnamed wiki page.' }, toc: [] };
     for (let headerLine of header.split('\n')) {

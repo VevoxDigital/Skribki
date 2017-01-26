@@ -2,12 +2,14 @@
 
 const MODEL = 'page';
 
+var PAGE;
+
 exports.install = () => {
   F.route(r => { return !Utils.locked(r); }, routeView);
   F.route(r => { return !Utils.locked(r); }, editPage, [ 'post' ]);
   F.route(r => { return !Utils.locked(r); }, deletePage, [ 'delete' ]);
 
-  var PAGE = F.model(MODEL);
+  PAGE = F.model(MODEL);
 };
 
 
@@ -63,13 +65,15 @@ function routeViewEdit() {
   * @this FrameworkController
   */
 function routeViewPage() {
-  PAGE.read(this.url).then(page.parseDocument).then(doc => {
+  PAGE.read(this.url).then(PAGE.parseDocument).then(doc => {
     if (!doc) {
       this.repository.title = 'Not Found';
       this.viewError(404);
     } else if (!doc.header) {
       this.repository.title = 'Viewing Directory';
       this.view('directory', { files: doc });
+    } else if (doc.header.redirect) {
+      this.redirect(doc.header.redirect);
     } else {
       this.repository.title = doc.header.title;
       this.view('page', { page: doc });
