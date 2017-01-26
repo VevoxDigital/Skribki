@@ -29,8 +29,8 @@ F.middleware('route-logging', (req, res, next, opts, controller) => {
 });
 F.use('route-logging');
 
-Controller.prototype.viewError = function (code, url = this.url, info) {
-  this.repository.title = Utils.localize(this.req, 'error.header', [ code ]);
+Controller.prototype.viewError = function (code, url, info) {
+  this.repository.title = Utils.localize(this.req, 'error.header', code);
   this.view('error', {
     errno: code,
     url: url,
