@@ -2,11 +2,11 @@ nav.navbar.navbar-default.navbar-fixed-top
   .container
     .navbar-header
       a.navbar-brand(href='/')
-        img(src=config.oem.icon)
-        span #{config.oem.name}
+        img(src=config['oem.icon'])
+        span #{config['oem.name']}
     .collapse.navbar-collapse#navbarLeft
       ul.nav.navbar-nav
-        - let nav = { text: config.navbar.items.text, link: config.navbar.items.link }
+        - let nav = { text: config['navbar.items.text'], link: config['navbar.items.link'] }
         - for (let i = 0; i < Math.min(nav.text.length, nav.link.length); i++)
           li
             a(href=nav.link[i])= nav.text[i]
@@ -16,6 +16,6 @@ nav.navbar.navbar-default.navbar-fixed-top
             a(href='/special/login')= translate('page.navbar.login')
         else
           li
-            a= translate('page.navbar.user', [ user.shortName ])
+            a= translate('page.navbar.user', user.shortName)
           li
             a(href='/special/logout')= translate('page.navbar.logout')

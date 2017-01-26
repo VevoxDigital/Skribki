@@ -4,7 +4,7 @@ block header
   .jumbotron.jumbotron-header
     .container
       h1= translate('page.history.title')
-      h2= translate('page.history.desc', [url])
+      h2= translate('page.history.desc', url)
 
 block content
   .content-options.text-right
@@ -14,7 +14,7 @@ block content
     if model.history.length === 1
       p= translate('page.history.changesSingular')
     else
-      p= translate('page.history.changesPlural', [model.history.length])
+      p= translate('page.history.changesPlural', model.history.length)
 
     each log in model.history
       p.commit(id='commit-' + log.hash)

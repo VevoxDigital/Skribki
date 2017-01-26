@@ -11,7 +11,7 @@
 doctype html
 html
   head
-    title #{repository.title || 'Wiki'} &#183; #{config.wiki.name}
+    title #{repository.title || 'Wiki'} &#183; #{config['wiki.name']}
 
     // vendor files
     link(href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'
@@ -42,10 +42,10 @@ html
       footer
         .container
           p
-            | #{config.wiki.name}, a free wiki by #{config.oem.name} powered by&nbsp;
+            | #{config['wiki.name']}, a free wiki by #{config['oem.name']} powered by&nbsp;
             a(href='https://github.com/VevoxDigital/Skribki') Skribki.
             |  Unless otherwise noted, content is available under&nbsp;
-            a(href=F.config.license.url)= F.config.license.name
+            a(href=config['license.url'])= config['license.name']
             | .
           p.langs
             | v

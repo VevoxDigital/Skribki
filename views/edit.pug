@@ -7,7 +7,7 @@ block content
     a(href=url)= translate('page.action.back')
   .content-page
     h1.text-center= translate('page.edit.header')
-    h3.text-center= translate('page.edit.desc', [ url ])
+    h3.text-center= translate('page.edit.desc', url)
     form#editForm(action=url method='POST')
       input(name='message' type='text' placeholder='update ' + url)
       input.btn.btn-success(type='submit' value=translate('page.edit.commit'))

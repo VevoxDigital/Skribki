@@ -3,14 +3,14 @@ extends layout-sidebar.pug
 block header
   .jumbotron.jumbotron-header
     .container
-      h1= translate('error.header', [ model.errno ])
-      h2= translate('error.err.' + model.errno, [ model.url ])
+      h1= translate('error.header', model.errno)
+      h2= translate('error.err.' + model.errno, model.url)
 
 block content
   .content-options.text-right
     a(href='/')= translate('page.action.home')
   .content-page
-    if F.locked(model.url)
+    if Utils.locked(model.url)
       p= translate('error.body.locked')
       a.btn.btn-lg.btn-primary(href='/')= translate('page.action.home')
     else
