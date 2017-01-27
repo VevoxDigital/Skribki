@@ -45,7 +45,9 @@ function checkProvider(name) {
   * @param providerName The name of the provider
   */
 function processLogin(providerName) {
-  if (!checkProvider(providerName)) return this.throw400('Unknown provider: ' + provider);
+  if (!checkProvider(providerName)) return this.throw400('Unknown provider: ' + providerName);
+
+  let provider = CONFIG('auth.providers')[providerName];
 
   this.custom();
   passport.authenticate(providerName, provider.options || { })(this.req, this.res, NOOP);
@@ -60,6 +62,8 @@ function processLogin(providerName) {
   */
 function processLoginCallback(providerName) {
   if (!checkProvider(providerName)) return this.throw400('Unknown provider: ' + provider);
+
+  let provider = CONFIG('auth.providers')[providerName];
 
   // add defaults to the provider's 'callback' property
   provider.callback = Utils.extend({ successRedirect: '/', failureRedirect: '/special/login' }, provider.callback, true);
@@ -76,7 +80,7 @@ function processLoginCallback(providerName) {
         if (err) return this.throw500(err);
         this.redirect(provider.callback.successRedirect);
       });
-      
+
     else this.redirect(provider.callback.failureRedirect + '?err=auth.'
       + (CONFIG('auth.whitelist') ? 'whitelist' : 'blacklist'));
 
