@@ -23,16 +23,18 @@
   min-height: 60px;
 
   .navbar-brand {
-    color: $color-base-fg;
+    color: $color-white;
     font-size: 20px;
-    font-weight: lighter;
+    font-weight: bold;
     height: 60px;
+    opacity: .7;
     padding: 18px;
-    transition: color 250ms;
+    transition: opacity 250ms;
 
     &:hover,
     &:focus {
-      color: $color-dark-fg;
+      color: $color-white;
+      opacity: .9;
     }
   }
 

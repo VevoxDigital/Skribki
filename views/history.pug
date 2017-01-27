@@ -1,20 +1,17 @@
 extends layout-sidebar.pug
 
+include layout/page-actions.pug
+
 block header
-  .jumbotron.jumbotron-header
-    .container
-      h1= translate('page.history.title')
-      h2= translate('page.history.desc', [url])
+  +header(translate('page.history.title'), translate('page.history.desc', url))
 
 block content
-  .content-options.text-right
-    a(href=url)= translate('page.action.back')
-  .content-page
+  +page-actions({ back: url })
     h1= translate('page.history.header')
     if model.history.length === 1
       p= translate('page.history.changesSingular')
     else
-      p= translate('page.history.changesPlural', [model.history.length])
+      p= translate('page.history.changesPlural', model.history.length)
 
     each log in model.history
       p.commit(id='commit-' + log.hash)

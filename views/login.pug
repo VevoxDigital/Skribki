@@ -1,10 +1,10 @@
 extends layout-sidebar.pug
 
+include layout/page-actions.pug
+
 block content
-  .content-options.text-right
-    a(href=url)= translate('page.action.back')
-  .content-page
-    h1= translate('page.auth.login', [ config.wiki.name || 'Wiki' ])
+  +page-actions({ back: url })
+    h1= translate('page.auth.login', config['wiki.name'] || 'Wiki')
     if config.auth.whitelist
       p= translate('page.auth.whitelist')
     else

@@ -1,13 +1,13 @@
 extends layout-sidebar.pug
 
+include layout/page-actions.pug
+
 block header
 block banner
 block content
-  .content-options.text-right
-    a(href=url)= translate('page.action.back')
-  .content-page
+  +page-actions({ back: url })
     h1.text-center= translate('page.edit.header')
-    h3.text-center= translate('page.edit.desc', [ url ])
+    h3.text-center= translate('page.edit.desc', url)
     form#editForm(action=url method='POST')
       input(name='message' type='text' placeholder='update ' + url)
       input.btn.btn-success(type='submit' value=translate('page.edit.commit'))

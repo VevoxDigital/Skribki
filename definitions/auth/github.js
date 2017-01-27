@@ -2,10 +2,9 @@
 
 const Strategy = require('passport-github2');
 
-// config definition hasn't loaded yet
 exports.strategy = new Strategy({
-  clientID: F.config['oauth.github.id'] || 'your-client-id',
-  clientSecret: F.config['oauth.github.secret'] || 'your-client-secret',
+  clientID: CONFIG('oauth.github.id') || 'your-client-id',
+  clientSecret: CONFIG('oauth.github.secret') || 'your-client-secret',
   callbackURL: '/special/login/github/callback'
 }, (accessToken, refreshToken, profile, done) => {
   if (profile.emails.length === 0)

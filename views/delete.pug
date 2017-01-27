@@ -1,15 +1,12 @@
 extends layout-sidebar.pug
 
+include layout/page-actions.pug
+
 block header
-  .jumbotron.jumbotron-header
-    .container
-      h1= translate('page.delete.title')
-      h2= translate('page.delete.desc', [ url ])
+  +header(translate('page.delete.title'), translate('page.delete.desc', url))
 
 block content
-  .content-options.text-right
-    a(href=url)= translate('page.action.back')
-  .content-page
+  +page-actions({ back: url })
     h1= translate('page.delete.header')
     p= translate('page.delete.confirm')
 

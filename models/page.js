@@ -11,6 +11,10 @@ const lockfile  = require('lockfile'),
 exports.id = 'page';
 exports.wikiPath = path.join(__dirname, '..', 'wiki');
 
+/**
+  * @function install
+  * Syncronous install function, called once when the model is loaded.
+  */
 exports.install = () => {
   F.path.wiki = (p = '') => { return path.join(exports.wikiPath, p); }
   try {
@@ -45,57 +49,66 @@ exports.install = () => {
   }
 };
 
+
+/**
+  * @function uninstall
+  * Syncronous uninstall method. Called when the model is unloading
+  */
 exports.uninstall = () => {
   delete F.path.wiki;
   lockfile.unlockSync(F.path.wiki('repo.lck'));
 };
 
-exports.normalizePath = (route = '') => {
-  assert.strictEqual(typeof route, 'string', 'route should be a string');
 
-  // remove any leading dots (non-leading dots are handled later)
-  while (route.startsWith('.')) route = route.substring(1);
-
-  // normalize slashes
-  if (route.endsWith('/')) route = route.slice(0, -1);
-  if (!route.startsWith('/')) route = '/' + route;
-
-  // normalize the path
-  route = path.normalize(route);
-  return route;
-};
-
+/**
+  * @function workingFile
+  * Gets the workingFile for the given route after normalizing it
+  * The working file is resolved if found, else an error is thrown
+  *
+  * @param route The route
+  * @return Promise
+  */
 exports.workingFile = route => {
-  let deferred = q.defer();
-  route = exports.normalizePath(route);
+  route = Utils.normalize(route);
   if (route === '/') route = '';
-
   if (path.dirname(route).split(/\//g).indexOf('index') >= 0)
-    deferred.reject(new Error(`'index' cannot be a directory`));
+    throw new Error(`'index' cannot be a directory`);
+
+  let deferred = q.defer();
 
   fs.stat(F.path.wiki(route), (err, stats) => {
-    // missing file means we resolve with no data.
-    if (err) return err.message.startsWith('ENOENT') ? deferred.resolve() : deferred.reject(err);
+    if (err) return err.message.startsWith('ENOENT') ? deferred.resolve(route) : deferred.reject(err);
     deferred.resolve(stats.isDirectory() ? route + '/index' : route);
   });
 
   return deferred.promise;
 };
 
+
+/**
+  * @function read
+  * Reads the given route, returning the file or directory contents if found and
+  * throwing an error if not.
+  *
+  * @param route The route
+  * @return Promise
+  */
 exports.read = (route, $readAnyway) => {
   return exports.workingFile(route).then(route => {
-    if (!route) return;
     let deferred = q.defer();
 
     if (route.endsWith('/index') && !$readAnyway)
       fs.stat(F.path.wiki(route), (err, stats) => {
         if (!err && stats.isFile()) deferred.resolve(exports.read(route, true));
-        else if (err.message.startsWith('ENOENT')) fs.readdir(F.path.wiki(path.dirname(route)), deferred.makeNodeResolver());
+        else if (err.message.startsWith('ENOENT')) fs.readdir(F.path.wiki(path.dirname(route)), (err, files) => {
+          if (err) return err.message.startsWith('ENOENT') ? deferred.resolve() : deferred.reject(err);
+          deferred.resolve(files);
+        });
         else deferred.reject(err);
       });
     else {
       fs.readFile(F.path.wiki(route), (err, data) => {
-        if (err) return deferred.reject(err);
+        if (err) return err.message.startsWith('ENOENT') ? deferred.resolve() : deferred.reject(err);
         deferred.resolve(data.toString());
       });
     }
@@ -104,12 +117,33 @@ exports.read = (route, $readAnyway) => {
   });
 };
 
+
+/**
+  * @function makeDirs
+  * Creates a promising function for the given route to create all necessary directores
+  *
+  * @param rt The route
+  * @return Function
+  */
 exports.makeDirs = rt => {
-  return (route = exports.normalizePath(rt)) => {
+  return (route = Utils.normalize(rt)) => {
     return q.nfcall(fs.ensureDir, F.path.wiki(path.dirname(route))).then(() => { return route; });
   };
 };
 
+
+/**
+  * @function modifyFile
+  * Creates a file modification lock for the given file then applies the function.
+  * When the function calls its callback, the file is unlocked.
+  *
+  * The returning promise is resolved with the data passed into the function's
+  * callback, or rejected on error.
+  *
+  * @param rt The route
+  * @param func The function to call
+  * @return Promise
+  */
 exports.modifyFile = (rt, func) => {
   return exports.workingFile(rt).then(exports.makeDirs(rt)).then(route => {
     let deferred = q.defer();
@@ -130,8 +164,15 @@ exports.modifyFile = (rt, func) => {
   });
 };
 
-// TODO Patch in the changes instead of writing over.
-// If two edits occur, one overwrites the other.
+
+/**
+  * @function write
+  * Writes the given data to the route
+  *
+  * @param rt The route
+  * @param data The data to write
+  * @return Promise
+  */
 exports.write = (rt, data) => {
   assert.equal(typeof data, typeof { }, 'data should be an object, got ' + typeof data);
   assert.equal(typeof data.name, 'string', 'data should have string name');
@@ -142,14 +183,22 @@ exports.write = (rt, data) => {
   return exports.modifyFile(rt, (route, done) => {
     fs.writeFile(F.path.wiki(route), data.body, err => {
       if (err) return done(err);
-      data.message = JSON.stringify(data.message || 'Update ' + route)
-        .substring(1).slice(0, -1).replace(/`/g, '\\`');
+      data.message = Utils.escape(data.message || 'Update ' + route);
       F.repository.add('.' + route)
         .commit(data.message, { '--author': `"${data.name} <${data.email}>"` }, done);
     });
   });
 };
 
+
+/**
+  * @function removeIfEmpty
+  * Removes the given route's directory if its empty. The promise is always resolved
+  * with no data unless there is an error
+  *
+  * @param route
+  * @return Promise
+  */
 exports.removeIfEmpty = route => {
   return q.nfcall(fs.readdir, F.path.wiki(route)).then(files => {
     if (files.length === 0) return q.nfcall(fs.rmdir, F.path.wiki(route))
@@ -157,6 +206,15 @@ exports.removeIfEmpty = route => {
   });
 };
 
+
+/**
+  * @function delete
+  * Deletes the page at the given route and commits the deletion
+  *
+  * @param rt The route
+  * @param data The commit data.
+  * @return Promise
+  */
 exports.delete = (rt, data = { }) => {
   assert.equal(typeof data, typeof { }, 'data should be an object, got ' + typeof data);
   assert.equal(typeof data.name, 'string', 'data should have string name');
@@ -165,8 +223,7 @@ exports.delete = (rt, data = { }) => {
   return exports.modifyFile(rt, (route, done) => {
     fs.unlink(F.path.wiki(route), err => {
       if (err) return done(err);
-      data.message = JSON.stringify(data.message || 'Update ' + route)
-        .substring(1).slice(0, -1).replace(/`/g, '\\`');
+      data.message = Utils.escape(data.message || 'Update ' + route);
       F.repository.add('.' + route)
         .commit(data.message, { '--author': `"${data.name} <${data.email}>"` }, (err) => {
           if (err) done(err);
@@ -176,12 +233,29 @@ exports.delete = (rt, data = { }) => {
   });
 };
 
+/**
+  * @function parseDocument
+  * Parses the given string as a page document, returning the resulting parsed data in a promise
+  *
+  * @param doc The document to parse
+  * @return Promise
+  */
+// TODO Solve the complexity issue the right way.
 /* eslint complexity: 0 */
 exports.parseDocument = doc => {
   if (typeof doc === 'string') {
-    let bodyIndex = doc.startsWith('$') ? /\n[^\$]/.exec(doc).index + 1 : 0,
-        header = doc.substring(0, bodyIndex),
-        body = doc.substring(bodyIndex);
+    let docPattern = /\n[^\$]/;
+
+    let bodyIndex, header, body;
+    if (doc.match(docPattern)) {
+      bodyIndex = doc.startsWith('$') ? docPattern.exec(doc).index + 1 : 0;
+      header = doc.substring(0, bodyIndex);
+      body = doc.substring(bodyIndex);
+    } else {
+      bodyIndex = 0;
+      header = doc.startsWith('$') ? doc : '';
+      body = doc.startsWith('$') ? '' : doc;
+    }
 
     let result = { header: { title: 'Page', desc: 'An unnamed wiki page.' }, toc: [] };
     for (let headerLine of header.split('\n')) {
@@ -216,6 +290,14 @@ exports.parseDocument = doc => {
   } else return q();
 };
 
+
+/**
+  * @function parse
+  * Executes all loaded parsers on the given string, returning the resulting html in a promise
+  *
+  * @param body The body to parse
+  * @return Promise
+  */
 exports.parse = body => {
   assert.equal(typeof body, 'string', 'body should be a string');
   let deferred = q.defer();
@@ -231,11 +313,19 @@ exports.parse = body => {
   return deferred.promise;
 };
 
+
+/**
+  * @function history
+  * Gets the history for the given route
+  *
+  * @param rt The route
+  * @return Promise
+  */
 exports.history = rt => {
   assert.equal(typeof rt, 'string', 'route must be a string');
   let deferred = q.defer();
 
-  exports.workingFile(rt).then((route = exports.normalizePath(rt)) => {
+  exports.workingFile(rt).then((route = Utils.normalize(rt)) => {
     F.repository.log(['--', route.substring(1)], (err, results) => {
       if (err) deferred.reject(err);
       deferred.resolve(results.all);

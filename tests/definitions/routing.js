@@ -5,16 +5,6 @@ const assert = require('assert'),
 
 exports.run = () => {
 
-  F.assert('definition:routing#locked', next => {
-    expect(F.lockedPatterns).to.be.an('array');
-
-    expect(F.locked('/special/foo')).to.be(true);
-    expect(F.locked('/category/bar')).to.be(true);
-    expect(F.locked('/.git')).to.be(true);
-    expect(F.locked('/foo/bar')).to.be(false);
-    next();
-  });
-
   F.assert('definition:Controller.prototype#viewError', next => {
     let code = 707, url = '/foo', info = 'foobar';
     let context = {

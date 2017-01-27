@@ -1,20 +1,18 @@
 extends layout-sidebar.pug
 
+include layout/page-actions.pug
+
 block header
-  .jumbotron.jumbotron-header
-    .container
-      h1= translate('error.header', [ model.errno ])
-      h2= translate('error.err.' + model.errno, [ model.url ])
+  +header(translate('error.header', model.errno), translate('error.err.' + model.errno, model.url || url))
 
 block content
-  .content-options.text-right
-    a(href='/')= translate('page.action.home')
-  .content-page
-    if F.locked(model.url)
+  +page-actions({ back: 'javascript:window.history.back()' })
+    if Utils.locked(model.url || url)
       p= translate('error.body.locked')
       a.btn.btn-lg.btn-primary(href='/')= translate('page.action.home')
     else
       p= translate('error.body.unlocked')
+      a.btn.btn-lg.btn-primary(href='/')= translate('page.action.home')
       a.btn.btn-lg.btn-primary(href='?a=history')= translate('page.action.history')
       a.btn.btn-lg.btn-success(href='?a=edit')= translate('page.action.create')
     if model.info

@@ -1,0 +1,7 @@
+block banner
+  section#banner.banner
+    .container
+      if (config['wiki.banner.text'])
+        p= config['wiki.banner.text']
+        span.banner-dash &#8211;
+        a(href=config['wiki.banner.link-url'])= config['wiki.banner.link-text']

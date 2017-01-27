@@ -1,19 +1,5 @@
 'use strict';
 
-const LOCKED = [
-  /^\/special\//i, // Special pages/directores
-  /^\/categor(?:y|ies)\//i,
-  /^\/\./ // anything that starts with a dot
-];
-
-F.lockedPatterns = LOCKED;
-F.locked = rt => {
-  if (typeof rt !== 'string') return true;
-  for (const pat of LOCKED)
-    if (rt.match(pat)) return true;
-  return false;
-};
-
 F.middleware('public-files', (req, res, next) => {
   if (req.url.startsWith('/public'))
     return res.redirect(req.url.substring(7));
@@ -21,8 +7,30 @@ F.middleware('public-files', (req, res, next) => {
 });
 F.use('public-files');
 
-Controller.prototype.viewError = function (code, url = this.url, info) {
-  this.repository.title = F.localize(this.req, 'error.header', [ code ]);
+
+F.middleware('route-logging', (req, res, next, opts, controller) => {
+  res.on('finish', () => {
+
+    let color = (() => {
+      if (res.statusCode >= 500) return 'red';
+      else if (res.statusCode >= 400) return 'yellow';
+      else if (res.statusCode >= 300) return 'cyan';
+      else if (res.statusCode >= 200) return 'green';
+      else return 'white';
+    })();
+
+    let ctrlMessage = controller ? controller.name + '!' : '';
+
+    LOG.log(Utils.locked(req.url) ? 'silly' : 'verbose',
+      `${req.connection.remoteAddress} ${req.method.bold} ${res.statusCode.toString()[color]} ${ctrlMessage}${req.url}`);
+
+  });
+  next();
+});
+F.use('route-logging');
+
+Controller.prototype.viewError = function (code, url, info) {
+  this.repository.title = Utils.localize(this.req, 'error.header', code);
   this.view('error', {
     errno: code,
     url: url,

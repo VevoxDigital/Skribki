@@ -1,7 +1,8 @@
 'use strict';
 
 const fs    = require('fs'),
-      path  = require('path');
+      path  = require('path'),
+      _     = require('lodash');
 
 const COOKIE = '__lang';
 
@@ -17,20 +18,19 @@ F.onLocale = (req, res) => {
   }
 };
 
-F.localize = (req, key, args = []) => {
-  let localized = F.resource(req.language, key) || F.resource(F.config['wiki.lang'], key) || key;
-  for (let i = 0; i < args.length; i++)
-    localized = localized.replace(new RegExp('\\{' + i + '\\}', 'g'), args[i]);
-  return localized;
-};
-
 F.config.languages = { };
-let resources = fs.readdirSync(F.path.resources());
-for (let res of resources) {
-  res = path.basename(res, '.resource');
-  F.config.languages[res] = {
-    id: res,
-    name: F.resource(res, 'lang.name') || res,
-    region: F.resource(res, 'lang.region')
-  };
+try {
+  LOG.info('loading languages...');
+  _.each(fs.readdirSync(F.path.resources()), file => {
+    file = path.basename(file, '.resource');
+    F.config.languages[file] = {
+      id: file,
+      name: Utils.localize(file, 'lang.name'),
+      region: Utils.localize(file, 'lang.region')
+    }
+    LOG.info(` > loaded '${file}'`);
+  });
+} catch (e) {
+  LOG.error('could not load language files');
+  LOG.error(e.stack);
 }

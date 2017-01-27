@@ -1,21 +1,13 @@
 extends layout-sidebar.pug
 
+include layout/page-actions.pug
+
 block header
-  .jumbotron.jumbotron-header
-    .container
-      h1= model.page.header.title
-      h2= model.page.header.desc
+  +header(model.page.header.title, model.page.header.desc)
 
 block content
-  div.content-options.text-right
-    if model.action === 'edit'
-      a(href=url)= translate('page.action.back')
-    else
-      a(href='?a=history')= translate('page.action.history')
-      if user
-        a(href='?a=edit')= translate('page.action.edit')
-        a.danger(href='?a=delete')= translate('page.action.delete')
-  div.content-page!= model.page.body
+  +page-actions({ history: '?a=history', edit: user && '?a=edit', delete: user && '?a=delete' })
+    != model.page.body
 
 append sidebar
   each link in (model.page.toc || [])

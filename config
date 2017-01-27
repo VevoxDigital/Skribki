@@ -5,15 +5,21 @@ auth.cookie   : __skrSS
 
 // whitelist/blacklist
 // emails are a whitelist when `auth.whitelist` is true or a blacklist otherwise
-// emails may be a string or a valid JavaScript regular expression
+// strings starting with a '/' will be treated as a JavaScript regular expression
 // string matches are case sensitive!
-auth.whitelist (boolean) : false
-auth.emails  (Object)    : [/@localhost$/i, 'user@example.com']
+auth.whitelist (boolean) : true
+auth.emails  (Object)    : ['/@localhost$/i', 'user@example.com']
 
 // Wiki Information
 wiki.name     : Skribki
 wiki.icon     : /img/logo.svg
 wiki.lang     : en-us
+
+// Wiki banner
+// removing/commenting 'wiki.banner.text' will disable the banner
+wiki.banner.text      : Welcome to Skribki!
+wiki.banner.link-text : Getting Started
+wiki.banner.link-url  : http://wiki.vevox.io/projects/skribki/
 
 // Content Licensing
 license.name  : CC-BY-SA

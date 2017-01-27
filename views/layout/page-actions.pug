@@ -1,0 +1,7 @@
+mixin page-actions(actions)
+  .content-options.text-right
+    each url, action in actions || { }
+      if (url)
+        a(href=url)= translate('page.action.' + action)
+  .content-page
+    block

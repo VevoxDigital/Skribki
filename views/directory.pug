@@ -1,19 +1,14 @@
 extends layout-sidebar.pug
 
+include layout/page-actions.pug
+
 block header
-  .jumbotron.jumbotron-header
-    .container
-      h1= translate('page.directory.title')
-      h2= translate('page.directory.desc', [ url ])
+  +header(translate('page.directory.title'), translate('page.directory.desc', url))
 
 block content
-  .content-options.text-right
-    a(href='?a=history')= translate('page.action.history')
-    if user
-      a(href='?a=edit')= translate('page.action.create')
-  .content-page
+  +page-actions({ history: '?a=history', create: user && '?a=edit' })
     h1= translate('page.directory.header')
-    p= translate('page.directory.info', [ url ])
+    p= translate('page.directory.info', url)
     each files, letter in model.files
       h3(id=letter)= letter
       .directory
