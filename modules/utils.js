@@ -82,7 +82,11 @@ exports.install = () => {
     if (typeof email !== 'string') return false;
 
     return !!_.find(CONFIG('auth.emails'), check => {
-      return (check instanceof RegExp && check.match(email)) || email === check
+      if (check.startsWith('/')) {
+        let flagsIndex = check.lastIndexOf('/'), pattern = new RegExp(
+          check.substring(1, flagsIndex), check.substring(flagsIndex + 1));
+        return email.match(pattern);
+      } else return email === check;
     }) === CONFIG('auth.whitelist');
   }
 

@@ -5,10 +5,10 @@ auth.cookie   : __skrSS
 
 // whitelist/blacklist
 // emails are a whitelist when `auth.whitelist` is true or a blacklist otherwise
-// emails may be a string or a valid JavaScript regular expression
+// strings starting with a '/' will be treated as a JavaScript regular expression
 // string matches are case sensitive!
 auth.whitelist (boolean) : true
-auth.emails  (Object)    : [/@localhost$/i, 'user@example.com']
+auth.emails  (Object)    : ['/@localhost$/i', 'user@example.com']
 
 // Wiki Information
 wiki.name     : Skribki
