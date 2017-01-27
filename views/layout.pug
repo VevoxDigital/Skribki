@@ -26,38 +26,14 @@ html
     block scripts
   body
     include layout/navbar.pug
+    include layout/page-header.pug
+
     block header
-      .jumbotron.jumbotron-header
-        .container
-          h1 Page Title
-          h2 The page's description would go here.
-    block banner
-      .banner
-        .container
-          p Welcome to Skribki!
-          span.banner-dash &#8211;
-          a(href='http://wiki.vevox.io/app/skribki/getting-started') Getting Started
+      +header('Page', 'A non-descript page.')
+
+    include layout/banner.pug
+
     block body
-    block footer
-      footer
-        .container
-          p
-            | #{config['wiki.name']}, a free wiki by #{config['oem.name']} powered by&nbsp;
-            a(href='https://github.com/VevoxDigital/Skribki') Skribki.
-            |  Unless otherwise noted, content is available under&nbsp;
-            a(href=config['license.url'])= config['license.name']
-            | .
-          p.langs
-            | v
-            strong= config.version
-            |  :: View in:
-            each lang, id in config.languages
-              |  &nbsp;
-              if (id === controller.req.language)
-                = lang.name
-                if (lang.region)
-                  |  (#{lang.region})
-              else
-                a(href='?language='+id)= lang.name
-                  if (lang.region)
-                    |  (#{lang.region})
+      p Hello world!
+
+    include layout/footer.pug
