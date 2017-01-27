@@ -31,6 +31,7 @@ F.use('route-logging');
 
 Controller.prototype.viewError = function (code, url, info) {
   this.repository.title = Utils.localize(this.req, 'error.header', code);
+  this.status = code;
   this.view('error', {
     errno: code,
     url: url,
