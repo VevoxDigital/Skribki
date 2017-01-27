@@ -4,12 +4,12 @@ block body
   .section-body
     .container
       .row
-        section.section-sidebar.col-xs-12.col-md-2
+        section#sidebar.section-sidebar.col-xs-12.col-md-2
           img(src=config['wiki.icon'])
           block sidebar
             a.sidebar-lg.active(href='/') Wiki Home
             a.sidebar-md(href='/special/random') Random Page
             a.sidebar-md(href='/special/search') Page Search
             hr
-        section.section-content.col-xs-12.col-md-10
+        section#content.section-content.col-xs-12.col-md-10
           block content
