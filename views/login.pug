@@ -5,7 +5,7 @@ include layout/page-actions.pug
 block content
   +page-actions({ back: url })
     h1= translate('page.auth.login', config['wiki.name'] || 'Wiki')
-    if config.auth.whitelist
+    if config['auth.whitelist']
       p= translate('page.auth.whitelist')
     else
       p= translate('page.auth.blacklist')
