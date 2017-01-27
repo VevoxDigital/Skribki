@@ -22,7 +22,7 @@ F.middleware('route-logging', (req, res, next, opts, controller) => {
     let ctrlMessage = controller ? controller.name + '!' : '';
 
     LOG.log(Utils.locked(req.url) ? 'silly' : 'verbose',
-      `${req.connection.remoteAddress} ${req.method.bold} ${ctrlMessage}${req.url} ${res.statusCode.toString()[color]}`);
+      `${req.connection.remoteAddress} ${req.method.bold} ${res.statusCode.toString()[color]} ${ctrlMessage}${req.url}`);
 
   });
   next();
