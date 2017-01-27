@@ -15,6 +15,12 @@ wiki.name     : Skribki
 wiki.icon     : /img/logo.svg
 wiki.lang     : en-us
 
+// Wiki banner
+// removing/commenting 'wiki.banner.text' will disable the banner
+wiki.banner.text      : Welcome to Skribki!
+wiki.banner.link-text : Getting Started
+wiki.banner.link-url  : http://wiki.vevox.io/projects/skribki/
+
 // Content Licensing
 license.name  : CC-BY-SA
 license.url   : https://creativecommons.org/licenses/by-sa/4.0/
