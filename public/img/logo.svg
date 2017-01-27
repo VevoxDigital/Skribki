@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="255.999px" height="256px" viewBox="0 0 255.999 256" enable-background="new 0 0 255.999 256" xml:space="preserve">
-<g>
-	<path fill="#00AACC" d="M172.944,44.15l-33.916,19.859c0,0,59.579,65.089,52.953,90.438
-		c-11.861,45.373-161.88,94.784-161.88,94.784s102.732,15.749,130.992-0.799c28.262-16.549,67.592-81.215,64.805-113.846
-		C223.668,108.486,172.944,44.15,172.944,44.15z"/>
-	<path fill="#00AACC" d="M94.904,7.568C66.643,24.117,27.313,88.785,30.101,121.415c2.23,26.107,52.955,90.439,52.955,90.439
-		l33.914-19.855c0,0-59.581-65.094-52.955-90.443C75.875,56.183,225.899,6.769,225.899,6.769S123.165-8.979,94.904,7.568z"/>
-	<rect x="100.197" y="92.698" fill="none" width="55.465" height="57.377"/>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="512px"
+	 height="512px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve">
+<g id="Icon">
+	<path fill="#34495E" d="M414.85,26.951c13.132,13.132,0,74.283,0,74.283C291.777,101.233,192,201.01,192,324.084
+		c0,0-61.151,13.13-74.283,0C1.677,208.042,298.82-89.079,414.85,26.951z"/>
+	<path fill="#34495E" d="M97.151,484.672c-13.131-13.133,0.001-74.281,0.001-74.281c123.072,0,222.847-99.778,222.847-222.85
+		c0,0,61.153-13.133,74.283,0C510.322,303.579,213.181,600.702,97.151,484.672z"/>
+	<circle fill="#00AACC" cx="256" cy="257.458" r="41.171"/>
+</g>
+<g id="Banner">
 </g>
 </svg>
