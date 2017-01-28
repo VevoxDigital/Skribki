@@ -19,7 +19,7 @@ exports.install = () => {
   * @this FrameworkController
   */
 function viewLogin() {
-  let model = { };
+  let model = { error: this.query.err };
   _.each(CONFIG('auth.providers'), (provider, name) => {
     model[name] = provider.button;
   });

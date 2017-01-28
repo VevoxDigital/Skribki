@@ -17,6 +17,8 @@ error.err.408 : The request to {0} timed out.
 error.err.418 : Cannot GET {0}: I'm a teapot!
 error.err.500 : An internal error occurred when loading {0}
 error.err.501 : The requested feature at {0} is under development.
+error.auth.whitelist  : The primary email on your account is not whitelisted.
+error.auth.blacklist  : The primary email on your account has been blacklisted.
 
 // titles
 title.page.edit     : Editing Page
@@ -37,6 +39,10 @@ page.navbar.user    : Hi, {0}
 
 // Login page
 page.auth.login     : {0} Login
+page.auth.title     : Login
+page.auth.desc      : Account login for {0}
+page.auth.error     : Your account could not be logged in:
+page.auth.contact   : Contact your wiki administrator if you believe this to be an error.
 page.auth.whitelist : This wiki is private and only available to certain users.
 page.auth.blacklist : This wiki is public: any non-banned user may log in.
 
