@@ -22,8 +22,8 @@ exports.install = () => {
       // info files will rotate daily
       new winston.transports.DailyRotateFile({
         name: 'info-file',
-        filename: F.path.logs('log'),
-        datePattern: 'info-yy-MM-dd.',
+        filename: F.path.logs('info-'),
+        datePattern: 'yy-MM-dd.log',
         level: 'info',
         json: false
       }),
@@ -31,9 +31,9 @@ exports.install = () => {
       // error files rotate once a month
       new winston.transports.DailyRotateFile({
         name: 'error-file',
-        filename: F.path.logs('log'),
-        datePattern: 'err-yy-MM.',
-        level: 'warning',
+        filename: F.path.logs('errors'),
+        datePattern: '-yy-MM.log',
+        level: 'warn',
         json: false
       })
 
