@@ -1,11 +1,14 @@
 extends layout-sidebar.pug
 
+block header
+  +header(translate('page.auth.title'), translate('page.auth.desc', config['wiki.name'] || 'Wiki'))
+
 include layout/page-actions.pug
 
 block content
   +page-actions({ back: url })
     h1= translate('page.auth.login', config['wiki.name'] || 'Wiki')
-    if config.auth.whitelist
+    if config['auth.whitelist']
       p= translate('page.auth.whitelist')
     else
       p= translate('page.auth.blacklist')
@@ -19,3 +22,7 @@ block content
           else
             img(src=button.icon)
           | #{button.text}
+
+    if model.error
+      h3= translate('page.auth.error')
+      pre= translate('error.' + model.error) + ' ' + translate('page.auth.contact')

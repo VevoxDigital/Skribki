@@ -131,6 +131,6 @@ function deletePage() {
     email: this.user.email,
     message: this.body.message
   }).then(() => {
-    this.redirect(this.url);
+    this.plain('');
   }).catch(err => { this.throw500(err); }).done();
 }

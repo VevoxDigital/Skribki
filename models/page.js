@@ -223,7 +223,7 @@ exports.delete = (rt, data = { }) => {
   return exports.modifyFile(rt, (route, done) => {
     fs.unlink(F.path.wiki(route), err => {
       if (err) return done(err);
-      data.message = Utils.escape(data.message || 'Update ' + route);
+      data.message = Utils.escape(data.message || 'Delete ' + route);
       F.repository.add('.' + route)
         .commit(data.message, { '--author': `"${data.name} <${data.email}>"` }, (err) => {
           if (err) done(err);

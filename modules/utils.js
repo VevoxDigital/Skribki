@@ -34,8 +34,6 @@ exports.install = () => {
     * @return The escaped string
     */
   Utils.escape = str => {
-    assert.strictEqual(typeof str, 'string', 'input must be a string');
-
     // "stringify" the string, escaping many JSON-invalid characters
     return JSON.stringify(str)
 

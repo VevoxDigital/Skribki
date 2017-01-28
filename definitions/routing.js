@@ -31,6 +31,7 @@ F.use('route-logging');
 
 Controller.prototype.viewError = function (code, url, info) {
   this.repository.title = Utils.localize(this.req, 'error.header', code);
+  this.status = code;
   this.view('error', {
     errno: code,
     url: url,
@@ -44,6 +45,7 @@ for (const c of simpleCodes)
     this.viewError(c, this.url, msg);
   }
 Controller.prototype.view500 = Controller.prototype.throw500 = function (err) {
+  LOG.warn(this.url + ' ' + err.stack);
   this.viewError(500, this.url, err.stack || err.toString());
 };
 Controller.prototype.view707 = Controller.prototype.view707 = function () {
