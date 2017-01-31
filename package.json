@@ -31,8 +31,10 @@
     "node": ">=6.0"
   },
   "dependencies": {
+    "cheerio": "^0.22.0",
     "colors": "^1.1.2",
     "fs-extra": "^2.0.0",
+    "highlight.js": "^9.9.0",
     "lockfile": "^1.0.3",
     "lodash": "^4.17.4",
     "marked": "^0.3.6",
