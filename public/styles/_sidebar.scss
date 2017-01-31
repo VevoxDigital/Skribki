@@ -1,6 +1,8 @@
 
 .section-sidebar {
+
   > img {
+    max-height: 200px;
     max-width: 100%;
     padding: 20px;
   }
@@ -22,5 +24,11 @@
     &.sidebar-sm {
       font-size: 8pt;
     }
+  }
+}
+
+@media (min-width: 768px) {
+  .section-sidebar > img {
+    max-height: auto;
   }
 }
