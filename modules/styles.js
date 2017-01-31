@@ -17,7 +17,7 @@ exports.compile = (content, dir) => {
     return sass.renderSync({
       data: content,
       outputStyle: 'compressed',
-      includePaths: [ dir, F.path.root('node_modules') ]
+      includePaths: [ dir, F.path.public('styles'), F.path.root('node_modules') ]
     }).css.toString();
   } catch (e) {
     LOG.error('style engine failure');
