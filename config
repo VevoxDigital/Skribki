@@ -14,6 +14,7 @@ auth.emails  (Object)    : ['/@localhost$/i', 'user@example.com']
 wiki.name     : Skribki
 wiki.icon     : /img/logo.svg
 wiki.lang     : en-us
+wiki.theme    : vevox-blue
 
 // Wiki banner
 // removing/commenting 'wiki.banner.text' will disable the banner
