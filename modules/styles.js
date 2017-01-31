@@ -111,7 +111,7 @@ function sendFile(req, res, key, file) {
   * @param data The data to send.
   */
 function send(req, res, key, data) {
-  F.cache.set(key, data, '10 minutes');
+  if (!F.isDebug) F.cache.set(key, data, '10 minutes');
   F.responseContent(req, res, 200, data, 'text/css');
   F.stats.response.file++;
 }
