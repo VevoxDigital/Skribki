@@ -72,8 +72,8 @@ function compileTarget(req, res, isValidation) {
   * @param route The route, themed.
   */
 function compileTargetTheme(req, res, key, route) {
-  let theme = F.config['wiki.theme'] || F.config['default-theme'];
-  LOG.debug('theme: ' + theme);
+  let theme = CONFIG('wiki.theme') || CONFIG('default-theme');
+  LOG.debug('theme theme=' + theme);
 
   sendFile(req, res, key, F.path.themes(theme + route.substring('theme'.length)));
 }
@@ -94,7 +94,7 @@ function sendFile(req, res, key, file) {
 
     try {
 
-      LOG.info('compiling uncached style ' + key);
+      if (!F.isDebug) LOG.info('compiling uncached style ' + key);
       send(req, res, key, exports.compile( data.toString(), path.dirname(file) ));
 
     } catch (e) {
