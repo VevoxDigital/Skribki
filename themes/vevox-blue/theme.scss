@@ -13,3 +13,14 @@
 @import 'navbar';
 @import 'header';
 @import 'banner';
+@import 'footer';
+
+// core
+@import 'layout';
+@import 'sidebar';
+@import 'parts';
+
+// styles
+body {
+  background-color: $color-lightgray;
+}

@@ -1,3 +1,6 @@
+@import 'includes/colors';
+@import 'includes/functions';
+
 @import 'colors';
 
 .content-page {
@@ -5,11 +8,10 @@
   p {
     color: $color-gray;
     padding: 0 10px;
-    text-indent: 10px;
   }
 
   :not(pre) > code {
-    background-color: $color-white1;
+    background-color: tint($color-white1, 50%);
     border-radius: 2px;
     color: tint($color-gray, 40%);
     padding: 2px 5px;
