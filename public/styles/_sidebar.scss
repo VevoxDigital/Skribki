@@ -1,0 +1,26 @@
+
+.section-sidebar {
+  > img {
+    max-width: 100%;
+    padding: 20px;
+  }
+
+  > a {
+    display: block;
+
+    &.sidebar-lg {
+      font-size: 12pt;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+
+    &.sidebar-md {
+      font-size: 10pt;
+      margin: 5px 0;
+    }
+
+    &.sidebar-sm {
+      font-size: 8pt;
+    }
+  }
+}

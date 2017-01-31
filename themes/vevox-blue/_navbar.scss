@@ -1,0 +1,51 @@
+.navbar-brand {
+  padding: 20px 15px;
+}
+
+.navbar-default {
+  background-color: $color-base-1;
+  border-color: $color-base-2;
+  box-shadow: 0 1px 0 rgba($color-white, .07);
+
+  .navbar-brand {
+    color: $color-white;
+    font-weight: bold;
+    opacity: .7;
+    transition: opacity 250ms;
+
+    &:hover,
+    &:focus {
+      color: $color-white;
+      opacity: .9;
+    }
+  }
+
+  // scss-lint:disable SelectorDepth
+  .navbar-nav > li > a {
+    color: $color-white;
+    opacity: .7;
+    transition: opacity 250ms, background-color 250ms;
+
+    &:hover,
+    &:focus {
+      background-color: $color-base-2;
+      color: $color-white;
+      opacity: .9;
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .navbar-brand {
+    font-size: 16px;
+  }
+
+  .navbar-default {
+    min-height: 60px;
+
+    // scss-lint:disable SelectorDepth
+    .navbar-nav > li > a {
+      padding: 20px;
+    }
+  }
+}

@@ -1,0 +1,20 @@
+.jumbotron.jumbotron-header {
+  background-color: tint($color-base-1, 5%);
+  color: $color-dark-fg;
+  margin: 0;
+  padding: 60px 10%;
+
+  h1 {
+    font-family: 'Raleway Black', sans-serif;
+    font-weight: bold;
+    margin: 0;
+    margin-bottom: 10px;
+  }
+
+  h2 {
+    color: $color-base-fg;
+    font-size: 21px;
+    font-weight: lighter;
+    margin: 0;
+  }
+}
