@@ -1,5 +1,5 @@
 .banner {
-  background-color: $color-banner-bg;
+  background-color: tint($color-banner-bg, 5%);
   border-bottom: 1px shade($color-banner-bg, 10%) solid;
   color: $color-banner-fg;
 
