@@ -16,7 +16,7 @@ exports.install = () => {
     url = url.toString();
 
     // remove any leading dots or trailing slashes
-    while (url.startsWith('.')) url = url.substring(1);
+    while (url.match(/\.+\//)) url = url.substring(1);
     while (url.endsWith('/')) url = url.slice(0, -1);
 
     // append a leading slash
@@ -52,7 +52,7 @@ exports.install = () => {
     /^\/special\//i, // Special pages/directores
     /^\/categor(?:y|ies)\//i,
     /^\/(?:img\/|styles\/|favicon)/i, // public files
-    /^repo\.lck$/, // the repo lock
+    /^\/repo\.lck$/, // the repo lock
     /^\/\./ // anything that starts with a dot
   ];
 
