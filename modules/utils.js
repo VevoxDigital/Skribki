@@ -52,6 +52,7 @@ exports.install = () => {
     /^\/special\//i, // Special pages/directores
     /^\/categor(?:y|ies)\//i,
     /^\/(?:img\/|styles\/|favicon)/i, // public files
+    /^repo\.lck$/, // the repo lock
     /^\/\./ // anything that starts with a dot
   ];
 
