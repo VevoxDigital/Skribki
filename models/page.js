@@ -2,11 +2,15 @@
 
 const lockfile  = require('lockfile'),
       fs        = require('fs-extra'),
+      readline  = require('readline'),
+      klaw      = require('klaw'),
       path      = require('path'),
       q         = require('q'),
       assert    = require('assert'),
       _         = require('lodash'),
       git       = require('simple-git');
+
+const INDEX_KEY = 'PAGE_INDEX'
 
 exports.id = 'page';
 exports.wikiPath = path.join(__dirname, '..', 'wiki');
@@ -117,6 +121,96 @@ exports.read = (route, $readAnyway) => {
   });
 };
 
+exports.PageHeader = class PageHeader {
+  constructor (path, headers) {
+    Object.defineProperty(this, 'path', { value: path, enumerable: true })
+    Object.defineProperty(this, 'headers', { value: headers, enumerable: true })
+  }
+}
+
+exports.buildIndex = () => {
+  const cached = F.cache.get(INDEX_KEY)
+  if (!F.isDebug && cached) return q(cached)
+
+  const deferred = q.defer()
+
+  function replacePath(route) {
+    return U.normalize(route).substring(1).replace(new RegExp(`\\${path.sep}`, 'g'), '.')
+  }
+
+  let indexList = [ ], index = { }
+  klaw(F.path.wiki())
+    .on('data', item => {
+      if (item.stats.isDirectory() || item.stats.isFile()) {
+        indexList.push({ path: item.path, isFile: item.stats.isFile() })
+      }
+    })
+    .on('end', () => {
+      const startIndex = indexList[0].path.length + 1
+      indexList.shift() // ignore the first entry after we recorded its length
+
+      let indexPromises = [ ]
+      _.each(indexList, item => {
+        item.path = item.path.substring(startIndex)
+        if (U.locked(U.normalize(item.path))) return
+
+        if (item.isFile) indexPromises.push(exports.readHeader(item.path, true))
+        else U.set(index, replacePath(item.path), { })
+      })
+
+      deferred.resolve(q.allSettled(indexPromises).then(results => {
+        _.each(results, result => {
+          if (result.state !== 'fulfilled') return LOG.warn(result.value)
+          result = result.value
+
+          U.set(index, replacePath(result.path.substring(1)), new exports.PageHeader(result.path, result.header))
+        })
+
+        F.cache.set(INDEX_KEY, index, CONFIG('cache.index.time') || '10 minutes')
+        return index
+      }))
+    })
+
+  return deferred.promise
+}
+
+
+/**
+  * Reads the header off a given file, returning a promise that will resolve with it.
+  *
+  * @param rt The route to read
+  * @return Promise
+  */
+exports.readHeader = (rt, $skipFileCheck) => {
+  return ($skipFileCheck ? q(U.normalize(rt)) : exports.workfigFile(rt)).then(route => {
+    const deferred = q.defer()
+
+    const is = fs.createReadStream(F.path.wiki(route)),
+          reader = readline.createInterface({
+            input: is
+          })
+
+    is.on('error', deferred.reject)
+
+    let header = { }, finished = false
+    reader.on('line', line => {
+      if (finished || !line.startsWith('$')) {
+        finished = true
+        return
+      }
+
+      const breakIndex = line.indexOf(' ')
+      if (breakIndex < 0) return
+
+      header[line.substring(1, breakIndex)] = line.substring(breakIndex).trim()
+    })
+    .on('close', () => {
+      deferred.resolve({ path: route, header: header })
+    })
+
+    return deferred.promise
+  })
+}
 
 /**
   * @function makeDirs
