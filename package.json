@@ -27,6 +27,15 @@
     "url": "https://github.com/VevoxDigital/Skribki/issues"
   },
   "homepage": "http://wiki.vevox.io/projects/skribki",
+  "standard": {
+    "globals": [
+      "F",
+      "U",
+      "EMPTYOBJECT",
+      "EMPTYARRAY",
+      "assert"
+    ]
+  },
   "engines": {
     "node": ">=6.0"
   },
