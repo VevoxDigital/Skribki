@@ -22,6 +22,12 @@ wiki.banner.text      : Welcome to Skribki!
 wiki.banner.link-text : Getting Started
 wiki.banner.link-url  : http://wiki.vevox.io/projects/skribki/
 
+// Search index and page cacheing
+cache.index.enabled (boolean) : true
+cache.index.time              : 10 minutes
+cache.pages.enabled (boolean) : true
+cache.pages.time              : 30 minutes
+
 // Content Licensing
 license.name  : CC-BY-SA
 license.url   : https://creativecommons.org/licenses/by-sa/4.0/
