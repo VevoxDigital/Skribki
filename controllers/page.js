@@ -13,7 +13,7 @@ exports.install = () => {
 }
 
 /**
-  * @function routeViewHistory()
+  * @function routeViewHistory
   * routes the 'history' view
   *
   * @this FrameworkController
@@ -26,7 +26,7 @@ function routeViewHistory () {
 }
 
 /**
-  * @function routeViewDelete()
+  * @function routeViewDelete
   * routes the 'delete' view
   *
   * @this FrameworkController
@@ -54,7 +54,7 @@ function routeViewEdit () {
 }
 
 /**
-  * @function routeViewPage()
+  * @function routeViewPage
   * routes the 'page' view
   *
   * @this FrameworkController
@@ -77,7 +77,7 @@ function routeViewPage () {
 }
 
 /**
-  * @function routeView()
+  * @function routeView
   * Decides which routing function to delegate to the router
   *
   * @this FrameworkController
@@ -92,7 +92,7 @@ function routeView () {
 }
 
 /**
-  * @function editPage()
+  * @function editPage
   * Routes an edit to the model, redirecting when complete
   *
   * @this FrameworkController
@@ -112,7 +112,7 @@ function editPage () {
 }
 
 /**
-  * @function deletePage()
+  * @function deletePage
   * Routes a delete to the model, redirecting when complete
   *
   * @this FrameworkController
