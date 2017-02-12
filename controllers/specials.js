@@ -25,7 +25,7 @@ function viewRandom () {
   * @this FrameworkController
   */
 function viewSearch () {
-  this.view501('search not yet implemented')
+  this.view('search')
 }
 
 /**
@@ -35,7 +35,8 @@ function viewSearch () {
   * @this FrameworkController
   */
 function fetchSearchData () {
-  F.model('page').searchIndex().then(results => {
+  console.log('searchData')
+  F.model('page').searchIndex(this.body.query).then(results => {
     this.json(results)
-  }).catch(err => { this.response500(err) }).done()
+  }).catch(err => { F.response500(this.req, this.res, err) }).done()
 }

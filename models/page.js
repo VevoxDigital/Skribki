@@ -244,7 +244,7 @@ exports.searchIndex = keyword => {
   function search (index) {
     _.each(index, (val, key) => {
       if (val instanceof exports.PageHeader) {
-        if (keywordMatch(val.header.title) || keywordMatch(val.header.desc) ||
+        if (keywordMatch(val.headers.title) || keywordMatch(val.headers.desc) ||
           keywordMatch(key)) results.pages.push(val)
       } else {
         if (keywordMatch(key)) results.dirs.push(key)

@@ -75,3 +75,9 @@ page.directory.title    : Directory
 page.directory.desc     : Viewing directory contents for {0}
 page.directory.header   : Directory Contents
 page.directory.info     : The directory {0} exists but lacks an index. Below is a list of its contents.
+
+// search page
+page.search.title       : Search
+page.search.desc        : Search for an item on the wiki
+page.search.greeting    : Go ahead and enter a search phrase.
+page.search.characters  : Please enter at least three characters.
