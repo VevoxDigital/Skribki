@@ -2,8 +2,6 @@
 
 exports.install = () => {
   F.route('/special/error/{errno}', function (errno) { this.viewError(errno, '/') })
-  F.route('/special/random', displayRandom)
-  F.route('/special/search', displaySearch)
 
   // commit stuff
   F.route('/special/commit/{commit}', showCommit)
@@ -13,14 +11,6 @@ exports.install = () => {
   F.route('/special/brew', function () { this.view418() })
 
   F.route('/special/parsers', parseBody, [ 'post' ])
-}
-
-function displayRandom () {
-  this.throw501('random not yet implemented')
-}
-
-function displaySearch () {
-  this.throw501('search not yet implemented')
 }
 
 function showCommit () {

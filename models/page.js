@@ -8,6 +8,7 @@ const path = require('path')
 const q = require('q')
 const _ = require('lodash')
 const git = require('simple-git')
+const assert = require('assert')
 
 const INDEX_KEY = 'PAGE_INDEX'
 
@@ -217,6 +218,82 @@ exports.readHeader = (rt, $skipFileCheck) => {
     })
 
     return deferred.promise
+  })
+}
+
+/**
+  * @function searchIndex
+  * Searches the wiki index for a specified keyword (case in-sensitive). If the specified
+  * keyword is found within the path, title, or description, the path is added to the results.
+  *
+  * The result is an object with two arrays: dirs (strings) and pages (PageHeaders)
+  *
+  * @return Promise A promise to search the index
+  */
+exports.searchIndex = keyword => {
+  let results = { dirs: [ ], pages: [ ] }
+
+  function keywordMatch (key) {
+    let match = false
+    _.each(key.split(/ /g), word => {
+      if (word.toLowerCase() === keyword.toLowerCase()) match = true
+    })
+    return match
+  }
+
+  function search (index) {
+    _.each(index, (val, key) => {
+      if (val instanceof exports.PageHeader) {
+        if (keywordMatch(val.header.title) || keywordMatch(val.header.desc) ||
+          keywordMatch(key)) results.pages.push(val)
+      } else {
+        if (keywordMatch(key)) results.dirs.push(key)
+        search(val)
+      }
+    })
+  }
+
+  return exports.buildIndex().then(index => {
+    search(index)
+    return results
+  })
+}
+
+/**
+  * @function pageList
+  * Flattens the wiki index, creating a list of PageHeaders and strings (directories)
+  *
+  * @return Promise A promise to flatten the index
+  */
+exports.pageList = () => {
+  let flatMap = []
+
+  function flatten (index) {
+    _.each(index, (val, key) => {
+      if (val instanceof exports.PageHeader) flatMap.push(val)
+      else {
+        flatMap.push(key)
+        flatten(val)
+      }
+    })
+  }
+
+  return exports.buildIndex().then(index => {
+    flatten(index)
+    return flatMap
+  })
+}
+
+/**
+  * @function random
+  * Selects a pseudo-random page from the @{function pageList} and returns it, either
+  * a PageHeader or string path (in the event of a directory)
+  *
+  * @return Promise A promise to select a random page
+  */
+exports.random = () => {
+  return exports.pageList().then(list => {
+    return list[Math.floor(Math.random() * list.length)]
   })
 }
 
