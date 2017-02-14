@@ -1,36 +1,36 @@
-'use strict';
+'use strict'
 
-const fs    = require('fs'),
-      path  = require('path'),
-      _     = require('lodash');
+const fs = require('fs')
+const path = require('path')
+const _ = require('lodash')
 
-const COOKIE = '__lang';
+const COOKIE = '__lang'
 
 F.onLocale = (req, res) => {
-  let lang = req.query.language;
+  let lang = req.query.language
   if (lang) {
-    res.cookie(COOKIE, lang);
-    req.language = lang;
-    return lang;
+    res.cookie(COOKIE, lang)
+    req.language = lang
+    return lang
   } else {
-    req.language = req.cookie(COOKIE);
-    return req.language;
+    req.language = req.cookie(COOKIE)
+    return req.language
   }
-};
+}
 
-F.config.languages = { };
+F.config.languages = { }
 try {
-  LOG.info('loading languages...');
+  F.logger.info('loading languages...')
   _.each(fs.readdirSync(F.path.resources()), file => {
-    file = path.basename(file, '.resource');
+    file = path.basename(file, '.resource')
     F.config.languages[file] = {
       id: file,
-      name: Utils.localize(file, 'lang.name'),
-      region: Utils.localize(file, 'lang.region')
+      name: U.localize(file, 'lang.name'),
+      region: U.localize(file, 'lang.region')
     }
-    LOG.info(` > loaded '${file}'`);
-  });
+    F.logger.info(` > loaded '${file}'`)
+  })
 } catch (e) {
-  LOG.error('could not load language files');
-  LOG.error(e.stack);
+  F.logger.error('could not load language files')
+  F.logger.error(e.stack)
 }

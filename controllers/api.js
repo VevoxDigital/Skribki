@@ -11,7 +11,7 @@ exports.install = () => {
   * @param endpoint The requested endpoint
   * @this FrameworkController
   */
-function get(endpoint) {
+function get (endpoint) {
   switch (endpoint) {
     case 'index':
       getIndex.call(this)
@@ -28,7 +28,7 @@ function get(endpoint) {
   *
   * @this FrameworkController
   */
-function getIndex() {
+function getIndex () {
   F.model('page').buildIndex().then(index => {
     this.json(index)
   }).catch(this.response500).done()
