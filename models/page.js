@@ -234,6 +234,7 @@ exports.searchIndex = keyword => {
   let results = { dirs: [ ], pages: [ ] }
 
   function keywordMatch (key) {
+    if (!key) return false
     return key.toLowerCase().contains(keyword.toLowerCase())
   }
 
