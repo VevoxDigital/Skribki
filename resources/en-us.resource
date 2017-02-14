@@ -81,3 +81,6 @@ page.search.title       : Search
 page.search.desc        : Search for an item on the wiki
 page.search.greeting    : Go ahead and enter a search phrase.
 page.search.characters  : Please enter at least three characters.
+page.search.pages       : Pages:
+page.search.dirs        : Directories:
+page.search.none        : No Results :(

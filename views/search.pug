@@ -23,6 +23,7 @@ append scripts
 
       var dirsListTitle = '#{translate('page.search.dirs')}'
       var pagesListTitle = '#{translate('page.search.pages')}'
+      var noResultsTitle = '#{translate('page.search.none')}'
 
       var valPrefix = undefined
       var searchData = undefined
@@ -38,16 +39,27 @@ append scripts
           var pagesList = $('<ul class="search-list search-list-pages"></ul>')
 
           searchData.dirs.forEach(function (dir) {
-            dirsList.append('<li><a href="' + dir + '">' + dir + '</a></li>')
+            dirsList.append('<li><a href="' + dir + '">/' + dir + '</a></li>')
           })
           searchData.pages.forEach(function (page) {
-            pagesList.append('<li><a href="' + page.path + '">' + page.headers.title || page.path + '</a></li>')
+            let listItem = $('<li><a href="' + page.path + '">' + (page.headers.title || ('/' + page.path)) + '</a></li>')
+            if (page.headers.desc) {
+              listItem.append(' - ' + page.headers.desc)
+            }
+            pagesList.append(listItem)
           })
 
-          results.append('<h4>' + dirsListTitle + '</h4>')
-          results.append(dirsList)
-          results.append('<h4>' + pagesListTitle + '</h4>')
-          results.append(pagesList)
+          if (dirsList.children().length) {
+            results.append('<h4>' + dirsListTitle + '</h4>')
+            results.append(dirsList)
+          }
+          if (pagesList.children().length) {
+            results.append('<h4>' + pagesListTitle + '</h4>')
+            results.append(pagesList)
+          }
+          if (!pagesList.children().length && !dirsList.children().length) {
+            results.append('<h3 class="text-center">' + noResultsTitle + '</h3>')
+          }
         } else {
           results.html('<h4 class="text-center">' + characterPhrase + '</h4>')
         }
