@@ -35,7 +35,6 @@ function viewSearch () {
   * @this FrameworkController
   */
 function fetchSearchData () {
-  console.log('searchData')
   F.model('page').searchIndex(this.body.query).then(results => {
     this.json(results)
   }).catch(err => { F.response500(this.req, this.res, err) }).done()
