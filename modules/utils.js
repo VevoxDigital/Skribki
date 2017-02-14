@@ -1,10 +1,9 @@
-'use strict';
+'use strict'
 
-const path  = require('path'),
-      _     = require('lodash');
+const path = require('path')
+const _ = require('lodash')
 
 exports.install = () => {
-
   /**
     * @function normalize
     * Normalizes the given url to a standardized format.
@@ -12,18 +11,18 @@ exports.install = () => {
     * @param url The url to normalize
     * @return The normalized url
     */
-  Utils.normalize = (url = '') => {
-    url = url.toString();
+  U.normalize = (url = '') => {
+    url = url.toString()
 
     // remove any leading dots or trailing slashes
-    while (url.match(/\.+\//)) url = url.substring(1);
-    while (url.endsWith('/')) url = url.slice(0, -1);
+    while (url.match(/\.+\//)) url = url.substring(1)
+    while (url.endsWith('/')) url = url.slice(0, -1)
 
     // append a leading slash
-    if (!url.startsWith('/')) url = '/' + url;
+    if (!url.startsWith('/')) url = '/' + url
 
     // apply path#normalize and return
-    return path.normalize(url);
+    return path.normalize(url)
   }
 
   /**
@@ -33,7 +32,7 @@ exports.install = () => {
     * @param str The string to escape
     * @return The escaped string
     */
-  Utils.escape = str => {
+  U.escape = str => {
     // "stringify" the string, escaping many JSON-invalid characters
     return JSON.stringify(str)
 
@@ -41,20 +40,20 @@ exports.install = () => {
       .substring(1).slice(0, -1)
 
       // escape backticks
-      .replace(/`/g, '\\`');
+      .replace(/`/g, '\\`')
   }
 
   /**
     * @prop lockedPatterns
     * List of patterns that are considered 'locked'
     */
-  Utils.lockedPatterns = [
+  U.lockedPatterns = [
     /^\/special\//i, // Special pages/directores
     /^\/categor(?:y|ies)\//i,
     /^\/(?:img\/|styles\/|favicon)/i, // public files
     /^\/repo\.lck$/, // the repo lock
     /^\/\./ // anything that starts with a dot
-  ];
+  ]
 
   /**
     * @function locked
@@ -63,11 +62,12 @@ exports.install = () => {
     * @param rt The route
     * @return True if locked, false if not
     */
-  Utils.locked = rt => {
-    if (typeof rt !== 'string') return true;
-    for (const pat of Utils.lockedPatterns)
-      if (rt.match(pat)) return true;
-    return false;
+  U.locked = rt => {
+    if (typeof rt !== 'string') return true
+    for (const pat of U.lockedPatterns) {
+      if (rt.match(pat)) return true
+    }
+    return false
   }
 
   /**
@@ -77,16 +77,16 @@ exports.install = () => {
     * @param email The email
     * @return True if valid (whitelisted/not blacklisted), false otherwise
     */
-  Utils.checkEmail = email => {
-    if (typeof email !== 'string') return false;
+  U.checkEmail = email => {
+    if (typeof email !== 'string') return false
 
-    return !!_.find(CONFIG('auth.emails'), check => {
+    return !!_.find(F.config['auth.emails'], check => {
       if (check.startsWith('/')) {
-        let flagsIndex = check.lastIndexOf('/'), pattern = new RegExp(
-          check.substring(1, flagsIndex), check.substring(flagsIndex + 1));
-        return email.match(pattern);
-      } else return email === check;
-    }) === CONFIG('auth.whitelist');
+        let flagsIndex = check.lastIndexOf('/')
+        let pattern = new RegExp(check.substring(1, flagsIndex), check.substring(flagsIndex + 1))
+        return email.match(pattern)
+      } else return email === check
+    }) === F.config['auth.whitelist']
   }
 
   /**
@@ -97,14 +97,12 @@ exports.install = () => {
     * @param key The resource key
     * @return The localized string in the given or wiki default language, else the resource key
     */
-  Utils.localize = function (lang, key) {
-    let localized = F.resource(typeof lang === 'object' ? lang.language : lang, key)
-      || F.resource(CONFIG('wiki.lang'), key)
-      || key;
+  U.localize = function (lang, key) {
+    let localized = F.resource(typeof lang === 'object' ? lang.language : lang, key) ||
+      F.resource(F.config['wiki.lang'], key) || key
     _.each(Array.prototype.slice.call(arguments, 2), (arg, i) => {
-      localized = localized.replace(new RegExp('\\{' + i + '\\}', 'g'), arg);
-    });
-    return localized;
+      localized = localized.replace(new RegExp('\\{' + i + '\\}', 'g'), arg)
+    })
+    return localized
   }
-
 }

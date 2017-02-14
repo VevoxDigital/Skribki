@@ -1,12 +1,12 @@
-'use strict';
+'use strict'
 
-const q       = require('q'),
-      cheerio = require('cheerio');
+const q = require('q')
+const cheerio = require('cheerio')
 
-exports.id = 'parsers/escape';
+exports.id = 'parsers/escape'
 
 exports.run = content => {
-  let $ = cheerio.load(content);
-  $('script').remove();
-  return q($.html());
-};
+  let $ = cheerio.load(content)
+  $('script').remove()
+  return q($.html())
+}

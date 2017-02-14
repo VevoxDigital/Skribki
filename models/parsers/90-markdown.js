@@ -1,10 +1,10 @@
-'use strict';
+'use strict'
 
-const marked  = require('marked'),
-      q       = require('q');
+const marked = require('marked')
+const q = require('q')
 
-exports.id = 'parsers/markdown';
+exports.id = 'parsers/markdown'
 
 exports.run = content => {
-  return q(marked(content));
-};
+  return q(marked(content))
+}
