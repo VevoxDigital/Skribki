@@ -1,17 +1,18 @@
-'use strict';
+'use strict'
 
-const pkg = require('../package.json');
+const pkg = require('../package.json')
 
-F.config.name = 'Skribki';
-F.config.version = pkg.version;
-F.config.author = pkg.author;
+F.config.name = 'Skribki'
+F.config.version = pkg.version
+F.config.author = pkg.author
 
-let oldConfig = CONFIG;
+F.config['default-theme'] = 'vevox-blue'
 
-global.CONFIG = key => {
-  let val = oldConfig(key), valStr = JSON.stringify(val);
-  if (valStr.length > 43)
-    valStr = valStr.substring(0, 20) + '...' + valStr.substring(valStr.length - 21, valStr.length - 1);
-  LOG.debug(`config ${key}=${valStr}`);
-  return val;
-};
+F.logger.info(`configuration: ${F.config.name} v${F.config.version}`)
+
+F.logger.info(` ${'-'.yellow} name: ${F.config['wiki.name']}`)
+F.logger.info(` ${'-'.yellow} theme: ${F.config['wiki.theme'] || F.config['default-theme']}`)
+F.logger.info(` ${'-'.yellow} language: ${F.config['wiki.lang']}`)
+
+F.logger.info(` ${'-'.yellow} page cacheing: ${!!F.config['cache.pages.enabled']}`)
+F.logger.info(` ${'-'.yellow} index cacheing: ${!!F.config['cache.pages.enabled']}`)

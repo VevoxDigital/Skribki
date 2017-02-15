@@ -1,0 +1,100 @@
+extends layout-sidebar.pug
+
+include layout/page-actions.pug
+
+block header
+  +header(translate('page.search.title'), translate('page.search.desc'))
+
+block content
+  +page-actions({ home: '/' })
+    .input-container
+      h2.input-greeting= translate('page.search.greeting')
+      input#searchInput.input.input-search(type='text', placeholder='Search Query')
+    #searchResults
+      h4.text-center= translate('page.search.characters')
+
+append scripts
+  script.
+    $(function () {
+      // why, again, can't we declare multiple vars at once with StandardJS?
+      var results = $('#searchResults')
+      var input = $('#searchInput')
+      var characterPhrase = results.find('h4').html()
+
+      var dirsListTitle = '#{translate('page.search.dirs')}'
+      var pagesListTitle = '#{translate('page.search.pages')}'
+      var noResultsTitle = '#{translate('page.search.none')}'
+
+      var valPrefix = undefined
+      var searchData = undefined
+      var querying = false
+
+      function updateSearchResults () {
+        results.empty()
+
+        if (querying) {
+          results.html('<h2 class="text-center">...</h2>')
+        } else if (searchData) {
+          var dirsList = $('<ul class="search-list search-list-dirs"></ul>')
+          var pagesList = $('<ul class="search-list search-list-pages"></ul>')
+
+          searchData.dirs.forEach(function (dir) {
+            dirsList.append('<li><a href="' + dir + '">/' + dir + '</a></li>')
+          })
+          searchData.pages.forEach(function (page) {
+            let listItem = $('<li><a href="' + page.path + '">' + (page.headers.title || ('/' + page.path)) + '</a></li>')
+            if (page.headers.desc) {
+              listItem.append(' - ' + page.headers.desc)
+            }
+            pagesList.append(listItem)
+          })
+
+          if (dirsList.children().length) {
+            results.append('<h4>' + dirsListTitle + '</h4>')
+            results.append(dirsList)
+          }
+          if (pagesList.children().length) {
+            results.append('<h4>' + pagesListTitle + '</h4>')
+            results.append(pagesList)
+          }
+          if (!pagesList.children().length && !dirsList.children().length) {
+            results.append('<h3 class="text-center">' + noResultsTitle + '</h3>')
+          }
+        } else {
+          results.html('<h4 class="text-center">' + characterPhrase + '</h4>')
+        }
+      }
+
+      function fetchSearchResults (query) {
+        $.post('#{url}', { query: query }).done(function (data) {
+          querying = true
+          updateSearchResults()
+
+          // check if the query should still be considered valid
+          if (query === valPrefix) {
+            searchData = data
+            querying = false
+            updateSearchResults()
+          }
+        }).fail(function (reason) {
+          searchData = undefined
+          querying = false
+          updateSearchResults()
+          results.html('<pre>' + reason.responseText + '</pre>')
+        })
+      }
+
+      input.on('change keyup paste', function () {
+        valPrefix = input.val().substring(0, 3)
+
+        if (input.val().length >= 3 && !searchData) {
+          fetchSearchResults(valPrefix)
+        } else if (input.val().length < 3) {
+          searchData = undefined
+          querying = false
+          updateSearchResults()
+        }
+      })
+
+      updateSearchResults()
+    })

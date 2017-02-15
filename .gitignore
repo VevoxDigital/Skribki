@@ -43,6 +43,7 @@ dist/
 repo/
 /wiki/
 tmp/
+config-release
 
 # Debug files
 config-debug

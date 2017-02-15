@@ -14,12 +14,19 @@ auth.emails  (Object)    : ['/@localhost$/i', 'user@example.com']
 wiki.name     : Skribki
 wiki.icon     : /img/logo.svg
 wiki.lang     : en-us
+wiki.theme    : vevox-blue
 
 // Wiki banner
 // removing/commenting 'wiki.banner.text' will disable the banner
 wiki.banner.text      : Welcome to Skribki!
 wiki.banner.link-text : Getting Started
 wiki.banner.link-url  : http://wiki.vevox.io/projects/skribki/
+
+// Search index and page cacheing
+cache.index.enabled (boolean) : true
+cache.index.time              : 10 minutes
+cache.pages.enabled (boolean) : true
+cache.pages.time              : 30 minutes
 
 // Content Licensing
 license.name  : CC-BY-SA

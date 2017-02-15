@@ -1,0 +1,18 @@
+.banner {
+  background-color: $color-white2;
+  padding: 15px 20px;
+
+  p {
+    display: inline;
+  }
+
+  .banner-dash {
+    display: inline-block;
+    opacity: .5;
+    padding: 0 5px;
+  }
+
+  a {
+    font-weight: bold;
+  }
+}

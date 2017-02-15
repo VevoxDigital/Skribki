@@ -1,0 +1,33 @@
+
+.section-sidebar {
+
+  > img {
+    max-height: 200px;
+    max-width: 100%;
+  }
+
+  > a {
+    display: block;
+
+    &.sidebar-lg {
+      font-size: 12pt;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+
+    &.sidebar-md {
+      font-size: 10pt;
+      margin: 5px 0;
+    }
+
+    &.sidebar-sm {
+      font-size: 8pt;
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .section-sidebar > img {
+    max-height: auto;
+  }
+}

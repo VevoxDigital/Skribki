@@ -1,0 +1,31 @@
+@import 'page';
+
+.input-container {
+  padding: 10px 20px;
+
+  .input-search {
+    width: 100%;
+  }
+
+}
+
+.search-list {
+  list-style-type: none;
+
+  li {
+    color: $color-white2;
+    font-size: 9pt;
+
+    a:hover {
+      text-decoration: none;
+    }
+  }
+
+  &.search-list-pages > li > a {
+    font-size: 130%;
+  }
+
+  &.search-list-dirs > li {
+    font-size: 10pt;
+  }
+}

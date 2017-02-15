@@ -1,15 +1,19 @@
+@import 'includes/colors';
+@import 'includes/functions';
+
 @import 'colors';
 
 .content-page {
   // paragraph
   p {
     color: $color-gray;
+    font-size: 10pt;
+    line-height: 1.5em;
     padding: 0 10px;
-    text-indent: 10px;
   }
 
   :not(pre) > code {
-    background-color: $color-white1;
+    background-color: tint($color-white1, 50%);
     border-radius: 2px;
     color: tint($color-gray, 40%);
     padding: 2px 5px;
@@ -20,8 +24,9 @@
   h1 {
     border-bottom: 1px rgba($color-black, .1) solid;
     color: $color-gray;
-    font-family: 'Raleway Black', sans-serif;
+    font-family: 'Raleway', sans-serif;
     font-size: 30pt;
+    font-weight: 900;
   }
 
   h2,
@@ -35,13 +40,13 @@
   h2 {
     color: tint($color-gray, 20%);
     font-size: 20pt;
-    font-weight: bold;
+    font-weight: 500;
   }
 
   h3 {
     color: tint($color-gray, 20%);
     font-size: 16pt;
-    font-weight: bold;
+    font-weight: 500;
   }
 
   h4 {
@@ -52,7 +57,7 @@
   h5 {
     color: tint($color-gray, 40%);
     font-size: 13pt;
-    font-weight: bold;
+    font-weight: 500;
   }
 
   h6 {

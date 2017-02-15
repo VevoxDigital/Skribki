@@ -1,0 +1,27 @@
+//
+// Vevox Blue Skribki Theme
+// Provided with Skribki courtesty of the Skribki team.
+
+// parent includes
+@import 'includes/colors';
+@import 'includes/functions';
+
+// functions and variables
+@import 'colors';
+@import 'fonts';
+
+// partials
+@import 'navbar';
+@import 'header';
+@import 'banner';
+@import 'footer';
+
+// core
+@import 'layout';
+@import 'sidebar';
+@import 'parts';
+
+// styles
+body {
+  background-color: $color-lightgray;
+}

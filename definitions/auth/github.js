@@ -1,14 +1,15 @@
-'use strict';
+'use strict'
 
-const Strategy = require('passport-github2');
+const Strategy = require('passport-github2')
 
 exports.strategy = new Strategy({
-  clientID: CONFIG('oauth.github.id') || 'your-client-id',
-  clientSecret: CONFIG('oauth.github.secret') || 'your-client-secret',
+  clientID: F.config['oauth.github.id'],
+  clientSecret: F.config['oauth.github.secret'],
   callbackURL: '/special/login/github/callback'
 }, (accessToken, refreshToken, profile, done) => {
-  if (profile.emails.length === 0)
-    return done(new Error('Profile does not have any valid emails on record'));
+  if (profile.emails.length === 0) {
+    return done(new Error('Profile does not have any valid emails on record'))
+  }
 
   done(null, {
     id: profile.id,
@@ -17,8 +18,8 @@ exports.strategy = new Strategy({
     shortName: profile.displayName ? profile.displayName.substring(0, profile.displayName.indexOf(' ')) : undefined,
     username: profile.username,
     email: profile.emails[0].value
-  });
-});
+  })
+})
 
 // used to render the button on the login page
 // if the icon begins with 'fa-', a FontAwesome icon will be used,
@@ -30,15 +31,15 @@ exports.button = {
     background: '#333',
     foreground: '#f5f5f5'
   }
-};
+}
 
 // passed directly to passport during initial authentication
 exports.options = {
   scope: 'user.email'
-};
+}
 
 // passed to passport during callback handling
 exports.callback = {
   failureRedirect: '/special/login',
   successRedirect: '/'
-};
+}

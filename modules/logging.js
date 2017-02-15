@@ -1,13 +1,13 @@
-'use strict';
+'use strict'
 
 // this module loads absolutely first before anything.
 // perform init
-require('colors');
+require('colors')
 
-const winston = require('winston');
-require('winston-daily-rotate-file');
+const winston = require('winston')
+require('winston-daily-rotate-file')
 
-exports.id = 'logging';
+exports.id = 'logging'
 
 exports.install = () => {
   F.logger = new winston.Logger({
@@ -16,7 +16,7 @@ exports.install = () => {
       // console output will be the most verbose
       new winston.transports.Console({
         colorize: true,
-        level: DEBUG ? 'debug' : 'verbose'
+        level: F.isDebug ? 'debug' : 'verbose'
       }),
 
       // info files will rotate daily
@@ -38,12 +38,10 @@ exports.install = () => {
       })
 
     ]
-  });
-
-  global.LOG = F.logger;
+  })
 }
 
 exports.uninstall = () => {
-  delete F.logger;
-  delete global.LOG;
+  delete F.logger
+  delete global.LOG
 }

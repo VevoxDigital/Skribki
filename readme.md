@@ -6,39 +6,36 @@
 [![Travis](https://img.shields.io/travis/VevoxDigital/Skribki/dev.svg?style=flat-square&label=latest)](https://travis-ci.org/VevoxDigital/Skribki)
 [![Code Climate](https://img.shields.io/codeclimate/github/VevoxDigital/Skribki.svg?style=flat-square)](https://codeclimate.com/github/VevoxDigital/Skribki)
 [![Code Climate](https://img.shields.io/codeclimate/issues/github/VevoxDigital/Skribki.svg?style=flat-square)](https://codeclimate.com/github/VevoxDigital/Skribki/issues)
+[![Code Style](https://img.shields.io/badge/code_style-standard-brightgreen.svg?style=flat-square)](http://standardjs.com)
 [![GitHub release](https://img.shields.io/github/release/VevoxDigital/Skribki.svg?style=flat-square)](https://github.com/VevoxDigital/Skribki/releases)
 
 # A Powerful New Wiki
-Skribki is unique as wiki software in that it is *super* simple to set up and requires **no additional software** besides NodeJS and git. That's really it: no silly databases and no hassle with web server or daemon configuration.
+Skribki stands apart from most wiki software in its simplicity and functionality. The app itself can be run entirely without any external databases and easily integrates into your existing authentication system or any OAuth provider.
 
 ## Quick Install
-Skribki is simple to install and requires little extra work to get it running.
+Skribki can be quickly installed by simply cloneing the repository and installing its dependencies. You will need `npm` and NodeJS 6 or later for this.
 
 ```
-// Clone the repo and install dependencies
-$ git clone https://github.com/VevoxDigital/Skribki
-$ npm install
-
-// Start Skribki
+$ git clone https://github.com/VevoxDigital/Skribki --branch=master && npm install
 $ npm start
 ```
 
-Optionally append `--branch=dev` to the clone command to use the latest bleeding-edge build.
+For a more in-depth guide, [check this out.](http://wiki.vevox.io/projects/skribki/install)
 
-Skirbki requires NodeJS `v6.0` (`v6.9.1 lts` preferred) or later. If you need help upgrading, check out [this nifty thing](https://www.npmjs.com/package/n).
+## Something Different
+Skribki runs completely without a database, which may sound a little strange at first. Skribki stores all of its pages using `git`, meaning your wiki can be accessed as if it were a git respository if you so desire.
 
-[In-depth installation documentation can be found here.](http://wiki.vevox.io/projects/skribki/install)
-
-## Database-less Data
-Skribki runs completely without a database, which may sound a little strange at first. All of the pages and files associated with Skribki are all stored on disk and controlled by a git repository: changes are logged and stored soley by git.
-
-For authentication and users, Skribki utilizes OAuth providers to store user account data elsewhere. All of Skribki's authentication is all external, meaning you can either integrate with your pre-existing system or use any number of OAuth providers.
+For authentication, Skribki utilizes OAuth providers to store user account data elsewhere. You can either integrate with your pre-existing system and/or use any number of OAuth providers available.
 
 ## Flexibility and Simplicity
-What sets Skribki apart from other software is its extreme flexibility without over-complicating its functionality. Themes, custom parsers, new authentication strategies, and more are all readily available, but Skribki is ready to go out of the gate if you just want to get things rolling.
+What sets Skribki apart from other software is its extreme flexibility without over-complicating its functionality. Themes, custom parsers, new authentication strategies, and more can all be added, but Skribki is ready to go without.
+
+Included in this repository is the [Vevox Blue](http://workshop.vevox.io/p/vevox-blue) theme, a GitHub authentication option, and a simple markdown parser. Read up [here](http://wiki.vevox.io/projects/skribki/customization) here if you want to add more.
 
 ----
 
-Made for you by [@CynicalBusiness](/CynicalBusiness) at Vevox Digital
+Made for all by [@CynicalBusiness](https://github.com/CynicalBusiness) with [Vevox Digital](http://vevox.io)
+
+[GPL v3.0](/LICENSE). Copyright &copy; [Matthew Struble](https://github.com/CynicalBusiness).
 
 *To My Warrior, Half the World Away*
