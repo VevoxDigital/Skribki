@@ -28,7 +28,7 @@ try {
       name: U.localize(file, 'lang.name'),
       region: U.localize(file, 'lang.region')
     }
-    F.logger.info(` > loaded '${file}'`)
+    F.logger.info(` ${'✓'.green} loaded '${file}'`)
   })
 } catch (e) {
   F.logger.error('could not load language files')

@@ -33,10 +33,10 @@ _.each(files, file => {
     let provider = require(F.path.definitions('auth/' + file))
     providers[providerName] = provider
     passport.use(provider.strategy)
-    F.logger.info(' > loaded \'' + providerName + '\'')
+    F.logger.info(` ${'✓'.green} loaded '${providerName}'`)
   } catch (e) {
-    F.logger.warning(' > failed to load provider: ' + providerName)
-    F.logger.warning(e.stack)
+    F.logger.warn(` ${'X'.red} failed to load provider: '${providerName}'`)
+    F.logger.warn(e.stack)
   }
 })
 F.config['auth.providers'] = providers
