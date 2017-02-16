@@ -45,7 +45,7 @@ function checkProvider (name) {
 function processLogin (providerName) {
   if (!checkProvider(providerName)) return this.throw400('Unknown provider: ' + providerName)
 
-  let provider = F.config('auth.providers')[providerName]
+  let provider = F.config['auth.providers'][providerName]
 
   this.custom()
   passport.authenticate(providerName, provider.options || { })(this.req, this.res, U.noop)
