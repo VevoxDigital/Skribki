@@ -72,7 +72,6 @@ function compileTarget (req, res, isValidation) {
   */
 function compileTargetTheme (req, res, key, route) {
   let theme = F.config['wiki.theme'] || F.config['default-theme']
-  F.logger.debug('theme theme=' + theme)
 
   sendFile(req, res, key, F.path.themes(theme + route.substring('theme'.length)))
 }

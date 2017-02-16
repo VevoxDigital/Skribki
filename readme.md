@@ -30,7 +30,7 @@ For authentication, Skribki utilizes OAuth providers to store user account data 
 ## Flexibility and Simplicity
 What sets Skribki apart from other software is its extreme flexibility without over-complicating its functionality. Themes, custom parsers, new authentication strategies, and more can all be added, but Skribki is ready to go without.
 
-Included in this repository is the [Vevox Blue](http://workshop.vevox.io/p/vevox-blue) theme, a GitHub authentication option, and a simple markdown parser. Read up [here](http://wiki.vevox.io/projects/skribki/customization) here if you want to add more.
+Included in this repository is the [Vevox Blue](http://workshop.vevox.io/p/vevox-blue) theme, a GitHub authentication option, and a simple markdown parser. Read up [here](http://wiki.vevox.io/projects/skribki/customization) if you want to add more.
 
 ----
 
