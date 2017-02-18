@@ -1,5 +1,7 @@
 'use strict'
 
+const url = require('url')
+
 F.middleware('public-files', (req, res, next) => {
   if (req.url.startsWith('/public')) {
     return res.redirect(req.url.substring(7))
@@ -7,6 +9,14 @@ F.middleware('public-files', (req, res, next) => {
   next()
 })
 F.use('public-files')
+
+F.middleware('route-normalizer', (req, res, next) => {
+  let u = url.parse(req.url)
+  if (u.pathname.endsWith('/') && u.pathname.length > 1) {
+    res.redirect(u.pathname.slice(0, -1) + (u.search || '') + (u.hash || ''), true)
+  } else return next()
+})
+F.use('route-normalizer')
 
 F.middleware('route-logging', (req, res, next, opts, controller) => {
   res.on('finish', () => {
