@@ -49,7 +49,7 @@ function routeViewEdit () {
 
   PAGE.read(this.url).then(data => {
     this.repository.title = U.localize(this.req, 'title.page.edit')
-    this.view('edit', { data: data })
+    this.view('edit', { data: data, canUseDir: !data })
   }).catch(err => { this.throw500(err) }).done()
 }
 
