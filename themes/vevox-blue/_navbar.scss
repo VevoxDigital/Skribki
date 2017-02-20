@@ -1,5 +1,9 @@
 .navbar-brand {
   padding: 20px 15px;
+
+  > img {
+    padding-right: 6px;
+  }
 }
 
 .navbar-default {
