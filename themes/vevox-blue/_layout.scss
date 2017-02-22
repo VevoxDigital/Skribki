@@ -16,16 +16,30 @@
   .content-options > a {
     color: $color-base-1;
     display: inline-block;
-    padding: 5px 10px;
-    transition: opacity 250ms;
+    padding: 0 10px;
+    transition: color 250ms;
 
     &:hover,
     &:focus {
-      color: $color-base-1;
-      opacity: .7;
+      color: tint($color-base-1, 50%);
       text-decoration: none;
     }
 
     &.danger { color: $color-red1; }
+  }
+}
+
+.breadcrumb {
+  background-color: transparent;
+
+  .breadcrumb-item > a {
+    color: $color-base-1;
+    transition: color 250ms;
+
+    &:hover,
+    &:focus {
+      color: tint($color-base-1, 50%);
+      text-decoration: none;
+    }
   }
 }

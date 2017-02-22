@@ -1,0 +1,12 @@
+mixin breadcrumbs
+  - var crumbs = url.substring(1).slice(0, -1).split(/\//g)
+  - var link = '/'
+  ol.breadcrumb
+    li.breadcrumb-item
+      a(href = '/')= 'home'
+    while crumbs.length > 1
+      - var c = crumbs.shift()
+      li.breadcrumb-item
+        - link += c + '/'
+        a(href = link.slice(0, -1))= c
+    li.breadcrumb-item.active= crumbs[0]

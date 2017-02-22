@@ -54,7 +54,8 @@ page.history.changesSingular  : There has been 1 change to this page.
 page.history.changesPlural    : There have been {0} changes to this page.
 
 // edit page
-page.edit.header        : Edit Page
+page.edit.header.edit   : Editing Page
+page.edit.header.create : Creating Page
 page.edit.desc          : Changing page contents for {0}
 page.edit.commit        : Commit Changes
 page.edit.useDir        : Create as Directory

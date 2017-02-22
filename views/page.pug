@@ -1,6 +1,7 @@
 extends layout-sidebar.pug
 
 include layout/page-actions.pug
+include layout/breadcrumbs.pug
 
 append scripts
   link(rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/solarized-light.min.css')
@@ -10,6 +11,7 @@ block header
 
 block content
   +page-actions({ history: '?a=history', edit: user && '?a=edit', delete: user && '?a=delete' })
+    +breadcrumbs
     != model.page.body
 
 append sidebar
