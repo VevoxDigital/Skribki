@@ -25,6 +25,11 @@ body {
   }
 }
 
+.content-options {
+  float: right;
+  padding: 8px;
+}
+
 // generic styles
 @media (min-width: 768px) {
   body {

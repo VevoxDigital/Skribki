@@ -1,5 +1,5 @@
 mixin page-actions(actions)
-  .content-options.text-right
+  .content-options
     each url, action in actions || { }
       if (url)
         a(href=url)= translate('page.action.' + action)
