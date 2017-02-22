@@ -1,12 +1,14 @@
 extends layout-sidebar.pug
 
 include layout/page-actions.pug
+include layout/breadcrumbs.pug
 
 block header
   +header(translate('page.history.title'), translate('page.history.desc', url))
 
 block content
   +page-actions({ back: url })
+    +breadcrumbs
     h1= translate('page.history.header')
     if model.history.length === 1
       p= translate('page.history.changesSingular')
