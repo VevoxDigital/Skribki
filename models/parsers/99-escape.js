@@ -5,8 +5,9 @@ const cheerio = require('cheerio')
 
 exports.id = 'parsers/escape'
 
-exports.run = content => {
-  let $ = cheerio.load(content)
+exports.run = doc => {
+  let $ = cheerio.load(doc.body)
   $('script').remove()
-  return q($.html())
+  doc.body = $.html()
+  return q(doc)
 }

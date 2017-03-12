@@ -7,18 +7,18 @@ const PATTERN = /```(\S+)\n((?:.|\n)+?)\n```/g
 
 exports.id = 'parsers/hightlight'
 
-exports.run = content => {
+exports.run = doc => {
   let match
-  while ((match = PATTERN.exec(content)) !== null) {
+  while ((match = PATTERN.exec(doc.body)) !== null) {
     try {
       let syntax = hljs.highlight(match[1], match[2])
-      content = [content.slice(0, match.index),
+      doc.body = [doc.body.slice(0, match.index),
         '<pre><code>' + syntax.value + '</code></pre>',
-        content.slice(match.index + match[0].length)].join('')
+        doc.body.slice(match.index + match[0].length)].join('')
     } catch (e) {
       // no-op
     }
   }
 
-  return q(content)
+  return q(doc)
 }

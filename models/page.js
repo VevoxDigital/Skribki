@@ -431,7 +431,7 @@ exports.parseDocument = doc => {
       body = doc.startsWith('$') ? '' : doc
     }
 
-    let result = { header: { title: 'Page', desc: 'An unnamed wiki page.' }, toc: [] }
+    let result = { header: { title: 'Page', desc: 'An unnamed wiki page.' }, toc: [], body: body }
     for (let headerLine of header.split('\n')) {
       headerLine = headerLine.trim()
       let key = headerLine.substring(1, headerLine.indexOf(' '))
@@ -439,8 +439,8 @@ exports.parseDocument = doc => {
       result.header[key] = val
     }
 
-    return exports.parse(body).then(r => {
-      result.body = r
+    return exports.parse(result).then(r => {
+      result.body = r.body
       let headerPattern = /<h([1-3]).*id="([^"]+)">([^<]+)/gi
       let match
       while ((match = headerPattern.exec(result.body)) !== null) {
@@ -470,19 +470,19 @@ exports.parseDocument = doc => {
   * @function parse
   * Executes all loaded parsers on the given string, returning the resulting html in a promise
   *
-  * @param body The body to parse
+  * @param doc The document to parse
   * @return Promise
   */
-exports.parse = body => {
-  assert.equal(typeof body, 'string', 'body should be a string')
+exports.parse = doc => {
+  assert.equal(typeof doc.body, 'string', 'body should be a string')
   let deferred = q.defer()
 
   fs.readdir(F.path.models('parsers'), (err, files) => {
     if (err) deferred.reject(err)
 
-    body = q(body)
-    for (const file of files) body = body.then(require(F.path.models('parsers/' + file)).run); // eslint-disable-line
-    deferred.resolve(body)
+    let docPromise = q(doc)
+    for (const file of files) docPromise = docPromise.then(require(F.path.models('parsers/' + file)).run); // eslint-disable-line
+    deferred.resolve(docPromise)
   })
 
   return deferred.promise
