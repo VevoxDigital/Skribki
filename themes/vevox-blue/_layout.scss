@@ -1,14 +1,9 @@
 .section-body {
-  background-color: shade($color-white, 10%);
-  box-shadow: 0 1px 6px rgba($color-black, .2);
   min-height: 50vh;
   padding-bottom: 50px;
 }
 
 .section-content {
-  background-color: $color-white;
-  border-radius: 0 0 5px 5px;
-  box-shadow: 0 2px 4px rgba($color-black, .1);
   margin-top: 0;
   min-height: 40px;
   padding: 20px 40px;
@@ -34,6 +29,7 @@
 
   .breadcrumb-item > a {
     color: $color-base-1;
+    text-transform: capitalize;
     transition: color 250ms;
 
     &:hover,
