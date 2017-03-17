@@ -5,7 +5,7 @@
   "main": "release.js",
   "private": true,
   "scripts": {
-    "test": "node test.js",
+    "test": "rm -rf wiki.test && node test.js",
     "start": "node release.js",
     "debug": "node debug.js",
     "unlock": "rm -f wiki/repo.lck",

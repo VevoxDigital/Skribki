@@ -14,16 +14,20 @@ function resetCommit (cb) {
 exports.run = () => {
   const page = F.model('page')
 
-  F.assert('model:page#install', next => {
+  F.assert('model:page#install', done => {
     expect(F.path.wiki).to.be.a('function')
     expect(F.repository).to.be.an('object')
 
-    expect(fs.statSync).withArgs(F.path.wiki('repo.lck')).to.not.throwException()
+    expect(fs.statSync)
+      .withArgs(F.path.wiki(page.LOCKFILE))
+      .to.not.throwException()
     expect(fs.statSync(F.path.wiki('repo.lck')).isFile()).to.be(true)
 
-    expect(fs.statSync).withArgs(F.path.wiki('.git')).to.not.throwException()
+    expect(fs.statSync)
+      .withArgs(F.path.wiki('.git'))
+      .to.not.throwException()
     expect(fs.statSync(F.path.wiki('.git')).isDirectory()).to.be(true)
-    next()
+    done()
   })
 
   F.assert('model:page#workingFile', next => {

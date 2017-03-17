@@ -15,17 +15,21 @@ const INDEX_KEY = 'PAGE_INDEX'
 exports.id = 'page'
 exports.wikiPath = path.join(__dirname, '..', 'wiki')
 
+exports.LOCKFILE = 'repo.lck'
+
 /**
   * @function install
   * Syncronous install function, called once when the model is loaded.
   */
 exports.install = () => {
-  F.path.wiki = (p = '') => { return F.path.root(path.join('wiki', p)) }
+  let deferred = q.defer()
+
+  F.path.wiki = (p = '') => { return F.path.root(path.join(F.isTest ? 'wiki.test' : 'wiki', p)) }
   try {
     fs.mkdirSync(F.path.wiki())
   } catch (e) { /* no-op */ }
   try {
-    lockfile.lockSync(F.path.wiki('repo.lck'))
+    lockfile.lockSync(F.path.wiki(exports.LOCKFILE))
   } catch (e) {
     console.error('failed to lock repository, it may be in use')
     console.error(e)
@@ -40,17 +44,20 @@ exports.install = () => {
   } catch (e) {
     // repo isn't initialized, need to do so.
     repo.init().addConfig('user.email', 'skribki@localhost')
-      .addConfig('user.name', 'Skribki')
-
-    let data = {
-      body: '$title Home\n$desc  Welcome to your new Skribki!\n' +
-        fs.readFileSync(path.join(__dirname, '..', 'readme.md')).toString(),
-      name: 'Skribki',
-      email: 'skribki@localhost',
-      message: 'Initial Commit'
-    }
-    exports.write('index', data).then(() => { }).catch(e => { throw e }).done()
+      .addConfig('user.name', 'Skribki', err => {
+        if (err) return deferred.reject(err)
+        let data = {
+          body: '$title Home\n$desc  Welcome to your new Skribki!\n' +
+            fs.readFileSync(path.join(__dirname, '..', 'readme.md')).toString(),
+          name: 'Skribki',
+          email: 'skribki@localhost',
+          message: 'Initial Commit'
+        }
+        deferred.resolve(exports.write('index', data))
+      })
   }
+
+  return deferred.promise
 }
 
 /**
@@ -58,8 +65,9 @@ exports.install = () => {
   * Syncronous uninstall method. Called when the model is unloading
   */
 exports.uninstall = () => {
-  delete F.path.wiki
+  if (F.isTest) fs.removeSync(F.path.wiki())
   lockfile.unlockSync(F.path.wiki('repo.lck'))
+  delete F.path.wiki
 }
 
 /**
