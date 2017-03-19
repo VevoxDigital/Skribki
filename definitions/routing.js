@@ -21,6 +21,7 @@ middleware['public-files'] = (req, res, next) => {
   * Removed trailing slashes from urls to ensure normalization.
   */
 middleware['route-normalizer'] = (req, res, next) => {
+  if (req.method !== 'GET') return next()
   let u = url.parse(req.url)
   if (u.pathname.endsWith('/') && u.pathname.length > 1) {
     res.redirect(u.pathname.slice(0, -1) + (u.search || '') + (u.hash || ''), true)
