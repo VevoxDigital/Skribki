@@ -9,6 +9,7 @@ const q = require('q')
 const _ = require('lodash')
 const git = require('simple-git')
 const assert = require('assert')
+const stream = require('stream')
 
 const INDEX_KEY = 'PAGE_INDEX'
 
@@ -140,165 +141,63 @@ exports.PageHeader = class PageHeader {
 }
 
 /**
-  * @function buildIndex
-  * Builds the wiki index, cacheing it for `cache.index.time`
+  * @function readHeader
+  * Reads the header from a given Readable, returning a promise that will resolve with it.
   *
-  * @return Promise A promise with the index
+  * @param rt The route that created the Readable
+  * @return Promise
   */
-exports.buildIndex = () => {
-  const cached = F.cache.get(INDEX_KEY)
-  if (!F.isDebug && cached) return q(cached)
-
+exports.readHeader = (route, readStream) => {
   const deferred = q.defer()
 
-  function replacePath (route) {
-    return U.normalize(route).substring(1).replace(new RegExp(`\\${path.sep}`, 'g'), '.')
-  }
+  const reader = readline.createInterface({ input: readStream })
+  readStream.on('error', deferred.reject)
 
-  let indexList = [ ]
-  let index = { }
-  klaw(F.path.wiki())
-    .on('data', item => {
-      if (item.stats.isDirectory() || item.stats.isFile()) {
-        indexList.push({ path: item.path, isFile: item.stats.isFile() })
-      }
-    })
-    .on('end', () => {
-      const startIndex = indexList[0].path.length + 1
-      indexList.shift() // ignore the first entry after we recorded its length
+  let header = { }
+  let finished = false
+  reader.on('line', line => {
+    if (finished || !line.startsWith('$')) {
+      finished = true
+      return
+    }
 
-      let indexPromises = [ ]
-      _.each(indexList, item => {
-        item.path = item.path.substring(startIndex)
-        if (U.locked(U.normalize(item.path))) return
+    const breakIndex = line.indexOf(' ')
+    if (breakIndex < 0) return
 
-        if (item.isFile) indexPromises.push(exports.readHeader(item.path, true))
-        else U.set(index, replacePath(item.path), { })
-      })
-
-      deferred.resolve(q.allSettled(indexPromises).then(results => {
-        _.each(results, result => {
-          if (result.state !== 'fulfilled') return F.logger.warn(result.value)
-          result = result.value
-
-          U.set(index, replacePath(result.path.substring(1)), new exports.PageHeader(result.path, result.header))
-        })
-
-        if (F.config['cache.index.enabled']) F.cache.set(INDEX_KEY, index, F.config['cache.index.time'] || '10 minutes')
-        return index
-      }))
-    })
+    header[line.substring(1, breakIndex)] = line.substring(breakIndex).trim()
+  })
+  .on('close', () => {
+    deferred.resolve(new exports.PageHeader(route, header))
+  })
 
   return deferred.promise
 }
 
 /**
-  * @function readHeader
-  * Reads the header off a given file, returning a promise that will resolve with it.
+  * @function readStringHeader
+  * Promises to read a PageHeader from the given string
   *
-  * @param rt The route to read
+  * @param route The route the string originated from
   * @return Promise
   */
-exports.readHeader = (rt, $skipFileCheck) => {
+exports.readStringHeader = (doc) => {
+  let reader = new stream.Readable()
+  reader.push(doc)
+  reader.push(null)
+
+  return exports.readHeader(undefined, reader)
+}
+
+/**
+  * @function readFileHeader
+  * Promises to read a PageHeader from the given file
+  *
+  * @param rt The route of the file
+  * @return Promise
+  */
+exports.readFileHeader = (rt, $skipFileCheck) => {
   return ($skipFileCheck ? q(U.normalize(rt)) : exports.workfigFile(rt)).then(route => {
-    const deferred = q.defer()
-
-    const is = fs.createReadStream(F.path.wiki(route))
-    const reader = readline.createInterface({ input: is })
-
-    is.on('error', deferred.reject)
-
-    let header = { }
-    let finished = false
-    reader.on('line', line => {
-      if (finished || !line.startsWith('$')) {
-        finished = true
-        return
-      }
-
-      const breakIndex = line.indexOf(' ')
-      if (breakIndex < 0) return
-
-      header[line.substring(1, breakIndex)] = line.substring(breakIndex).trim()
-    })
-    .on('close', () => {
-      deferred.resolve({ path: route, header: header })
-    })
-
-    return deferred.promise
-  })
-}
-
-/**
-  * @function searchIndex
-  * Searches the wiki index for a specified keyword (case in-sensitive). If the specified
-  * keyword is found within the path, title, or description, the path is added to the results.
-  *
-  * The result is an object with two arrays: dirs (strings) and pages (PageHeaders)
-  *
-  * @return Promise A promise to search the index
-  */
-exports.searchIndex = keyword => {
-  let results = { dirs: [ ], pages: [ ] }
-
-  function keywordMatch (key) {
-    if (!key) return false
-    return key.toLowerCase().contains(keyword.toLowerCase())
-  }
-
-  function search (index) {
-    _.each(index, (val, key) => {
-      if (val instanceof exports.PageHeader) {
-        if (keywordMatch(val.headers.title) || keywordMatch(val.headers.desc) ||
-          keywordMatch(key)) results.pages.push(val)
-      } else {
-        if (keywordMatch(key)) results.dirs.push(key)
-        search(val)
-      }
-    })
-  }
-
-  return exports.buildIndex().then(index => {
-    search(index)
-    return results
-  })
-}
-
-/**
-  * @function pageList
-  * Flattens the wiki index, creating a list of PageHeaders and strings (directories)
-  *
-  * @return Promise A promise to flatten the index
-  */
-exports.pageList = () => {
-  let flatMap = []
-
-  function flatten (index) {
-    _.each(index, (val, key) => {
-      if (val instanceof exports.PageHeader) flatMap.push(val)
-      else {
-        flatMap.push(key)
-        flatten(val)
-      }
-    })
-  }
-
-  return exports.buildIndex().then(index => {
-    flatten(index)
-    return flatMap
-  })
-}
-
-/**
-  * @function random
-  * Selects a pseudo-random page from the @{function pageList} and returns it, either
-  * a PageHeader or string path (in the event of a directory)
-  *
-  * @return Promise A promise to select a random page
-  */
-exports.random = () => {
-  return exports.pageList().then(list => {
-    return list[Math.floor(Math.random() * list.length)]
+    return exports.readHeader(route, fs.createReadStream(F.path.wiki(route)))
   })
 }
 
@@ -310,9 +209,9 @@ exports.random = () => {
   * @return Function
   */
 exports.makeDirs = rt => {
-  return (route = U.normalize(rt)) => {
+  return q(U.normalize(rt)).then(route => {
     return q.nfcall(fs.ensureDir, F.path.wiki(path.dirname(route))).then(() => { return route })
-  }
+  })
 }
 
 /**
@@ -422,33 +321,13 @@ exports.delete = (rt, data = { }) => {
   * @param doc The document to parse
   * @return Promise
   */
-// TODO Solve the complexity issue the right way.
-/* eslint complexity: 0 */
 exports.parseDocument = doc => {
   if (typeof doc === 'string') {
-    let docPattern = /\n[^$]/
+    let body = doc.substring(/(?:^|\n)[^$]/.exec(doc).index)
 
-    let bodyIndex, header, body
-    if (doc.match(docPattern)) {
-      bodyIndex = doc.startsWith('$') ? docPattern.exec(doc).index + 1 : 0
-      header = doc.substring(0, bodyIndex)
-      body = doc.substring(bodyIndex)
-    } else {
-      bodyIndex = 0
-      header = doc.startsWith('$') ? doc : ''
-      body = doc.startsWith('$') ? '' : doc
-    }
-
-    let result = { header: { title: 'Page', desc: 'An unnamed wiki page.' }, toc: [], body: body }
-    for (let headerLine of header.split('\n')) {
-      headerLine = headerLine.trim()
-      let key = headerLine.substring(1, headerLine.indexOf(' '))
-      let val = headerLine.substring(headerLine.indexOf(' ')).trim()
-      result.header[key] = val
-    }
-
-    return exports.parse(result).then(r => {
-      result.body = r.body
+    return exports.readStringHeader(doc).then(header => {
+      return { header: header, toc: [], body: body }
+    }).then(result => { return exports.parse(result) }).then(result => {
       let headerPattern = /<h([1-3]).*id="([^"]+)">([^<]+)/gi
       let match
       while ((match = headerPattern.exec(result.body)) !== null) {
@@ -515,4 +394,130 @@ exports.history = rt => {
   })
 
   return deferred.promise
+}
+
+/**
+  * @function searchIndex
+  * Searches the wiki index for a specified keyword (case in-sensitive). If the specified
+  * keyword is found within the path, title, or description, the path is added to the results.
+  *
+  * The result is an object with two arrays: dirs (strings) and pages (PageHeaders)
+  *
+  * @return Promise A promise to search the index
+  */
+exports.searchIndex = keyword => {
+  let results = { dirs: [ ], pages: [ ] }
+
+  function keywordMatch (key) {
+    if (!key) return false
+    return key.toLowerCase().contains(keyword.toLowerCase())
+  }
+
+  function search (index) {
+    _.each(index, (val, key) => {
+      if (val instanceof exports.PageHeader) {
+        if (keywordMatch(val.headers.title) || keywordMatch(val.headers.desc) ||
+          keywordMatch(key)) results.pages.push(val)
+      } else {
+        if (keywordMatch(key)) results.dirs.push(key)
+        search(val)
+      }
+    })
+  }
+
+  return exports.buildIndex().then(index => {
+    search(index)
+    return results
+  })
+}
+
+/**
+  * @function pageList
+  * Flattens the wiki index, creating a list of PageHeaders and strings (directories)
+  *
+  * @return Promise A promise to flatten the index
+  */
+exports.pageList = () => {
+  let flatMap = []
+
+  function flatten (index) {
+    _.each(index, (val, key) => {
+      if (val instanceof exports.PageHeader) flatMap.push(val)
+      else {
+        flatMap.push(key)
+        flatten(val)
+      }
+    })
+  }
+
+  return exports.buildIndex().then(index => {
+    flatten(index)
+    return flatMap
+  })
+}
+
+/**
+  * @function buildIndex
+  * Builds the wiki index, cacheing it for `cache.index.time`
+  *
+  * @return Promise A promise with the index
+  */
+exports.buildIndex = () => {
+  const cached = F.cache.get(INDEX_KEY)
+  if (!F.isDebug && cached) return q(cached)
+
+  const deferred = q.defer()
+
+  function replacePath (route) {
+    return U.normalize(route).substring(1).replace(new RegExp(`\\${path.sep}`, 'g'), '.')
+  }
+
+  let indexList = [ ]
+  let index = { }
+  klaw(F.path.wiki())
+    .on('data', item => {
+      if (item.stats.isDirectory() || item.stats.isFile()) {
+        indexList.push({ path: item.path, isFile: item.stats.isFile() })
+      }
+    })
+    .on('end', () => {
+      const startIndex = indexList[0].path.length + 1
+      indexList.shift() // ignore the first entry after we recorded its length
+
+      let indexPromises = [ ]
+      _.each(indexList, item => {
+        item.path = item.path.substring(startIndex)
+        if (U.locked(U.normalize(item.path))) return
+
+        if (item.isFile) indexPromises.push(exports.readHeader(item.path, true))
+        else U.set(index, replacePath(item.path), { })
+      })
+
+      deferred.resolve(q.allSettled(indexPromises).then(results => {
+        _.each(results, result => {
+          if (result.state !== 'fulfilled') return F.logger.warn(result.value)
+          result = result.value
+
+          U.set(index, replacePath(result.path.substring(1)), new exports.PageHeader(result.path, result.header))
+        })
+
+        if (F.config['cache.index.enabled']) F.cache.set(INDEX_KEY, index, F.config['cache.index.time'] || '10 minutes')
+        return index
+      }))
+    })
+
+  return deferred.promise
+}
+
+/**
+  * @function random
+  * Selects a pseudo-random page from the @{function pageList} and returns it, either
+  * a PageHeader or string path (in the event of a directory)
+  *
+  * @return Promise A promise to select a random page
+  */
+exports.random = () => {
+  return exports.pageList().then(list => {
+    return list[Math.floor(Math.random() * list.length)]
+  })
 }
