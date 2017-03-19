@@ -7,7 +7,7 @@ append scripts
   link(rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/solarized-light.min.css')
 
 block header
-  +header(model.page.header.title, model.page.header.desc)
+  +header(model.page.header.headers.title, model.page.header.headers.desc)
 
 block content
   +page-actions({ history: '?a=history', edit: user && '?a=edit', delete: user && '?a=delete' })

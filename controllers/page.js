@@ -67,10 +67,10 @@ function routeViewPage () {
     } else if (!doc.header) {
       this.repository.title = 'Viewing Directory'
       this.view('directory', { files: doc })
-    } else if (doc.header.redirect) {
-      this.redirect(doc.header.redirect)
+    } else if (doc.header.headers.redirect) {
+      this.redirect(doc.header.headers.redirect)
     } else {
-      this.repository.title = doc.header.title
+      this.repository.title = doc.header.headers.title
       this.view('page', { page: doc })
     }
   }).catch(err => { this.throw500(err) }).done()
