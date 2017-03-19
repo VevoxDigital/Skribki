@@ -18,7 +18,8 @@ exports.run = () => {
   })
   F.assert('definition:routing.middleware[\'route-normalizer\']', done => {
     middleware['route-normalizer']({
-      url: '/foo/bar/baz/'
+      url: '/foo/bar/baz/',
+      method: 'GET'
     }, {
       redirect: url => {
         expect(url).to.be('/foo/bar/baz')
