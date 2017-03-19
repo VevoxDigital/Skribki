@@ -323,7 +323,9 @@ exports.delete = (rt, data = { }) => {
   */
 exports.parseDocument = doc => {
   if (typeof doc === 'string') {
-    let body = doc.substring(/(?:^|\n)[^$]/.exec(doc).index)
+    let bodyMatch = /(?:^|\n)[^$]/.exec(doc)
+    if (!bodyMatch) return q('')
+    let body = doc.substring(bodyMatch.index)
 
     return exports.readStringHeader(doc).then(header => {
       return { header: header, toc: [], body: body }
@@ -397,6 +399,59 @@ exports.history = rt => {
 }
 
 /**
+  * @function buildIndex
+  * Builds the wiki index, cacheing it for `cache.index.time`
+  *
+  * @return Promise A promise with the index
+  */
+exports.buildIndex = () => {
+  const cached = F.cache.get(INDEX_KEY)
+  if (!F.isDebug && cached) return q(cached)
+
+  const deferred = q.defer()
+
+  function replacePath (route) {
+    return U.normalize(route).substring(1).replace(new RegExp(`\\${path.sep}`, 'g'), '.')
+  }
+
+  let indexList = [ ]
+  let index = { }
+  klaw(F.path.wiki())
+    .on('data', item => {
+      if (item.stats.isDirectory() || item.stats.isFile()) {
+        indexList.push({ path: item.path, isFile: item.stats.isFile() })
+      }
+    })
+    .on('end', () => {
+      const startIndex = indexList[0].path.length
+      indexList.shift() // ignore the first entry after we recorded its length
+
+      let indexPromises = [ ]
+      _.each(indexList, item => {
+        item.path = item.path.substring(startIndex)
+        if (U.locked(U.normalize(item.path))) return
+
+        if (item.isFile) indexPromises.push(exports.readFileHeader(item.path, true))
+        else _.set(index, replacePath(item.path), { })
+      })
+
+      deferred.resolve(q.allSettled(indexPromises).then(results => {
+        _.each(results, result => {
+          if (result.state !== 'fulfilled') return F.logger.warn(result.value)
+          result = result.value
+
+          _.set(index, replacePath(result.path.substring(1)), result)
+        })
+
+        if (F.config['cache.index.enabled']) F.cache.set(INDEX_KEY, index, F.config['cache.index.time'] || '10 minutes')
+        return index
+      }))
+    })
+
+  return deferred.promise
+}
+
+/**
   * @function searchIndex
   * Searches the wiki index for a specified keyword (case in-sensitive). If the specified
   * keyword is found within the path, title, or description, the path is added to the results.
@@ -454,59 +509,6 @@ exports.pageList = () => {
     flatten(index)
     return flatMap
   })
-}
-
-/**
-  * @function buildIndex
-  * Builds the wiki index, cacheing it for `cache.index.time`
-  *
-  * @return Promise A promise with the index
-  */
-exports.buildIndex = () => {
-  const cached = F.cache.get(INDEX_KEY)
-  if (!F.isDebug && cached) return q(cached)
-
-  const deferred = q.defer()
-
-  function replacePath (route) {
-    return U.normalize(route).substring(1).replace(new RegExp(`\\${path.sep}`, 'g'), '.')
-  }
-
-  let indexList = [ ]
-  let index = { }
-  klaw(F.path.wiki())
-    .on('data', item => {
-      if (item.stats.isDirectory() || item.stats.isFile()) {
-        indexList.push({ path: item.path, isFile: item.stats.isFile() })
-      }
-    })
-    .on('end', () => {
-      const startIndex = indexList[0].path.length + 1
-      indexList.shift() // ignore the first entry after we recorded its length
-
-      let indexPromises = [ ]
-      _.each(indexList, item => {
-        item.path = item.path.substring(startIndex)
-        if (U.locked(U.normalize(item.path))) return
-
-        if (item.isFile) indexPromises.push(exports.readHeader(item.path, true))
-        else U.set(index, replacePath(item.path), { })
-      })
-
-      deferred.resolve(q.allSettled(indexPromises).then(results => {
-        _.each(results, result => {
-          if (result.state !== 'fulfilled') return F.logger.warn(result.value)
-          result = result.value
-
-          U.set(index, replacePath(result.path.substring(1)), new exports.PageHeader(result.path, result.header))
-        })
-
-        if (F.config['cache.index.enabled']) F.cache.set(INDEX_KEY, index, F.config['cache.index.time'] || '10 minutes')
-        return index
-      }))
-    })
-
-  return deferred.promise
 }
 
 /**

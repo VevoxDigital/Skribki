@@ -181,7 +181,7 @@ exports.run = () => {
     }).catch(assert.ifError).done()
   })
 
-  F.assert('model:page#history', next => {
+  F.assert('model:page#history', done => {
     // we're assuming the first commit created in 'exports.install' will be there.
     page.history('/').then(history => {
       expect(history).to.be.an('array')
@@ -191,7 +191,48 @@ exports.run = () => {
       expect(commit.author_email).to.be('skribki@localhost')
       expect(commit.message.startsWith('Initial Commit')).to.be(true)
 
-      next()
+      done()
+    }).catch(assert.ifError).done()
+  })
+
+  F.assert('model:page#buildIndex', done => {
+    // since all the other tests ran first, we're going to work off those files
+    page.buildIndex().then(index => {
+      expect(index.foo).to.be.an('object')
+      expect(index.foo.bar).to.be.an('object')
+      expect(index.foo.bar).to.be.empty()
+
+      expect(index['read-header-1']).to.be.a(page.PageHeader)
+      expect(index['read-header-1'].headers.foo1).to.be('bar1')
+
+      done()
+    }).catch(assert.ifError).done()
+  })
+
+  F.assert('model:page#searchIndex', done => {
+    page.searchIndex('read').then(results => {
+      expect(results.pages).to.have.length(3)
+      expect(results.dirs).to.have.length(1)
+
+      done()
+    }).catch(assert.ifError).done()
+  })
+
+  F.assert('model:page#pageList', done => {
+    page.pageList().then(list => {
+      expect(list).to.be.an('array')
+      expect(list[0]).to.be.a('string')
+      expect(list[5]).to.be.a(page.PageHeader)
+
+      done()
+    }).catch(assert.ifError).done()
+  })
+
+  F.assert('model:page#random', done => {
+    page.random().then(page => {
+      expect(page).to.be.ok()
+
+      done()
     }).catch(assert.ifError).done()
   })
 }
