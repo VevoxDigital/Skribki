@@ -1,0 +1,4 @@
+auth.emails  (Object)    : ['/@localhost$/i', 'user@example.com']
+
+oauth.github.id     : test-client-id
+oauth.github.secret : test-client-secret-data

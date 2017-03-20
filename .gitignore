@@ -42,6 +42,7 @@ bower_components
 dist/
 repo/
 /wiki/
+/wiki.test/
 tmp/
 config-release
 

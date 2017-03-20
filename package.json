@@ -1,13 +1,14 @@
 {
   "name": "skribki",
-  "version": "1.4.2",
+  "version": "1.5.0-rc1",
   "description": "An open-source wiki software based on git.",
   "main": "release.js",
   "private": true,
   "scripts": {
-    "test": "node test.js",
+    "test": "rm -rf wiki.test && node test.js",
     "start": "node release.js",
     "debug": "node debug.js",
+    "unlock": "rm -f wiki/repo.lck",
     "fixcrash": "sudo kill -9 `lsof -t -i:8000`"
   },
   "repository": {
@@ -59,6 +60,7 @@
     "winston-daily-rotate-file": "^1.4.3"
   },
   "devDependencies": {
-    "expect.js": "^0.3.1"
+    "expect.js": "^0.3.1",
+    "mock-fs": "^4.2.0"
   }
 }

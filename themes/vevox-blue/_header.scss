@@ -1,20 +1,32 @@
 .jumbotron.jumbotron-header {
-  background-color: tint($color-base-1, 5%);
+  background: url('/img/background.png') tint($color-header, 5%);
+  background-attachment: fixed;
+  background-position: bottom;
+  background-repeat: no-repeat;
+  background-size: cover;
   color: $color-dark-fg;
   margin: 0;
-  padding: 60px 10%;
+  margin-top: -60px;
+  padding: 60px 80px;
+  padding-top: 100px;
+
+  .container {
+    padding: 0 50px;
+  }
 
   h1 {
-    font-family: 'Raleway', sans-serif;
-    font-size: 50px;
-    font-weight: 900;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 70px;
+    font-style: italic;
+    font-weight: 800;
     margin: 0;
   }
 
   h2 {
-    color: $color-base-fg;
+    color: $color-white;
     font-size: 21px;
-    font-weight: lighter;
+    font-weight: normal;
     margin: 0;
+    opacity: .9;
   }
 }
