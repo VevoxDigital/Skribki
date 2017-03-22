@@ -15,6 +15,7 @@ block content
     != model.page.body
 
 append sidebar
+  hr
   each link in (model.page.toc || [])
     if link.level === 1
       a.sidebar-lg(href='#'+link.id)= link.content
