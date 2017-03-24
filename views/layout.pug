@@ -33,6 +33,11 @@ html
             $('.top-button').toggleClass('top-button-hidden', $(window).scrollTop() <= 10)
           })
           $(window).scroll()
+
+          $('.top-button').click(function () {
+            $('body,html').animate({ scrollTop: 0 }, 500)
+            $('.top-button').blur()
+          })
         })
   body
     a.top-button.top-button-hidden.fa.fa-chevron-up(href='javascript:')
