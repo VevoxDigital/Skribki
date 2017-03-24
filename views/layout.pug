@@ -20,12 +20,23 @@ html
         crossorigin='anonymous')
     script(src='https://code.jquery.com/jquery-3.1.1.min.js')
 
+    link(href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css' rel='stylesheet')
+
     // custom header content
     link(rel='stylesheet' href='/styles/layout.scss')
     link(rel='stylesheet' href='/styles/theme/theme.scss')
     link(rel='stylesheet' href='/styles/theme/' + name + '.scss')
     block scripts
+      script.
+        $(function () {
+          $(window).scroll(function () {
+            $('.top-button').toggleClass('top-button-hidden', $(window).scrollTop() <= 10)
+          })
+          $(window).scroll()
+        })
   body
+    a.top-button.top-button-hidden.fa.fa-chevron-up(href='javascript:')
+
     include layout/navbar.pug
     include layout/page-header.pug
 
