@@ -5,8 +5,7 @@ $color-btn-success: mix($color-green1, $color-base-1, 40%);
 
 // buttons
 .btn {
-  border: 0 $color-white solid;
-  border-bottom-width: 3px;
+  border: 0;
   border-radius: 0;
   color: rgba($color-white, .9);
   display: inline-block;
@@ -14,21 +13,39 @@ $color-btn-success: mix($color-green1, $color-base-1, 40%);
   margin: 0 5px;
   outline: none;
   padding: 5px 15px;
+  position: relative;
   text-indent: 0;
-  transition: 250ms;
+  top: 0;
   vertical-align: middle;
 
-  &:hover,
-  &:focus {
-    color: $color-light-bg;
-    outline: none;
+  &,
+  &::before {
+    transform-origin: top center;
+    transition: all 250ms;
   }
 
+  &::before {
+    background: inherit;
+    border-top: 4px rgba($color-black, .1) solid;
+    content: '';
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 100%;
+  }
+
+  &:hover,
+  &:focus,
   &:active {
-    box-shadow: 0 3px 3px 0 rgba($color-black, .3) inset;
+    border-bottom-width: 2px;
+    border-color: rgba($color-black, .1);
+    color: $color-light-bg;
     outline: none;
-    padding-bottom: 2px;
-    padding-top: 8px;
+    transform: translateY(2px);
+
+    &::before {
+      transform: scaleY(.5);
+    }
   }
 
   &.btn-lg {
@@ -38,33 +55,27 @@ $color-btn-success: mix($color-green1, $color-base-1, 40%);
 
   &.btn-primary {
     background-color: $color-base-1;
-    border-color: shade($color-base-1, 10%);
 
     &:hover,
     &:focus {
       background-color: tint($color-base-1, 10%);
-      border-color: $color-base-1;
     }
 
     &:active {
       background-color: shade($color-base-1, 15%);
-      border-color: shade($color-base-1, 15%);
     }
   }
 
   &.btn-success {
     background-color: $color-btn-success;
-    border-color: shade($color-btn-success, 10%);
 
     &:hover,
     &:focus {
       background-color: tint($color-btn-success, 10%);
-      border-color: $color-btn-success;
     }
 
     &:active {
       background-color: shade($color-btn-success, 15%);
-      border-color: shade($color-btn-success, 15%);
     }
   }
 }
