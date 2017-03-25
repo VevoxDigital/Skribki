@@ -3,6 +3,10 @@
 .btn-login {
   transition: 250ms;
 
+  .fa {
+    padding-right: 10px;
+  }
+
   &:hover,
   &:focus {
     opacity: .9;
