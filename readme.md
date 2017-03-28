@@ -8,6 +8,7 @@
 [![Code Climate](https://img.shields.io/codeclimate/issues/github/VevoxDigital/Skribki.svg?style=flat-square)](https://codeclimate.com/github/VevoxDigital/Skribki/issues)
 [![Code Style](https://img.shields.io/badge/code_style-standard-brightgreen.svg?style=flat-square)](http://standardjs.com)
 [![GitHub release](https://img.shields.io/github/release/VevoxDigital/Skribki.svg?style=flat-square)](https://github.com/VevoxDigital/Skribki/releases)
+[![Gratipay Team](https://img.shields.io/gratipay/user/CynicalBusiness.svg?style=flat-square)](https://gratipay.com/Skribki/)
 
 # A Powerful New Wiki
 Skribki stands apart from most wiki software in its simplicity without sacraficing functionality; it runs entirely without external databases or login systems, making it super simple to install. Just download it and its ready to go.
