@@ -24,33 +24,33 @@ $color-btn-success: mix($color-green1, $color-base-1, 40%);
     transition: all 250ms;
   }
 
-  &::before {
-    background: inherit;
-    border-top: 4px rgba($color-black, .1) solid;
-    content: '';
-    left: 0;
-    position: absolute;
-    right: 0;
-    top: 100%;
-  }
-
-  &:hover,
-  &:focus,
-  &:active {
-    border-bottom-width: 2px;
-    border-color: rgba($color-black, .1);
-    color: $color-light-bg;
-    outline: none;
-    transform: translateY(2px);
-
-    &::before {
-      transform: scaleY(.5);
-    }
-  }
-
   &.btn-lg {
     font-size: 13pt;
     padding: 10px 20px;
+
+    &::before {
+      background: inherit;
+      border-top: 4px rgba($color-black, .1) solid;
+      content: '';
+      left: 0;
+      position: absolute;
+      right: 0;
+      top: 100%;
+    }
+
+    &:hover,
+    &:focus,
+    &:active {
+      border-bottom-width: 2px;
+      border-color: rgba($color-black, .1);
+      color: $color-light-bg;
+      outline: none;
+      transform: translateY(2px);
+
+      &::before {
+        transform: scaleY(.5);
+      }
+    }
   }
 
   &.btn-primary {
