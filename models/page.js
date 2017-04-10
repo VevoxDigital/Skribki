@@ -209,9 +209,8 @@ exports.readFileHeader = (rt, $skipFileCheck) => {
   * @return Function
   */
 exports.makeDirs = rt => {
-  return q(U.normalize(rt)).then(route => {
-    return q.nfcall(fs.ensureDir, F.path.wiki(path.dirname(route))).then(() => { return route })
-  })
+  rt = U.normalize(rt)
+  return q.nfcall(fs.ensureDir, F.path.wiki(path.dirname(rt))).then(() => { return rt })
 }
 
 /**
@@ -227,7 +226,7 @@ exports.makeDirs = rt => {
   * @return Promise
   */
 exports.modifyFile = (rt, func) => {
-  return exports.workingFile(rt).then(exports.makeDirs(rt)).then(route => {
+  return exports.workingFile(rt).then(exports.makeDirs).then(route => {
     let deferred = q.defer()
 
     // lock the file to avoid any weird commits with two simultanious edits

@@ -30,6 +30,28 @@ body {
   padding: 8px;
 }
 
+.top-button {
+  background-color: $color-gray;
+  color: $color-white;
+  opacity: .7;
+  padding: 5px;
+  position: fixed;
+  right: 20px;
+  top: 20px;
+  transition: top .5s, opacity 250ms;
+  z-index: 50;
+
+  &:hover {
+    color: $color-white;
+    opacity: 1;
+    text-decoration: none;
+  }
+
+  &.top-button-hidden {
+    top: -30px;
+  }
+}
+
 // generic styles
 @media (min-width: 768px) {
   body {

@@ -8,6 +8,7 @@
 [![Code Climate](https://img.shields.io/codeclimate/issues/github/VevoxDigital/Skribki.svg?style=flat-square)](https://codeclimate.com/github/VevoxDigital/Skribki/issues)
 [![Code Style](https://img.shields.io/badge/code_style-standard-brightgreen.svg?style=flat-square)](http://standardjs.com)
 [![GitHub release](https://img.shields.io/github/release/VevoxDigital/Skribki.svg?style=flat-square)](https://github.com/VevoxDigital/Skribki/releases)
+[![Gratipay Team](https://img.shields.io/gratipay/user/CynicalBusiness.svg?style=flat-square)](https://gratipay.com/Skribki/)
 
 # A Powerful New Wiki
 Skribki stands apart from most wiki software in its simplicity without sacraficing functionality; it runs entirely without external databases or login systems, making it super simple to install. Just download it and its ready to go.
@@ -20,7 +21,7 @@ $ git clone https://github.com/VevoxDigital/Skribki --branch=master && npm insta
 $ npm start
 ```
 
-For a more in-depth guide, [check this out.](http://wiki.vevox.io/projects/skribki/install)
+For a more in-depth guide, [check this out](http://wiki.vevox.io/projects/skribki/install).
 
 ## Something Different
 Skribki runs completely without a database, meaning you do not have to install an entire separate database (which usually comes with a daemon) to maintain, it just works out of the box.
@@ -30,7 +31,18 @@ The pages themselves are managed by a `git` repository within the app, so you co
 ## Flexibility and Simplicity
 What sets Skribki apart from other software is its extreme flexibility without over-complicating its functionality. Themes, custom parsers, new authentication strategies, and more can all be added, but Skribki is ready to go without any fidgeting. Included in this repository is the [Vevox Blue](http://workshop.vevox.io/p/vevox-blue) theme, a GitHub authentication option, and a simple markdown parser.
 
-Want to add more? Read up [here](http://wiki.vevox.io/projects/skribki/customization) if you want to add more.
+Read up [here](http://wiki.vevox.io/projects/skribki/customization) if you want to add more.
+
+### What's The Name?
+The name Skribki is a compound word from [Sulang](http://wiki.vevox.io/lore/shadows-of-maya/sulang), meaning 'Writing by the People'.
+
+```
+skrib (n.)
+    written information; lit. writing, text
+
+-ki (suff.)
+    by/of people
+```
 
 ----
 

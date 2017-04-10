@@ -11,10 +11,15 @@ block header
 
 block content
   +page-actions({ history: '?a=history', edit: user && '?a=edit', delete: user && '?a=delete' })
-    +breadcrumbs
+    if url !== '/'
+      +breadcrumbs
+    else
+      ol.breadcrumb
+      //- this list here is just so the spacer is placed
     != model.page.body
 
 append sidebar
+  hr
   each link in (model.page.toc || [])
     if link.level === 1
       a.sidebar-lg(href='#'+link.id)= link.content
