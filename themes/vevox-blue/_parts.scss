@@ -47,6 +47,7 @@ $color-btn-success: mix($color-green1, $color-base-1, 40%);
       outline: none;
       transform: translateY(2px);
 
+      // scss-lint:disable NestingDepth
       &::before {
         transform: scaleY(.5);
       }
@@ -176,4 +177,9 @@ textarea {
     border-color: rgba($color-base-1, .3);
     outline: none;
   }
+}
+
+em {
+  font-family: Ubuntu, sans-serif;
+  font-weight: normal;
 }
