@@ -52,6 +52,23 @@ body {
   }
 }
 
+h1,
+h2,
+h3 {
+  > .fa-link {
+    color: inherit;
+    font-size: 65%;
+    opacity: 0;
+    padding: 0 10px;
+    text-decoration: none;
+    transition: opacity 250ms;
+  }
+
+  &:hover > .fa-link {
+    opacity: .8;
+  }
+}
+
 // generic styles
 @media (min-width: 768px) {
   body {

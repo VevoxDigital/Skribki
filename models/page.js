@@ -10,6 +10,7 @@ const _ = require('lodash')
 const git = require('simple-git')
 const assert = require('assert')
 const stream = require('stream')
+const cheerio = require('cheerio')
 
 const INDEX_KEY = 'PAGE_INDEX'
 
@@ -329,15 +330,20 @@ exports.parseDocument = doc => {
     return exports.readStringHeader(doc).then(header => {
       return { header: header, toc: [], body: body }
     }).then(result => { return exports.parse(result) }).then(result => {
-      let headerPattern = /<h([1-3]).*id="([^"]+)">([^<]+)/gi
-      let match
-      while ((match = headerPattern.exec(result.body)) !== null) {
+      const $ = cheerio.load(result.body)
+
+      $('h1, h2, h3').each(function () {
+        const element = $(this)
+
         result.toc.push({
-          level: parseInt(match[1], 10),
-          id: match[2],
-          content: match[3]
+          level: parseInt(element.prop('tagName').substring(1), 10),
+          id: element.attr('id'),
+          content: element.html()
         })
-      }
+        element.append(`<a href="#${element.attr('id')}" class="fa fa-link"></a>`)
+      })
+
+      result.body = $.html()
       return result
     })
   } else if (doc instanceof Array) {
