@@ -7,6 +7,13 @@ require('colors')
 const winston = require('winston')
 require('winston-daily-rotate-file')
 
+const PREFIXES = {
+  CONF: '✓'.green,
+  FAIL: 'X'.red,
+  WARN: '!'.yellow,
+  NOTE: '*'.cyan
+}
+
 exports.id = 'logging'
 
 exports.install = () => {
@@ -39,6 +46,20 @@ exports.install = () => {
 
     ]
   })
+
+  const logPrefix = (prefix, level, msg) => {
+    if (!msg && level) {
+      msg = level
+      level = 'info'
+    }
+
+    F.logger.log(level, ` ${PREFIXES[prefix]} ${msg}`)
+  }
+
+  F.logger.prefixNote = (level = '', msg) => { logPrefix('NOTE', level, msg) }
+  F.logger.prefixConf = (level = '', msg) => { logPrefix('CONF', level, msg) }
+  F.logger.prefixFail = (level = '', msg) => { logPrefix('FAIL', level, msg) }
+  F.logger.prefixWarn = (level = '', msg) => { logPrefix('WARN', level, msg) }
 }
 
 exports.uninstall = () => {
